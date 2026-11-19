@@ -1,0 +1,32 @@
+name: ui-audit
+
+# Runs on every successful Vercel deployment (preview and production), so a first-screen
+# regression shows up the day it's introduced. Needs the repo connected to Vercel's GitHub app,
+# which posts the deployment statuses. For protected previews, add the project's
+# "Protection Bypass for Automation" secret as VERCEL_AUTOMATION_BYPASS_SECRET.
+on: deployment_status
+
+jobs:
+  audit:
+    if: github.event.deployment_status.state == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-node@v7.1.0
+        with:
+          node-version: 26
+      # The audit uses the CLI's bundled Playwright and the runner's preinstalled Google Chrome.
+      - run: npm i -g @playwright/cli@0.1.23
+      - name: Audit the deployed first screen
+        env:
+          URL: ${{ github.event.deployment_status.environment_url }}
+          BYPASS: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+        run: |
+          args=(--phrase "$(node -p "require('./src/lib/site.json').thesis")" --out ui-audit)
+          if [ -n "$BYPASS" ]; then args+=(--header "x-vercel-protection-bypass: $BYPASS"); fi
+          node scripts/ui-audit.mjs "$URL" "${args[@]}"
+      - uses: actions/upload-artifact@v7.0.2
+        if: always()
+        with:
+          name: ui-audit
+          path: ui-audit
