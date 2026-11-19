@@ -23,7 +23,12 @@ All checkpoints count from `Started:`.
 - [x] Design direction locked through `impeccable shape`: PRODUCT.md, a decision round, the Register Roll chosen (D-007), direction contract in `.impeccable/surfaces/`.
 
 ### M1 · Walking skeleton
-- [ ] Placeholder. Detailed once M0 closes.
+- [x] Statement page `/` and `/book/[address]` server-rendered from AnnalBook, re-read live. → E-007
+- [x] Each line opens to its trail (origin, Lasna reaction, Base callback) and is re-checked against the origin receipt in the reader's browser. → E-007
+- [x] Explorers' view: transfers the book didn't print, with the reason (look-alike shown struck). → E-007
+- [x] Open flow wired (connect, switch to Base Sepolia, `open()`). Built and typechecked; **not yet exercised with a browser wallet** (needs a wallet extension in the test browser).
+- [ ] Signature component chosen from three variants (`impeccable generate 3`). Deferred: the roll was locked on the decision page (D-007); variants of the line treatment come at the M3 UI pass.
+- [ ] Phone and tablet re-verified after every UI change (done for this build: `mobile-2.png`, `tablet-2.png`).
 
 ### M2 · Core claim
 - [ ] Placeholder.

@@ -57,6 +57,16 @@ Both Annal contracts sit at the same address because each was the deployer's fir
 - **zsh doesn't word-split unquoted variables.** Run multi-field shell loops under `bash -c`.
 - **Measured costs (n = 4 loops):** about 0.015 lREACT per payment reaction at 100 gwei Lasna gas; about 0.0000013 ETH per callback on Base Sepolia. Deploying AnnalReactive cost about 0.095 lREACT. (E-003)
 
+- **Lasna RPC caps `eth_getLogs` at 30,000 blocks** (error -32012, `maxAllowedRange: 30000`, observed 2026-11-20). `readLineTrail` binary-searches Lasna for the block nearest a line's time, then queries 600 blocks.
+- **Next 16 + Cache Components:** `RouteContext` only exists after typegen, so route params are typed explicitly. A `notFound()` inside `<Suspense>` streams the not-found UI with HTTP 200, because the shell is already sent.
+- **Tailwind preflight removes list markers.** Restore `list-style` where a list should show bullets.
+- **All three source RPCs, Lasna and Blockscout send CORS headers** (`*`, or the deployed origin), so the receipt check and the explorers' view run in the reader's browser (checked 2026-11-20).
+
+## Vercel (Lekan's account)
+- Project `lekan6/annal`, production alias https://annal-sooty.vercel.app, deployed by Vercel's GitHub app on every push to `main`.
+- The CLI login for Lekan lives in its own config dir, `~/.config/vercel-lekan`, so the operator's global login stays untouched. Use `npm run vercel:lekan -- <command>` (e.g. `ls`, `inspect <url>`). The repo is linked (`.vercel/`, gitignored).
+- Vercel MCP server added at user scope (`https://mcp.vercel.com`). It needs a one-time `/mcp` sign-in. The Vercel plugin (`vercel-plugin@vercel`) is installed at user scope and loads after a Claude Code restart.
+
 ## Environment
 | Var | Purpose | Where to get it |
 |---|---|---|
