@@ -46,3 +46,9 @@ Append-only. To change a decision, add a new entry that supersedes it.
 **Context:** The project lead asked to make the repo public. The private repo's Actions runs failed at startup with zero jobs (D-005).
 **Decision:** `github.com/ola-akanbi/annal` is public and MIT-licensed from 2026-11-19. The rules require public and open source by submission, so this only brings that forward.
 **Consequences:** Every commit message and file is visible to competitors and judges from now on (protocol: commit messages are public). Strategy stays in `internal/` (gitignored). CI should now run on public-repo minutes; the next push confirms it.
+
+## D-007 · Visual world: the Register Roll · 2026-11-19 · accepted
+**Context:** The statement page is a Read surface: a skeptical reader with no wallet must trust and check it. Impeccable's roll (seed:c8c4210e20f0a980) assigned candidate 6 of 7 grounded directions.
+**Decision:** The project lead chose the assigned Register Roll on the decision page: a thermal till roll on a dark register-green counter, numbered printed lines, tick and strike check marks, tabular figures, the total as the only display figure, one roll-end pink accent. Direction contract: `.impeccable/surfaces/src-app-book-address-page-tsx.md`. Sketch: `.impeccable/mocks/decision/assigned.html`.
+**Alternatives:** Passbook (Impeccable's pick; closest to the familiar leather-ledger look). The category-standard bank portal (looks editable, like every bank). Six catalog challengers, all declined, each donating one discipline (numbering, arrival, single display figure, marks for state, tabular figures, palette commitment).
+**Consequences:** Code-led build (Read surfaces always are). No crypto-dashboard devices anywhere. The final review audits the build against the sketch and contract, and DESIGN.md is written from the built world at finish.

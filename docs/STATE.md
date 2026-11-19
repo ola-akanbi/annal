@@ -3,8 +3,8 @@ _Last verified: 2026-11-19 22:25 UTC at 3c41d8e_
 
 **Thesis:** One income book for every chain you're paid on. Every line is copied from the payment's own log, and links back to it. (Claims table: qualified. Copy must name Ethereum, Base and Unichain Sepolia.)
 **Milestone:** M0 · Rigged (checkpoint 2026-11-21 10:44 UTC) · **Deadline:** 2026-12-05 20:00 UTC (time left: the clock line)
-**Next action:** design bar + `impeccable shape` for the statement page (PLAN M0). Then deploy the app to Vercel (account to be chosen by the operator).
-**Blocked on:** nothing for contracts. The Vercel account choice is open.
+**Next action:** build the statement page `/book/[address]` in the Register Roll world (D-007), reading AnnalBook live and re-checking each line against its origin receipt (PLAN M1).
+**Blocked on:** nothing.
 
 ## Works (verified this session)
 | Capability | Verified by | Evidence |
@@ -24,6 +24,7 @@ _Last verified: 2026-11-19 22:25 UTC at 3c41d8e_
 | AnnalReactive | Reactive Lasna | `0x653B62A39Aea06998c152b48F150175B2645c8Bd` (1.44 lREACT, debt 0) | 2026-11-19 22:20 UTC |
 | AnnalBook | Base Sepolia | `0x653B62A39Aea06998c152b48F150175B2645c8Bd` (0.00399 ETH, debt 0) | 2026-11-19 22:20 UTC |
 | LookalikeUSDC (demo only) | Base Sepolia | `0x4D2579b6E0f6273618Cd95Ff57Ae07653E9106Ca` | 2026-11-19 22:15 UTC |
+| Web app (starter floor, from Lekan's Vercel) | Vercel production | https://annal-sooty.vercel.app (title and h1 = thesis, read in a browser) | 2026-11-19 22:30 UTC |
 | Demo book owner (freelancer) | — | `0xa7D557BF0C7312EAF186a6A81159a3650aA77444`, 3 lines | 2026-11-19 22:20 UTC |
 
 ## Broken or unverified
@@ -31,10 +32,10 @@ _Last verified: 2026-11-19 22:25 UTC at 3c41d8e_
 - Contracts aren't source-verified on any explorer yet (Blockscout/Sourcify for Base Sepolia; check whether Lasna's explorer supports verification).
 - Latency is n = 1 per chain. Needs ≥ 20 runs before any public number (M2, via `harness/`).
 - No UI reads the book yet. The app is still the starter floor.
+- This machine's terminal can't reach Vercel's IPs (216.198.79.3, 64.29.17.3; connect timeout even outside the sandbox), but a browser can. Run production audits through the browser.
 
 ## Claims not yet verified
 - C-1 qualified (chains must be named; "links back" not yet in the UI). C-4 qualified (n too small). C-2, C-3 verified. See docs/EVIDENCE.md.
 
 ## Open questions
-- Which Vercel account owns the deployment? (operator)
 - Can related builders submit separate BUIDLs, and when are results announced? (organizers, via DoraHacks Q&A)

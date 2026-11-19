@@ -19,8 +19,8 @@ All checkpoints count from `Started:`.
 - [x] Foundry project in `contracts/` on Solidity 0.8.29 with `reactive-lib-omni` and forge-std pinned. Done when `forge build` and `forge test` are green.
 - [x] Deployer funded on Lasna, Ethereum Sepolia, Base Sepolia and Unichain Sepolia, with USDC on all three. Done when the balances are captured in `docs/evidence/`. → E-001
 - [x] Spike: a minimal reactive contract on Lasna subscribed to Circle USDC `Transfer` to a test wallet on two chains, calling back a recorder on Base Sepolia. Done when E-00n holds the origin tx, reactive tx and callback tx for each chain, plus the lREACT spent per reaction. → Done with the real contracts on three chains, not a minimal one: E-002, E-003, E-005. The M2 reversal beat and forgery refusal also landed early: E-004
-- [ ] App deployed to Vercel from the GitHub repo. Done when the production URL serves the thesis h1 and `ui-audit.mjs` has run on it.
-- [ ] Design bar: the best statement and ledger interfaces captured into `internal/design/bar/`, then `impeccable shape`. Done when the direction is recorded as a DECISIONS entry.
+- [x] App deployed to Vercel from the GitHub repo (Lekan's account): https://annal-sooty.vercel.app serves the thesis h1. `ui-audit.mjs` can't reach Vercel from this machine's terminal; it runs through the browser at M3.
+- [x] Design direction locked through `impeccable shape`: PRODUCT.md, a decision round, the Register Roll chosen (D-007), direction contract in `.impeccable/surfaces/`.
 
 ### M1 · Walking skeleton
 - [ ] Placeholder. Detailed once M0 closes.
