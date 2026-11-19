@@ -24,11 +24,12 @@ _Last verified: 2026-11-19 21:38 UTC at the foundation commit_
 - **Real subscribe/callback cost and the gas of `react()` on open** (three `subscribe` calls + one callback, under the 900k cap): unverified until the spike. Unit-test gas uses a recorder, not the real system contract.
 - `CALLBACK_GAS_LIMIT = 400_000` hasn't been checked against the Base Sepolia proxy's `_extraGas` / `_maxChargeGas`.
 - The Lasna faucet ratio and per-request cap haven't been read.
-- No GitHub remote yet. CI is unrun.
+- GitHub: `github.com/ola-akanbi/annal` (private), pushed at 792a9f9. **CI fails at startup with zero jobs** (run 44621076324). Workflow YAML parses, every action tag exists, Actions is enabled. Suspect the account's Actions billing for private repos. The local gate is the gate of record until fixed (D-005).
 
 ## Claims not yet verified
 - C-1 thesis, C-2 "nobody can write a line by hand", C-3 "fake USDC is never written". All need on-chain evidence from M0/M2 (docs/EVIDENCE.md).
 
 ## Open questions
 - Can related builders submit separate BUIDLs, and when are results announced? (organizers, via DoraHacks Q&A)
-- Vercel account for the deployment (operator).
+- Vercel account for the deployment: the CLI here is logged in as the operator's account, and Lekan's GitHub has the Vercel app installed (a Vercel check is queued on main). Which account owns the project? (operator)
+- Why does Actions fail at startup on the private repo? Check github.com/settings/billing on `ola-akanbi` (operator).

@@ -36,3 +36,8 @@ Append-only. To change a decision, add a new entry that supersedes it.
 ## D-004 · Deployer key in an encrypted Foundry keystore outside the repo · 2026-11-19 · accepted
 **Decision:** Testnet deployer `0x4713b56012F67a84114D6a65Cd8924E7850b691E`, keystore account `annal-deployer`. The password file lives outside the repo in the operator's home directory. Scripts use `--account annal-deployer --password-file "$ANNAL_PW_FILE"`. No private key in any env file, commit or log.
 **Consequences:** The key is testnet only and never funded on mainnet.
+
+## D-005 · Repo private until submission week · 2026-11-19 · accepted
+**Context:** Rules: "Repositories need to be public and open-source by the time you submit." The idea is in an open lane, and competitors can copy it during the window.
+**Decision:** `github.com/ola-akanbi/annal` stays private until the M4 freeze (2026-12-03 20:00 UTC), then goes public with an MIT licence before M5. Remote over HTTPS, with a repo-local `url.insteadOf` so pushes use the `ola-akanbi` credentials.
+**Consequences:** CI on a private repo depends on the account's Actions minutes. The first run failed at startup with zero jobs (run 44621076324), cause not yet known. Until it's fixed, the local gate (`npm run gate`) is the gate of record. Revisit if Actions can't run privately: making the repo public earlier is the alternative.
