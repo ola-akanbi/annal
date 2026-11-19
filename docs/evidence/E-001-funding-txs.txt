@@ -1,0 +1,4 @@
+faucet-4lREACT 0xb4f7351a29ce9e7435a255b176ca777e4deffe65e6fbbb7ef8eeb05847c8a66b status=0x1
+base-deployer-0.03 0x84cd828cf1e450f31d916376d1afefbdce9835970f335bc99fa3cdb99ec14c8d status=0x1
+base-freelancer-0.005 0x43884baf74f6f23948f76d2c9123ff4a4d9bb7e9acb3f24d283d1f466a96da88 status=0x1
+unichain-deployer-0.01 0x3f5d44c26a69f14723c604d92ea3e17a1a784adacc07494371ae07991b2d51cb status=0x1

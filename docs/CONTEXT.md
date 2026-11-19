@@ -9,6 +9,15 @@ Verified facts about everything this project depends on. Each entry says how it 
 | Base Sepolia | origin + destination (book) | 84532 (`0x14a34`) | `https://sepolia.base.org` (`BASE_SEPOLIA_RPC`) | https://sepolia.basescan.org | `eth_chainId` + 0.200 s blocks over 10,000, 2026-11-19 |
 | Unichain Sepolia | origin | 1301 (`0x515`) | `https://sepolia.unichain.org` (`UNICHAIN_SEPOLIA_RPC`) | https://sepolia.uniscan.xyz | `eth_chainId` + 1.000 s blocks over 10,000, 2026-11-19 |
 
+## Our deployments (testnet, 2026-11-19; full record in contracts/deployments/testnet.json)
+| Contract | Network | Address | Deploy tx |
+|---|---|---|---|
+| AnnalReactive | Reactive Lasna (5318007) | `0x653B62A39Aea06998c152b48F150175B2645c8Bd` | `0x7fc707bad916dd68804a495b20c5247ff1a165e7eb72f5b5bead4a182b104b52` |
+| AnnalBook | Base Sepolia (84532) | `0x653B62A39Aea06998c152b48F150175B2645c8Bd` | `0x6939b7177d970f26857ec34e9bea02498cf80a6805c2a48390286be7fbd86d8a` |
+| LookalikeUSDC (demo only, not a source) | Base Sepolia | `0x4D2579b6E0f6273618Cd95Ff57Ae07653E9106Ca` | see docs/evidence/E-004 |
+
+Both Annal contracts sit at the same address because each was the deployer's first transaction (nonce 0) on its chain. That is a coincidence of a fresh deployer, not a requirement: deploy.sh predicts the book's address from whatever the Base Sepolia nonce is.
+
 ## Contracts we call
 | Name | Address | Source of address | Verified how |
 |---|---|---|---|
@@ -42,6 +51,11 @@ Verified facts about everything this project depends on. Each entry says how it 
 - **Base Sepolia blocks are 200 ms.** Use timestamps, never block counts, for any timer. (Source: buildathon rules)
 - **Native ETH transfers emit no logs**, so Annal records ERC-20 (USDC) only.
 - Reactive transaction gas limit max 900,000. The callback proxy reserves `_extraGas` + `_maxChargeGas` from the callback gas limit, so read both from the proxy before sizing. (Source: economy.mdx)
+
+- **Base Sepolia public RPC limits `eth_getLogs` to a 200-block range** (error -32614). Page in 200-block windows. Lasna's RPC returned a 600+ block range without complaint. (Observed 2026-11-19)
+- **`cast call` decorates big numbers**, e.g. `1795126045 [1.795e9]`. Strip ` [..]` before arithmetic, or use `--json`.
+- **zsh doesn't word-split unquoted variables.** Run multi-field shell loops under `bash -c`.
+- **Measured costs (n = 4 loops):** about 0.015 lREACT per payment reaction at 100 gwei Lasna gas; about 0.0000013 ETH per callback on Base Sepolia. Deploying AnnalReactive cost about 0.095 lREACT. (E-003)
 
 ## Environment
 | Var | Purpose | Where to get it |

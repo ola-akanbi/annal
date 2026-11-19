@@ -1,0 +1,29 @@
+{
+  "deployedAt": "2026-11-19T22:06:06Z",
+  "deployer": "0x4713b56012F67a84114D6a65Cd8924E7850b691E",
+  "lasna": {
+    "chainId": 5318007,
+    "AnnalReactive": "0x653B62A39Aea06998c152b48F150175B2645c8Bd",
+    "tx": "0x7fc707bad916dd68804a495b20c5247ff1a165e7eb72f5b5bead4a182b104b52"
+  },
+  "baseSepolia": {
+    "chainId": 84532,
+    "AnnalBook": "0x653B62A39Aea06998c152b48F150175B2645c8Bd",
+    "tx": "0x6939b7177d970f26857ec34e9bea02498cf80a6805c2a48390286be7fbd86d8a",
+    "callbackProxy": "0x476F44b11F5C942c58f4c8E3d0300E5710743585"
+  },
+  "sources": [
+    {
+      "chainId": 11155111,
+      "usdc": "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238"
+    },
+    {
+      "chainId": 84532,
+      "usdc": "0x036CbD53842c5426634e7929541eC2318f3dCF7e"
+    },
+    {
+      "chainId": 1301,
+      "usdc": "0x31d0220469e10c4E71834a79b1f276d740d3768F"
+    }
+  ]
+}

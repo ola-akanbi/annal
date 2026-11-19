@@ -1,0 +1,10 @@
+LookalikeUSDC 0x4D2579b6E0f6273618Cd95Ff57Ae07653E9106Ca
+  name="USD Coin" symbol="USDC" decimals=6
+mint tx 0x4d270746ccfc7154b82ba542295c6eb1bd7c6d22fd37fef5672ee309a17663cd
+fake payment tx 0x811b5dcce5555c96c330d7d3e0dd26931614679c47d7311808b1ef2981f05b32 status 0x1 block 61021919
+freelancer fake-USDC balance: 500000000
+book lines before=3 after 30 s=3 totalReceived=3000000
+--- forged write from the owner, forced on-chain
+forged record tx 0x7e5721dca9c662484aa78d5873bcc24b69fa8e3be170b4bc39189b951e33c7ce status 0x0
+revert reason (simulated): NotAuthorized(0xa7D557BF0C7312EAF186a6A81159a3650aA77444, 0x476F44b11F5C942c58f4c8E3d0300E5710743585)
+book lines after forgery: 3

@@ -9,6 +9,7 @@ import {AbstractPayer} from "reactive-lib/base/AbstractPayer.sol";
 import {AbstractCallback} from "reactive-lib/base/AbstractCallback.sol";
 import {AnnalReactive} from "../src/AnnalReactive.sol";
 import {AnnalBook} from "../src/AnnalBook.sol";
+import {LookalikeUSDC} from "../src/demo/LookalikeUSDC.sol";
 
 /// @dev Stands in for Reactive's system contract at 0x8888…8888 inside the unit tests only.
 ///      It records subscriptions and callback requests so the tests can assert on them.
@@ -355,5 +356,22 @@ contract AnnalTest is Test {
         assertEq(line.payer, payer);
         assertEq(line.amount, amount);
         assertEq(line.logIndex, logIndex);
+    }
+}
+
+contract LookalikeUSDCTest is Test {
+    function test_lookalike_copiesUsdcMetadata_andMoves() public {
+        LookalikeUSDC t = new LookalikeUSDC();
+        assertEq(t.symbol(), "USDC");
+        assertEq(t.decimals(), 6);
+        address a = makeAddr("a");
+        address b = makeAddr("b");
+        t.mint(a, 5e6);
+        vm.prank(a);
+        t.transfer(b, 2e6);
+        assertEq(t.balanceOf(b), 2e6);
+        vm.prank(b);
+        vm.expectRevert(LookalikeUSDC.InsufficientBalance.selector);
+        t.transfer(a, 3e6);
     }
 }
