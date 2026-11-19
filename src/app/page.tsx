@@ -1,14 +1,10 @@
-import { Signature } from "@/components/signature";
-import site from "@/lib/site.json";
+import { BookView } from "@/components/book-view";
+import { DEMO_BOOK } from "@/lib/annal";
+import { readBookCached } from "@/lib/book";
 
-// The signature component's source is re-read about once a minute (see readLastState), and every
-// visitor gets HTML that's already filled.
-export default function Home() {
-  return (
-    <main className="mx-auto max-w-5xl px-4 py-16 sm:px-8 sm:py-24">
-      <h1 className="text-4xl font-semibold tracking-tight text-balance sm:text-6xl">{site.thesis}</h1>
-      <p className="mt-6 max-w-2xl text-lg text-pretty opacity-80">{site.lede}</p>
-      <Signature />
-    </main>
-  );
+// The demo book: a real wallet with real payments. Read on the server (cached about a minute) so
+// the first HTML is the filled statement; the page then re-reads the chain live.
+export default async function Home() {
+  const book = await readBookCached(DEMO_BOOK);
+  return <BookView initial={book} demo fast={false} />;
 }

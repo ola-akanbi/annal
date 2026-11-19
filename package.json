@@ -10,12 +10,16 @@
     "typecheck": "tsc --noEmit",
     "test:contracts": "cd contracts && forge test",
     "gate:contracts": "cd contracts && forge fmt --check && forge lint --deny warnings && forge build --sizes && forge test",
-    "gate": "npm run lint -- --max-warnings=0 && npm run typecheck && npm run build && npm run gate:contracts"
+    "gate": "npm run lint -- --max-warnings=0 && npm run typecheck && npm run build && npm run gate:contracts",
+    "abi": "cd contracts && forge build >/dev/null && cd .. && node scripts/gen-abi.mjs",
+    "vercel:lekan": "vercel --global-config ~/.config/vercel-lekan --scope lekan6"
   },
   "dependencies": {
+    "lucide-react": "1.73.0",
     "next": "16.4.6",
     "react": "19.3.0",
-    "react-dom": "19.3.0"
+    "react-dom": "19.3.0",
+    "viem": "2.57.20"
   },
   "devDependencies": {
     "@tailwindcss/turbopack": "4.3.3",

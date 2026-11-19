@@ -2,5 +2,5 @@
   "name": "Annal",
   "thesis": "One income book for every chain you're paid on. Every line is copied from the payment's own log, and links back to it.",
   "lede": "Open your book once. From then on, every USDC payment to your wallet on Ethereum, Base or Unichain is copied into it by Reactive Network, straight from the payment's own log, and each line can be checked against the chain it came from.",
-  "themeColor": "#16171a"
+  "themeColor": "#20322a"
 }

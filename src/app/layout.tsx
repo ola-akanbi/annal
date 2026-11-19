@@ -1,6 +1,22 @@
 import type { Metadata, Viewport } from "next";
+import { Archivo, Martian_Mono } from "next/font/google";
 import site from "@/lib/site.json";
 import "./globals.css";
+
+// Archivo reads; its expanded width sets the total the way a register prints a double-width total.
+const archivo = Archivo({
+  subsets: ["latin"],
+  axes: ["wdth"],
+  variable: "--font-archivo",
+  display: "swap",
+});
+
+// Martian Mono only prints: hashes, addresses, small labels. Never running text.
+const martian = Martian_Mono({
+  subsets: ["latin"],
+  variable: "--font-martian",
+  display: "swap",
+});
 
 // Absolute URLs for the link-preview image: production, each Vercel preview, and locally.
 const host =
@@ -19,8 +35,8 @@ export const viewport: Viewport = { themeColor: site.themeColor };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
-      <body className="antialiased">{children}</body>
+    <html lang="en" className={`${archivo.variable} ${martian.variable}`}>
+      <body>{children}</body>
     </html>
   );
 }

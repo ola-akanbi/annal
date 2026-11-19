@@ -1,0 +1,219 @@
+// Server-side reads of the book (Base Sepolia) and the reactive contract (Lasna).
+// Everything returned is plain JSON (bigints as decimal strings), so it can be cached and sent
+// to the client unchanged.
+
+import { createPublicClient, getAddress, http, type Address, type Hex } from "viem";
+import { cacheLife } from "next/cache";
+import { annalBookAbi, annalReactiveAbi } from "./abi";
+import { BOOK, REACTIVE } from "./annal";
+
+export type BookLine = {
+  index: number;
+  originChainId: number;
+  token: Address;
+  payer: Address;
+  amount: string;
+  originBlock: string;
+  originTxHash: Hex;
+  logIndex: number;
+  writtenAt: number;
+};
+
+export type ReactiveHealth = {
+  /** Whether AnnalReactive has subscribed for this wallet (null if Lasna couldn't be read). */
+  watching: boolean | null;
+  /** AnnalReactive's lREACT balance, wei as a string. */
+  balance: string | null;
+  /** Debt owed to the system contract. Any debt > 0 stops every reaction. */
+  debt: string | null;
+};
+
+export type BookState = {
+  owner: Address;
+  /** 0 = never opened. */
+  openedAt: number;
+  /** 0 = Reactive hasn't confirmed yet. */
+  watchingSince: number;
+  total: string;
+  lines: BookLine[];
+  reactive: ReactiveHealth;
+  /** Base Sepolia block the book was read at. */
+  block: string;
+  /** When the read happened (unix seconds). */
+  readAt: number;
+};
+
+const LINE_PAGE = 200n;
+
+const base = createPublicClient({ transport: http(BOOK.rpc, { timeout: 12_000, retryCount: 2 }) });
+const lasna = createPublicClient({ transport: http(REACTIVE.rpc, { timeout: 12_000, retryCount: 2 }) });
+
+const systemAbi = [
+  {
+    type: "function",
+    name: "debt",
+    stateMutability: "view",
+    inputs: [{ name: "", type: "address" }],
+    outputs: [{ name: "", type: "uint256" }],
+  },
+] as const;
+
+async function readReactiveHealth(owner: Address): Promise<ReactiveHealth> {
+  const [watching, balance, debt] = await Promise.allSettled([
+    lasna.readContract({ address: REACTIVE.address, abi: annalReactiveAbi, functionName: "watching", args: [owner] }),
+    lasna.getBalance({ address: REACTIVE.address }),
+    lasna.readContract({
+      address: REACTIVE.systemContract,
+      abi: systemAbi,
+      functionName: "debt",
+      args: [REACTIVE.address],
+    }),
+  ]);
+  return {
+    watching: watching.status === "fulfilled" ? watching.value : null,
+    balance: balance.status === "fulfilled" ? balance.value.toString() : null,
+    debt: debt.status === "fulfilled" ? debt.value.toString() : null,
+  };
+}
+
+/** Reads the whole book for `owner` straight from the chain. Uncached. */
+export async function readBookLive(ownerInput: string): Promise<BookState> {
+  const owner = getAddress(ownerInput);
+  const block = await base.getBlockNumber();
+  const at = { blockNumber: block } as const;
+  const c = { address: BOOK.address, abi: annalBookAbi } as const;
+
+  const [openedAt, watchingSince, total, count, reactive, blockInfo] = await Promise.all([
+    base.readContract({ ...c, functionName: "openedAt", args: [owner], ...at }),
+    base.readContract({ ...c, functionName: "watchingSince", args: [owner], ...at }),
+    base.readContract({ ...c, functionName: "totalReceived", args: [owner], ...at }),
+    base.readContract({ ...c, functionName: "lineCount", args: [owner], ...at }),
+    readReactiveHealth(owner),
+    base.getBlock({ blockNumber: block }),
+  ]);
+
+  const lines: BookLine[] = [];
+  for (let offset = 0n; offset < count; offset += LINE_PAGE) {
+    const page = await base.readContract({
+      address: BOOK.address,
+      abi: annalBookAbi,
+      functionName: "lines",
+      args: [owner, offset, LINE_PAGE],
+      ...at,
+    });
+    page.forEach((l, i) =>
+      lines.push({
+        index: Number(offset) + i,
+        originChainId: Number(l.originChainId),
+        token: l.token,
+        payer: l.payer,
+        amount: l.amount.toString(),
+        originBlock: l.originBlock.toString(),
+        originTxHash: l.originTxHash,
+        logIndex: Number(l.logIndex),
+        writtenAt: Number(l.writtenAt),
+      }),
+    );
+  }
+
+  return {
+    owner,
+    openedAt: Number(openedAt),
+    watchingSince: Number(watchingSince),
+    total: total.toString(),
+    lines,
+    reactive,
+    block: block.toString(),
+    readAt: Number(blockInfo.timestamp),
+  };
+}
+
+/**
+ * The same read, cached about a minute so the filled statement is part of the prerendered HTML.
+ * The client re-reads live as soon as it mounts, so this never stands in for current state for long.
+ */
+export async function readBookCached(owner: string): Promise<BookState> {
+  "use cache";
+  cacheLife("minutes");
+  return readBookLive(owner);
+}
+
+// ---------- the trail of one line: origin → Lasna reaction → Base callback ----------
+
+export type LineTrail = {
+  /** AnnalReactive's `Copied` event on Lasna: the reactive transaction that read the payment. */
+  reactiveTx: Hex | null;
+  reactiveAt: number | null;
+  /** AnnalBook's `LineWritten` event on Base Sepolia: the callback that wrote the line. */
+  callbackTx: Hex | null;
+  callbackAt: number | null;
+};
+
+/** Lasna block nearest to (at or after) `ts`, by binary search on block timestamps. */
+async function lasnaBlockAtOrAfter(ts: number): Promise<bigint> {
+  let lo = REACTIVE.deployBlock;
+  let hi = await lasna.getBlockNumber();
+  while (lo < hi) {
+    const mid = (lo + hi) / 2n;
+    const b = await lasna.getBlock({ blockNumber: mid });
+    if (Number(b.timestamp) < ts) lo = mid + 1n;
+    else hi = mid;
+  }
+  return lo;
+}
+
+async function findCallback(owner: Address, index: number, writtenAt: number) {
+  const latest = await base.getBlock();
+  // Base Sepolia makes a block every 200 ms (docs/CONTEXT.md), so the time pins the block closely.
+  const guess = latest.number - BigInt(Math.max(0, Number(latest.timestamp) - writtenAt) * 5);
+  for (const pad of [40n, 199n]) {
+    const logs = await base.getLogs({
+      address: BOOK.address,
+      event: annalBookAbi.find((x) => x.type === "event" && x.name === "LineWritten")!,
+      args: { owner, index: BigInt(index) },
+      fromBlock: guess - pad < BOOK.deployBlock ? BOOK.deployBlock : guess - pad,
+      toBlock: guess + pad > latest.number ? latest.number : guess + pad,
+    });
+    if (logs.length > 0) {
+      const b = await base.getBlock({ blockNumber: logs[0].blockNumber });
+      return { tx: logs[0].transactionHash, at: Number(b.timestamp) };
+    }
+  }
+  return { tx: null, at: null };
+}
+
+async function findReaction(owner: Address, originChainId: number, originTxHash: Hex, logIndex: number, writtenAt: number) {
+  const start = await lasnaBlockAtOrAfter(writtenAt - 120);
+  const logs = await lasna.getLogs({
+    address: REACTIVE.address,
+    event: annalReactiveAbi.find((x) => x.type === "event" && x.name === "Copied")!,
+    args: { owner, originChainId: BigInt(originChainId) },
+    fromBlock: start,
+    toBlock: start + 600n,
+  });
+  const match = logs.find(
+    (l) => BigInt(l.args.originTxHash ?? 0n) === BigInt(originTxHash) && Number(l.args.logIndex) === logIndex,
+  );
+  if (!match) return { tx: null, at: null };
+  const b = await lasna.getBlock({ blockNumber: match.blockNumber });
+  return { tx: match.transactionHash, at: Number(b.timestamp) };
+}
+
+/** A written line's trail never changes, so it is cached for as long as Next allows. */
+export async function readLineTrail(
+  ownerInput: string,
+  index: number,
+  originChainId: number,
+  originTxHash: Hex,
+  logIndex: number,
+  writtenAt: number,
+): Promise<LineTrail> {
+  "use cache";
+  cacheLife("max");
+  const owner = getAddress(ownerInput);
+  const [callback, reaction] = await Promise.all([
+    findCallback(owner, index, writtenAt),
+    findReaction(owner, originChainId, originTxHash, logIndex, writtenAt),
+  ]);
+  return { reactiveTx: reaction.tx, reactiveAt: reaction.at, callbackTx: callback.tx, callbackAt: callback.at };
+}
