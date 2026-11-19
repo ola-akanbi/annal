@@ -16,6 +16,7 @@ _Last verified: 2026-11-19 22:25 UTC at 3c41d8e_
 | Owner's forged `record` refused on-chain | tx `0x7e5721dc…` status 0, `NotAuthorized` | E-004 |
 | Costs: ~0.015 lREACT per payment, ~0.0000013 ETH per callback, no debt | balances read on Lasna and Base | E-003 |
 | Contracts gate: 21 tests, lint with warnings denied, fmt check | `npm run gate:contracts` | E-006 |
+| Landing page in production (live-ticker hero from the newest real payment, ticker, live stats, animated three-chain flow with real tx links, look-alike comparison, audiences, contracts and verify command, final call to action) + glass nav with icons, full-colour brand (D-008) | browser on https://annal-sooty.vercel.app at 1440 and 390 wide, every section rendered, no horizontal scroll, console clean | commit 074b520 |
 | Statement page in production: server-rendered roll, live re-reads, per-line trail, in-browser receipt check (3/3 ticked), explorers' view showing the look-alike struck | browser on https://annal-sooty.vercel.app at 1440, 900 and 390 wide; console clean | E-007 |
 
 ## Deployed
@@ -24,7 +25,7 @@ _Last verified: 2026-11-19 22:25 UTC at 3c41d8e_
 | AnnalReactive | Reactive Lasna | `0x653B62A39Aea06998c152b48F150175B2645c8Bd` (1.44 lREACT, debt 0) | 2026-11-19 22:20 UTC |
 | AnnalBook | Base Sepolia | `0x653B62A39Aea06998c152b48F150175B2645c8Bd` (0.00399 ETH, debt 0) | 2026-11-19 22:20 UTC |
 | LookalikeUSDC (demo only) | Base Sepolia | `0x4D2579b6E0f6273618Cd95Ff57Ae07653E9106Ca` | 2026-11-19 22:15 UTC |
-| Web app (statement page) | Vercel production, `lekan6/annal` | https://annal-sooty.vercel.app (commit a9402d9) | 2026-11-20 00:22 local |
+| Web app (landing `/` + book `/book/[address]`) | Vercel production, `lekan6/annal` | https://annal-sooty.vercel.app (commit 074b520) | 2026-11-20 00:53 local |
 | Demo book owner (freelancer) | — | `0xa7D557BF0C7312EAF186a6A81159a3650aA77444`, 3 lines | 2026-11-19 22:20 UTC |
 
 ## Broken or unverified
