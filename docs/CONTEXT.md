@@ -49,3 +49,16 @@ Verified facts about everything this project depends on. Each entry says how it 
 | `LASNA_RPC`, `SEPOLIA_RPC`, `BASE_SEPOLIA_RPC`, `UNICHAIN_SEPOLIA_RPC` | RPC endpoints | table above |
 | `ANNAL_ACCOUNT` | Foundry keystore account name (`annal-deployer`) | D-004 |
 | `ANNAL_PW_FILE` | Path to the keystore password file (outside the repo) | operator |
+
+## Funding routes (testnet)
+| Route | Contract | Source | Notes |
+|---|---|---|---|
+| Sepolia ETH → lREACT | `request(address receiver)` payable on `0x9b9BB25f1A81078C544C829c5EB7822d747Cf434` (Ethereum Sepolia) or `0x2afaFD298b23b62760711756088F75B7409f5967` (Base Sepolia) | reactive-mainnet.mdx + `ReactiveFaucetL1.sol` | 1 ETH → 100 lREACT. Each request is capped at `max_payout()`, and the excess is kept, so read the cap before sending |
+| Sepolia ETH → Base Sepolia ETH | L1StandardBridge `0xfd0Bf71F60660E2f608ed56e1659C450eB113120` (Ethereum Sepolia) | docs.base.org base-contracts (read 2026-11-19) | OP Stack deposit, a few minutes |
+| Sepolia ETH → Unichain Sepolia ETH | L1StandardBridgeProxy `0xea58fcA6849d79EAd1f26608855c2D6407d54Ce2` (Ethereum Sepolia) | ethereum-optimism/superchain-registry `superchain/configs/sepolia/unichain.toml` (read 2026-11-19) | OP Stack deposit |
+
+## Accounts (testnet only)
+| Role | Address | Keystore |
+|---|---|---|
+| Deployer, and the client who pays in the demo | `0x4713b56012F67a84114D6a65Cd8924E7850b691E` | `annal-deployer` |
+| Freelancer who owns the demo book | `0xa7D557BF0C7312EAF186a6A81159a3650aA77444` | `annal-freelancer` |

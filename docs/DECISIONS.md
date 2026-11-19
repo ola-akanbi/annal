@@ -41,3 +41,8 @@ Append-only. To change a decision, add a new entry that supersedes it.
 **Context:** Rules: "Repositories need to be public and open-source by the time you submit." The idea is in an open lane, and competitors can copy it during the window.
 **Decision:** `github.com/ola-akanbi/annal` stays private until the M4 freeze (2026-12-03 20:00 UTC), then goes public with an MIT licence before M5. Remote over HTTPS, with a repo-local `url.insteadOf` so pushes use the `ola-akanbi` credentials.
 **Consequences:** CI on a private repo depends on the account's Actions minutes. The first run failed at startup with zero jobs (run 44621076324), cause not yet known. Until it's fixed, the local gate (`npm run gate`) is the gate of record. Revisit if Actions can't run privately: making the repo public earlier is the alternative.
+
+## D-006 · Repo public from now on · 2026-11-19 · accepted · supersedes D-005
+**Context:** The project lead asked to make the repo public. The private repo's Actions runs failed at startup with zero jobs (D-005).
+**Decision:** `github.com/ola-akanbi/annal` is public and MIT-licensed from 2026-11-19. The rules require public and open source by submission, so this only brings that forward.
+**Consequences:** Every commit message and file is visible to competitors and judges from now on (protocol: commit messages are public). Strategy stays in `internal/` (gitignored). CI should now run on public-repo minutes; the next push confirms it.
