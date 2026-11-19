@@ -52,3 +52,12 @@ Append-only. To change a decision, add a new entry that supersedes it.
 **Decision:** The project lead chose the assigned Register Roll on the decision page: a thermal till roll on a dark register-green counter, numbered printed lines, tick and strike check marks, tabular figures, the total as the only display figure, one roll-end pink accent. Direction contract: `.impeccable/surfaces/src-app-book-address-page-tsx.md`. Sketch: `.impeccable/mocks/decision/assigned.html`.
 **Alternatives:** Passbook (Impeccable's pick; closest to the familiar leather-ledger look). The category-standard bank portal (looks editable, like every bank). Six catalog challengers, all declined, each donating one discipline (numbering, arrival, single display figure, marks for state, tabular figures, palette commitment).
 **Consequences:** Code-led build (Read surfaces always are). No crypto-dashboard devices anywhere. The final review audits the build against the sketch and contract, and DESIGN.md is written from the built world at finish.
+
+## D-008 · Full-colour brand and a live-ticker landing page · 2026-11-20 · accepted · extends D-007
+**Context:** The project lead reviewed the M1 statement page and rejected it as plain: no landing page, no navigation, few icons, a single accent. They asked for a modern, lively, colourful product, "extremely modern… break rules if necessary".
+**Decision:**
+- The receipt roll stays the signature object (D-007). The frame becomes a full palette: marigold sun ground, ink, paper, hot pink for rejection, live green, and one colour per chain (Ethereum `#627EEA`, Base `#0052FF`, Unichain `#F50DB4`) carried through lines, subtotals, the ticker and the flow diagram.
+- New landing page at `/`, the Live ticker structure chosen on the decision page (`.impeccable/mocks/decision/landing/ticker.html`). The hero headline is the demo book's newest real payment and its print delay. Below it: a live roll card, a ticker band, live stats, an animated flow diagram, the look-alike comparison, audiences, the contracts with a verify command, and a final call to action.
+- Glass nav with icons on every page. The live demo book moves to `/book/<demo>`.
+**Alternatives:** Handed-over and roll-as-page structures; overprint-ink colour system (decision page, 2026-11-20).
+**Consequences:** Persuade-mode rules apply to `/`; Read rules still govern the statement column. Reveals are IntersectionObserver-driven and visible by default (scroll-driven `view()` timelines left captured pages blank).

@@ -5,7 +5,7 @@
 import { createPublicClient, getAddress, http, type Address, type Hex } from "viem";
 import { cacheLife } from "next/cache";
 import { annalBookAbi, annalReactiveAbi } from "./abi";
-import { BOOK, REACTIVE } from "./annal";
+import { BOOK, REACTIVE, SOURCES } from "./annal";
 
 export type BookLine = {
   index: number;
@@ -17,6 +17,8 @@ export type BookLine = {
   originTxHash: Hex;
   logIndex: number;
   writtenAt: number;
+  /** Timestamp of the payment's own block on its chain (0 if it couldn't be read). */
+  originAt: number;
 };
 
 export type ReactiveHealth = {
@@ -47,6 +49,27 @@ const LINE_PAGE = 200n;
 
 const base = createPublicClient({ transport: http(BOOK.rpc, { timeout: 12_000, retryCount: 2 }) });
 const lasna = createPublicClient({ transport: http(REACTIVE.rpc, { timeout: 12_000, retryCount: 2 }) });
+
+const originClients = new Map(
+  SOURCES.map((s) => [s.chainId, createPublicClient({ transport: http(s.rpc, { timeout: 8_000, retryCount: 1 }) })]),
+);
+
+/** A block's timestamp never changes, so it is cached for as long as Next allows. */
+async function originTimestamp(chainId: number, block: string): Promise<number> {
+  "use cache";
+  cacheLife("max");
+  const client = originClients.get(chainId);
+  if (!client) return 0;
+  try {
+    const b = await client.getBlock({ blockNumber: BigInt(block) });
+    return Number(b.timestamp);
+  } catch {
+    return 0;
+  }
+}
+
+/** Fills `originAt` for the newest lines (older ones keep 0 to bound the work per read). */
+const ORIGIN_TIMES_FOR = 40;
 
 const systemAbi = [
   {
@@ -112,9 +135,14 @@ export async function readBookLive(ownerInput: string): Promise<BookState> {
         originTxHash: l.originTxHash,
         logIndex: Number(l.logIndex),
         writtenAt: Number(l.writtenAt),
+        originAt: 0,
       }),
     );
   }
+
+  const recent = lines.slice(-ORIGIN_TIMES_FOR);
+  const times = await Promise.all(recent.map((l) => originTimestamp(l.originChainId, l.originBlock)));
+  recent.forEach((l, i) => (l.originAt = times[i]));
 
   return {
     owner,

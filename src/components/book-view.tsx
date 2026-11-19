@@ -2,11 +2,13 @@
 
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import { BOOK, REACTIVE, SOURCES, addressUrl } from "@/lib/annal";
+import { BOOK, DEMO_BOOK, REACTIVE, SOURCES, addressUrl } from "@/lib/annal";
 import type { BookState } from "@/lib/book";
 import { shortHex } from "@/lib/format";
 import site from "@/lib/site.json";
+import { ChainMark } from "./marks";
 import { OpenBook } from "./open-book";
+import { SiteNav } from "./site-nav";
 import { Roll } from "./roll";
 import { useLiveBook } from "./use-live-book";
 import { watchState } from "./watch";
@@ -25,11 +27,10 @@ export function BookView({ initial, demo, fast }: { initial: BookState; demo: bo
   const debt = book.reactive.debt === null ? null : BigInt(book.reactive.debt);
 
   return (
+    <>
+    <SiteNav />
     <main className="counter">
       <aside className="rail rail-left" aria-label="About this book">
-        <Link href="/" className="wordmark">
-          Annal
-        </Link>
         <h1 className="thesis">{site.thesis}</h1>
         <p className="lede">{site.lede}</p>
 
@@ -43,7 +44,10 @@ export function BookView({ initial, demo, fast }: { initial: BookState; demo: bo
               const n = book.lines.filter((l) => l.originChainId === s.chainId).length;
               return (
                 <li key={s.key}>
-                  <span>{s.name}</span>
+                  <span className="chain-name">
+                    <ChainMark chain={s.key} size={16} />
+                    {s.name}
+                  </span>
                   <span>
                     {n} {n === 1 ? "line" : "lines"}
                   </span>
@@ -54,7 +58,7 @@ export function BookView({ initial, demo, fast }: { initial: BookState; demo: bo
           {watch.note && <p className="watch-note">{watch.note}</p>}
         </div>
 
-        {demo ? (
+        {demo || book.owner.toLowerCase() === DEMO_BOOK.toLowerCase() ? (
           <OpenBook />
         ) : watch.kind === "unopened" ? (
           <OpenBook forOwner={book.owner} label="Open this book" />
@@ -126,5 +130,6 @@ export function BookView({ initial, demo, fast }: { initial: BookState; demo: bo
         </section>
       </aside>
     </main>
+    </>
   );
 }

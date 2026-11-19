@@ -7,6 +7,7 @@ import type { BookLine, LineTrail } from "@/lib/book";
 import type { CheckState } from "@/lib/check";
 import { formatTime, formatUsdc, iso, lineNumber, shortHex } from "@/lib/format";
 import { CopyButton } from "./copy-button";
+import { ChainMark } from "./marks";
 
 type TrailLoad = { status: "idle" | "loading" | "error" } | { status: "ready"; trail: LineTrail };
 
@@ -93,7 +94,10 @@ export function Line({
             {lineNumber(line.index)}
           </span>
           <span className="line-what">
-            <span className="line-chain">{chainName}</span>
+            <span className="line-chain">
+              {source && <ChainMark chain={source.key} size={18} />}
+              {chainName}
+            </span>
             <span className="line-sub">
               from {shortHex(line.payer)} · <time dateTime={iso(line.writtenAt)}>{formatTime(line.writtenAt)}</time>
               {delay !== null && <> · printed in {delay} s</>}

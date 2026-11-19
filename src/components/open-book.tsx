@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { Wallet } from "lucide-react";
 import { useState } from "react";
 import {
   BaseError,
@@ -50,7 +51,16 @@ function explain(e: unknown): { title: string; body: string } {
  * Opens a book for the connected wallet: one `open()` transaction on Base Sepolia.
  * `forOwner` is set on a book page: then only that wallet can open this particular book.
  */
-export function OpenBook({ forOwner, label = "Open your own book" }: { forOwner?: string; label?: string }) {
+export function OpenBook({
+  forOwner,
+  label = "Open your own book",
+  hint = true,
+}: {
+  forOwner?: string;
+  label?: string;
+  /** Show the one-line explanation under the button. */
+  hint?: boolean;
+}) {
   const router = useRouter();
   const [step, setStep] = useState<Step>({ s: "idle" });
 
@@ -118,9 +128,10 @@ export function OpenBook({ forOwner, label = "Open your own book" }: { forOwner?
   return (
     <div className="open-flow">
       <button type="button" className="key" onClick={run} disabled={busy} aria-busy={busy}>
+        {!busy && <Wallet aria-hidden strokeWidth={2.3} />}
         {busy ? step.label : label}
       </button>
-      {step.s === "idle" && <p>One transaction on Base Sepolia. After that, nothing to run: payments print by themselves.</p>}
+      {step.s === "idle" && hint && <p>One transaction on Base Sepolia. After that, nothing to run: payments print by themselves.</p>}
       {step.s === "error" && (
         <p className="flow-error" role="alert">
           <strong>{step.title}</strong> {step.body}

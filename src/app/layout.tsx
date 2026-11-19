@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Archivo, Martian_Mono } from "next/font/google";
 import site from "@/lib/site.json";
 import "./globals.css";
+import "./landing.css";
 
 // Archivo reads; its expanded width sets the total the way a register prints a double-width total.
 const archivo = Archivo({

@@ -4,31 +4,50 @@
    A dark register counter is the frame; one thermal roll is the reading column.
    Token names come from the world, so a rule reads like the thing it draws. */
 :root {
-  /* the counter (frame) */
-  --counter: #20322a;
-  --counter-raised: #2a3f36;
-  --counter-rule: #3b5348;
-  --counter-ink: #ecf1ee; /* 13.9:1 on counter */
-  --counter-ink-soft: #b4c6bd; /* 8.1:1 on counter */
+  /* the brand field: marigold sun with ink */
+  --sun: #ffc233;
+  --sun-deep: #f5a50c;
+  --sun-pale: #ffe29a;
+  --ink: #0e0e10;
+  --ink-raised: #1a1a1f;
+  --ink-line: #2c2c33;
+  --ink-text-soft: #b9b9c4; /* 9.6:1 on ink */
+  --sun-text-soft: #4a3a0e; /* 7.0:1 on sun */
+
+  /* the counter (frame) is the sun */
+  --counter: var(--sun);
+  --counter-raised: var(--sun-pale);
+  --counter-rule: rgb(14 14 16 / 0.2);
+  --counter-ink: var(--ink);
+  --counter-ink-soft: var(--sun-text-soft);
 
   /* the roll (reading column) */
-  --paper: #f6f5f0;
+  --paper: #fbfaf6;
   --paper-fresh: #ffffff;
-  --print: #1b1b1e; /* 16:1 on paper */
-  --print-soft: #4d4d54; /* 7.9:1 on paper */
-  --print-faint: #64646b; /* 5.6:1 on paper */
-  --perforation: #c7c6bd;
+  --print: #1b1b1e;
+  --print-soft: #4d4d54;
+  --print-faint: #64646b;
+  --perforation: #d9d7cd;
   --perforation-strong: #8f8e86;
 
-  /* the one accent: the roll-end stripe, and "live" */
-  --roll-end: #d63a72;
-  --roll-end-ink: #a3234f; /* 6.3:1 on paper, for text */
+  /* signals */
+  --live: #22c96b;
+  --hot: #ff3d7f; /* rejection: the look-alike, mismatches */
+  --hot-ink: #c4114f; /* 5.4:1 on paper */
+  --roll-end: var(--hot);
+  --roll-end-ink: var(--hot-ink);
+
+  /* chains */
+  --eth: #627eea;
+  --base: #0052ff;
+  --uni: #f50db4;
 
   --font-read: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
   --font-print: var(--font-martian), ui-monospace, monospace;
 
   --roll-w: min(34rem, 100%);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   --tooth: 14px;
   --pad: 1.75rem;
   --no-col: 5.25rem;
@@ -40,7 +59,7 @@
 
 html {
   background: var(--counter);
-  color-scheme: dark;
+  color-scheme: light;
   -webkit-text-size-adjust: 100%;
 }
 
@@ -56,12 +75,12 @@ body {
 }
 
 ::selection {
-  background: var(--roll-end);
-  color: var(--paper-fresh);
+  background: var(--ink);
+  color: var(--sun);
 }
 
 :focus-visible {
-  outline: 2px solid var(--roll-end);
+  outline: 2.5px solid var(--ink);
   outline-offset: 3px;
   border-radius: 2px;
 }
@@ -85,12 +104,12 @@ a {
 
 .rail {
   position: sticky;
-  top: 0;
-  padding-top: clamp(2.5rem, 5vh, 4rem);
+  top: 5.5rem;
+  padding-top: clamp(1.5rem, 3vh, 2.5rem);
 }
 
 .rail-right {
-  padding-top: clamp(7rem, 14vh, 10rem);
+  padding-top: clamp(3.5rem, 7vh, 5rem);
 }
 
 @media (max-width: 1080px) {
@@ -213,7 +232,7 @@ a {
 }
 
 .thesis {
-  margin: 1.75rem 0 0;
+  margin: 0;
   font-size: clamp(1.45rem, 1.1rem + 0.9vw, 1.85rem);
   line-height: 1.22;
   font-weight: 600;
@@ -256,12 +275,12 @@ a {
   inline-size: 0.6rem;
   block-size: 0.6rem;
   border-radius: 50%;
-  background: var(--roll-end);
+  background: var(--live);
   flex: none;
 }
 
 .live-dot[data-state="live"] {
-  box-shadow: 0 0 0 0 color-mix(in oklab, var(--roll-end) 55%, transparent);
+  box-shadow: 0 0 0 0 color-mix(in oklab, var(--live) 55%, transparent);
   animation: breathe 2.4s var(--ease-out) infinite;
 }
 
@@ -276,11 +295,11 @@ a {
 
 @keyframes breathe {
   0% {
-    box-shadow: 0 0 0 0 color-mix(in oklab, var(--roll-end) 55%, transparent);
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--live) 60%, transparent);
   }
   70%,
   100% {
-    box-shadow: 0 0 0 0.6rem color-mix(in oklab, var(--roll-end) 0%, transparent);
+    box-shadow: 0 0 0 0.6rem color-mix(in oklab, var(--live) 0%, transparent);
   }
 }
 
@@ -319,15 +338,13 @@ a {
   min-height: 2.9rem;
   padding: 0.7rem 1.15rem;
   border: 0;
-  border-radius: 3px;
-  background: var(--paper);
-  color: var(--print);
-  font: 600 0.95rem/1 var(--font-read);
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--sun);
+  font: 700 0.95rem/1 var(--font-read);
   letter-spacing: 0.01em;
   cursor: pointer;
-  box-shadow:
-    0 1px 0 rgb(255 255 255 / 0.6) inset,
-    0 2px 6px rgb(0 0 0 / 0.28);
+  box-shadow: 0 6px 16px -6px rgb(14 14 16 / 0.45);
   transition:
     translate 0.15s var(--ease-out),
     box-shadow 0.15s var(--ease-out),
@@ -336,14 +353,18 @@ a {
 }
 
 .key:hover {
-  background: var(--paper-fresh);
+  translate: 0 -2px;
+  box-shadow: 0 12px 24px -8px rgb(14 14 16 / 0.5);
 }
 
 .key:active {
   translate: 0 1px;
-  box-shadow:
-    0 1px 0 rgb(255 255 255 / 0.6) inset,
-    0 1px 2px rgb(0 0 0 / 0.3);
+  box-shadow: 0 3px 8px -4px rgb(14 14 16 / 0.5);
+}
+
+.key svg {
+  inline-size: 1.05rem;
+  block-size: 1.05rem;
 }
 
 .key[disabled] {
@@ -352,13 +373,13 @@ a {
 }
 
 .key-quiet {
-  background: transparent;
-  color: var(--counter-ink);
-  box-shadow: inset 0 0 0 1px var(--counter-rule);
+  background: rgb(255 255 255 / 0.55);
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1.5px var(--ink);
 }
 
 .key-quiet:hover {
-  background: var(--counter-raised);
+  background: #fff;
 }
 
 .open-flow {
@@ -377,7 +398,7 @@ a {
 }
 
 .open-flow .flow-error strong {
-  color: #ff9fbf; /* roll-end tint, 7.4:1 on counter */
+  color: var(--hot-ink);
 }
 
 /* ───────────── the roll ───────────── */
@@ -391,8 +412,8 @@ a {
   color: var(--print);
   padding: calc(var(--tooth) + 2rem) 0 0;
   box-shadow:
-    0 24px 48px -12px rgb(0 0 0 / 0.55),
-    0 4px 10px rgb(0 0 0 / 0.25);
+    0 40px 70px -24px rgb(90 50 0 / 0.55),
+    0 6px 14px rgb(90 50 0 / 0.18);
   /* torn top edge */
   mask:
     conic-gradient(from 135deg at top, #0000, #000 1deg 89deg, #0000 90deg) top / var(--tooth) var(--tooth) repeat-x,
@@ -445,7 +466,7 @@ a {
   font-size: 0.6875rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--roll-end-ink);
+  color: #0b7a3c; /* live green, 5.3:1 on paper */
   border-bottom: 1px solid var(--perforation);
 }
 
@@ -533,8 +554,17 @@ details[open] .line-no svg {
 }
 
 .line-chain {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   font-weight: 600;
   color: var(--print);
+}
+
+.line-chain svg,
+.sub-name svg,
+.chain-name svg {
+  flex: none;
 }
 
 .line-sub {
@@ -753,8 +783,24 @@ details[open] .line-no svg {
 }
 
 .subtotals li {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  row-gap: 0.35rem;
+}
+
+.sub-name,
+.chain-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sub-bar {
+  grid-column: 1 / -1;
+  block-size: 4px;
+  border-radius: 99px;
+  background: linear-gradient(90deg, var(--chain) var(--share), var(--perforation) var(--share));
 }
 
 .subtotals .amount {

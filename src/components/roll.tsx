@@ -7,6 +7,7 @@ import { checkLine, type CheckState } from "@/lib/check";
 import { decimalsFor, formatDate, formatTime, formatUsdc, iso, shortHex } from "@/lib/format";
 import { CopyButton } from "./copy-button";
 import { Line } from "./line";
+import { CHAIN_COLOR, ChainMark } from "./marks";
 import { Unprinted } from "./unprinted";
 import { watchState, type WatchState } from "./watch";
 
@@ -55,6 +56,7 @@ export function Roll({
   const subtotals = useMemo(
     () =>
       SOURCES.map((s) => ({
+        key: s.key,
         name: s.name,
         count: book.lines.filter((l) => l.originChainId === s.chainId).length,
         sum: book.lines
@@ -129,14 +131,19 @@ export function Roll({
             </span>
           </div>
           <ul className="subtotals" aria-label="By chain">
-            {subtotals.map((s) => (
-              <li key={s.name}>
-                <span>
-                  {s.name} · {s.count} {s.count === 1 ? "line" : "lines"}
-                </span>
-                <span className="amount">{formatUsdc(s.sum, decimals)}</span>
-              </li>
-            ))}
+            {subtotals.map((s) => {
+              const share = BigInt(book.total) > 0n ? Number((BigInt(s.sum) * 1000n) / BigInt(book.total)) / 10 : 0;
+              return (
+                <li key={s.name}>
+                  <span className="sub-name">
+                    <ChainMark chain={s.key} size={16} />
+                    {s.name} · {s.count} {s.count === 1 ? "line" : "lines"}
+                  </span>
+                  <span className="amount">{formatUsdc(s.sum, decimals)}</span>
+                  <span className="sub-bar" aria-hidden style={{ ["--share" as string]: `${share}%`, ["--chain" as string]: CHAIN_COLOR[s.key] }} />
+                </li>
+              );
+            })}
           </ul>
         </div>
 
