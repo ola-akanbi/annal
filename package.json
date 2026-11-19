@@ -1,12 +1,16 @@
 {
-  "name": "annal-start",
+  "name": "annal",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "test:contracts": "cd contracts && forge test",
+    "gate:contracts": "cd contracts && forge fmt --check && forge lint --deny warnings && forge build --sizes && forge test",
+    "gate": "npm run lint -- --max-warnings=0 && npm run typecheck && npm run build && npm run gate:contracts"
   },
   "dependencies": {
     "next": "16.4.6",

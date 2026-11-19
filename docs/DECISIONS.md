@@ -1,0 +1,38 @@
+# Decisions
+Append-only. To change a decision, add a new entry that supersedes it.
+
+## D-001 · Build Annal for the Set It and Forget It track · 2026-11-19 · accepted
+**Context:** Reactive Omni Buildathon, three tracks (Every Second Counts $2,000/$250, Set It and Forget It $2,000/$250, Reactive Meets AI $1,000). Rubric: four equal criteria scored 1–5 (Execution, Integration, Usefulness, Craft). Execution requires reactive transactions and their callbacks on-chain.
+**Decision:** Annal, an income book across chains. One ownerless reactive contract on Lasna watches Circle USDC `Transfer` events to registered wallets on Ethereum Sepolia, Base Sepolia and Unichain Sepolia, and writes each one as a line in a book on Base Sepolia. Each line carries the origin chain ID, transaction hash and log index. Thesis: "One income book for every chain you're paid on. Every line is copied from the payment's own log, and links back to it."
+**Alternatives:**
+- A reserve router in Every Second Counts. Rejected on fit: it doesn't use Reactive's watch-every-chain subscription as directly.
+- A price alert for LP positions. Rejected: an alert needs an off-chain notifier, which removes the point of using Reactive.
+- An AI event interpreter. Rejected: the AI track's prize pool is half the size, and the model would only be decoration.
+- A plain portfolio viewer. Rejected: off-chain trackers already do that for free. A book that only on-chain events can write is something they can't offer.
+**Consequences:**
+- The book must have no owner-controlled write path.
+- The reactive contract must be ownerless and source-verified.
+- The UI must re-check every line against the origin chain.
+- Revisit if the M0 spike shows subscriptions can't deliver from two or more origin chains.
+**Evidence:** internal/research/DOSSIER.md (Decision, Thesis, §2, §4, §7).
+
+## D-002 · Testnet only: Lasna + Ethereum/Base/Unichain Sepolia · 2026-11-19 · accepted
+**Context:** The track allows Reactive mainnet or Lasna. The project lead asked for testnet.
+**Decision:** Reactive Lasna (5318007) for the reactive contract. Base Sepolia (84532) holds the book. Origins are Ethereum Sepolia (11155111), Base Sepolia and Unichain Sepolia (1301), using Circle's testnet USDC.
+**Alternatives:** Mainnet, rejected because it spends real funds and wasn't requested.
+**Consequences:** The limits section must say testnet only. Evidence needs durable captures, because testnets can reset.
+**Evidence:** Chain IDs and callback proxy bytecode checked 2026-11-19 (docs/CONTEXT.md).
+
+## D-003 · Stack: Next.js app at the root, Foundry contracts, TypeScript harness · 2026-11-19 · accepted
+**Context:** Judges and AI screens read the server-rendered HTML first, and the statement has to be linkable per wallet.
+**Decision:**
+- The Next.js app from `~/Documents/hackathons/_starter/start.sh` sits at the repo root (server-rendered thesis, link previews, CI, first-screen audit).
+- Solidity 0.8.29 + Foundry in `contracts/`, on `reactive-lib-omni`.
+- A TypeScript harness in `harness/` sends real payments and measures and captures each loop.
+**Alternatives:** A Vite SPA, as Ripcord used. Rejected: it renders nothing without JavaScript.
+**Consequences:** `contracts/` and `harness/` are excluded from the web app's lint and typecheck, and each has its own gate.
+**Evidence:** Starter README; reactive-contracts.mdx (`pragma solidity ^0.8.29`).
+
+## D-004 · Deployer key in an encrypted Foundry keystore outside the repo · 2026-11-19 · accepted
+**Decision:** Testnet deployer `0x4713b56012F67a84114D6a65Cd8924E7850b691E`, keystore account `annal-deployer`. The password file lives outside the repo in the operator's home directory. Scripts use `--account annal-deployer --password-file "$ANNAL_PW_FILE"`. No private key in any env file, commit or log.
+**Consequences:** The key is testnet only and never funded on mainnet.

@@ -9,6 +9,7 @@ const eslintConfig = defineConfig([
   globalIgnores([
     "internal/**",
     "ui-audit/**",
+    "contracts/**",
     // Default ignores of eslint-config-next:
     ".next/**",
     "out/**",
