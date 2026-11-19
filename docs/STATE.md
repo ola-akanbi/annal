@@ -24,11 +24,12 @@ _Last verified: 2026-11-19 21:38 UTC at the foundation commit_
 - **Real subscribe/callback cost and the gas of `react()` on open** (three `subscribe` calls + one callback, under the 900k cap): unverified until the spike. Unit-test gas uses a recorder, not the real system contract.
 - `CALLBACK_GAS_LIMIT = 400_000` hasn't been checked against the Base Sepolia proxy's `_extraGas` / `_maxChargeGas`.
 - The Lasna faucet ratio and per-request cap haven't been read.
-- GitHub: `github.com/ola-akanbi/annal`, **public** since 2026-11-19 (D-006). While private, all three CI runs failed at startup with zero jobs. This push is the first test on public minutes.
+- GitHub: `github.com/ola-akanbi/annal`, **public** since 2026-11-19 (D-006). **CI can't run: GitHub says "The job was not started because your account is locked due to a billing issue"** (run 44622607530, both jobs, after the switch to public). The account owner must clear it at github.com/settings/billing. Until then `npm run gate` locally is the gate of record.
 
 ## Claims not yet verified
 - C-1 thesis, C-2 "nobody can write a line by hand", C-3 "fake USDC is never written". All need on-chain evidence from M0/M2 (docs/EVIDENCE.md).
 
 ## Open questions
+- Clear the GitHub billing lock on `ola-akanbi` so CI runs (operator).
 - Can related builders submit separate BUIDLs, and when are results announced? (organizers, via DoraHacks Q&A)
 - Vercel account for the deployment: the CLI here is logged in as the operator's account, and Lekan's GitHub has the Vercel app installed (a Vercel check is queued on main). Which account owns the project? (operator)
