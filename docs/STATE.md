@@ -4,7 +4,7 @@ _Last verified: 2026-11-19 21:38 UTC at the foundation commit_
 **Thesis:** One income book for every chain you're paid on. Every line is copied from the payment's own log, and links back to it.
 **Milestone:** M0 · Rigged (checkpoint 2026-11-21 10:44 UTC) · **Deadline:** 2026-12-05 20:00 UTC (time left: the clock line)
 **Next action:** fund the deployer `0x4713b56012F67a84114D6a65Cd8924E7850b691E` on Base Sepolia, Ethereum Sepolia and Unichain Sepolia, plus lREACT and Circle USDC. Then run the M0 spike: deploy AnnalReactive on Lasna and AnnalBook on Base Sepolia, open a book, and send one USDC payment on two chains (PLAN M0).
-**Blocked on:** testnet funds for the deployer (since 2026-11-19; the operator funds it from faucets).
+**Blocked on:** testnet funds for the deployer (since 2026-11-19). Plan once Sepolia ETH lands: bridge to Base Sepolia (`0xfd0B…3120`) and Unichain Sepolia (`0xea58…4Ce2`), buy lREACT from the faucet (1 ETH → 100), and get USDC on all three chains (docs/CONTEXT.md, Funding routes).
 
 ## Works (verified this session)
 | Capability | Verified by | Evidence |
@@ -24,7 +24,7 @@ _Last verified: 2026-11-19 21:38 UTC at the foundation commit_
 - **Real subscribe/callback cost and the gas of `react()` on open** (three `subscribe` calls + one callback, under the 900k cap): unverified until the spike. Unit-test gas uses a recorder, not the real system contract.
 - `CALLBACK_GAS_LIMIT = 400_000` hasn't been checked against the Base Sepolia proxy's `_extraGas` / `_maxChargeGas`.
 - The Lasna faucet ratio and per-request cap haven't been read.
-- GitHub: `github.com/ola-akanbi/annal` (private), pushed at 792a9f9. **CI fails at startup with zero jobs** (run 44621076324). Workflow YAML parses, every action tag exists, Actions is enabled. Suspect the account's Actions billing for private repos. The local gate is the gate of record until fixed (D-005).
+- GitHub: `github.com/ola-akanbi/annal`, **public** since 2026-11-19 (D-006). While private, all three CI runs failed at startup with zero jobs. This push is the first test on public minutes.
 
 ## Claims not yet verified
 - C-1 thesis, C-2 "nobody can write a line by hand", C-3 "fake USDC is never written". All need on-chain evidence from M0/M2 (docs/EVIDENCE.md).
@@ -32,4 +32,3 @@ _Last verified: 2026-11-19 21:38 UTC at the foundation commit_
 ## Open questions
 - Can related builders submit separate BUIDLs, and when are results announced? (organizers, via DoraHacks Q&A)
 - Vercel account for the deployment: the CLI here is logged in as the operator's account, and Lekan's GitHub has the Vercel app installed (a Vercel check is queued on main). Which account owns the project? (operator)
-- Why does Actions fail at startup on the private repo? Check github.com/settings/billing on `ola-akanbi` (operator).
