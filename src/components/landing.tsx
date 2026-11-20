@@ -24,9 +24,8 @@ import { findUnprinted, formatUnitsPlain, type Unprinted } from "@/lib/explorers
 import { formatTime, formatUsdc, lineNumber, shortHex } from "@/lib/format";
 import site from "@/lib/site.json";
 import { CopyButton } from "./copy-button";
-import { AnnalMark, CHAIN_COLOR, ChainMark, GitHubMark } from "./marks";
+import { AnnalMark, CHAIN_COLOR, ChainMark } from "./marks";
 import { OpenBook } from "./open-book";
-import { REPO } from "./site-nav";
 import { useLiveBook } from "./use-live-book";
 import { watchState } from "./watch";
 
@@ -605,9 +604,6 @@ export function Landing({ initial }: { initial: BookState }) {
           <nav className="foot-links" aria-label="Footer">
             <Link href={`/book/${DEMO_BOOK}`}>Live book</Link>
             <Link href="/#how">How it works</Link>
-            <a href={REPO} target="_blank" rel="noreferrer">
-              <GitHubMark size={15} /> Source
-            </a>
           </nav>
           <p className="foot-note">
             Built on Reactive Network · testnet only (Lasna, Ethereum, Base and Unichain Sepolia) · USDC only · MIT licensed

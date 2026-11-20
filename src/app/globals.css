@@ -44,6 +44,7 @@
 
   --font-read: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
   --font-print: var(--font-martian), ui-monospace, monospace;
+  --font-dot: var(--font-doto), var(--font-martian), ui-monospace, monospace;
 
   --roll-w: min(34rem, 100%);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
@@ -528,9 +529,11 @@ a {
 
 .line-no {
   white-space: nowrap;
-  font-family: var(--font-print);
-  font-size: 0.6875rem;
-  letter-spacing: 0.04em;
+  font-family: var(--font-dot);
+  font-weight: 800;
+  font-variation-settings: "wght" 900, "ROND" 40;
+  font-size: 0.9375rem;
+  letter-spacing: 0.02em;
   color: var(--print-faint);
   display: inline-flex;
   align-items: center;
@@ -578,10 +581,13 @@ details[open] .line-no svg {
 }
 
 .amount {
+  font-family: var(--font-dot);
+  font-variation-settings: "wght" 900, "ROND" 40;
   font-variant-numeric: tabular-nums lining-nums;
-  font-feature-settings: "tnum", "lnum";
-  font-size: 1.125rem;
-  font-weight: 500;
+  font-size: 1.6rem;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  line-height: 1;
   color: var(--print);
   text-align: right;
   white-space: nowrap;
@@ -753,19 +759,22 @@ details[open] .line-no svg {
 }
 
 .total-figure {
-  font-weight: 800;
-  font-stretch: 125%;
-  font-size: clamp(3.25rem, 2.2rem + 3.2vw, 5rem);
-  line-height: 0.95;
-  letter-spacing: -0.04em;
+  font-family: var(--font-dot);
+  font-weight: 900;
+  font-variation-settings: "wght" 900, "ROND" 40;
+  font-size: clamp(3.6rem, 2.4rem + 3.6vw, 5.75rem);
+  line-height: 0.9;
+  letter-spacing: 0;
+  animation: dots-settle 1.4s var(--ease-out) both;
   font-variant-numeric: tabular-nums lining-nums;
   color: var(--print);
   white-space: nowrap;
 }
 
 .total-unit {
+  font-family: var(--font-read);
   font-size: 1.15rem;
-  font-weight: 700;
+  font-weight: 800;
   font-stretch: 100%;
   letter-spacing: 0.02em;
   margin-left: 0.4rem;
@@ -1017,5 +1026,24 @@ details[open] .line-no svg {
   }
   details > :not(summary) {
     display: block;
+  }
+}
+
+
+/* dots settle from square to round as a figure prints */
+@keyframes dots-settle {
+  from {
+    font-variation-settings: "wght" 900, "ROND" 0;
+    opacity: 0.2;
+  }
+  to {
+    font-variation-settings: "wght" 900, "ROND" 40;
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .total-figure {
+    animation: none;
   }
 }

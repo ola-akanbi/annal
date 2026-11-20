@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { BadgeCheck } from "lucide-react";
+import { useMemo } from "react";
 import { BOOK, SOURCES, addressUrl } from "@/lib/annal";
 import type { BookState } from "@/lib/book";
-import { checkLine, type CheckState } from "@/lib/check";
+import type { CheckState } from "@/lib/check";
 import { decimalsFor, formatDate, formatTime, formatUsdc, iso, shortHex } from "@/lib/format";
 import { CopyButton } from "./copy-button";
 import { Line } from "./line";
@@ -11,46 +12,20 @@ import { CHAIN_COLOR, ChainMark } from "./marks";
 import { Unprinted } from "./unprinted";
 import { watchState, type WatchState } from "./watch";
 
-const CHECK_CONCURRENCY = 4;
 
 export function Roll({
   book,
   fresh,
   readError,
+  checks,
 }: {
   book: BookState;
-  /** Line indexes that arrived since the page loaded: they feed out from under the tear. */
+  /** Line indexes that arrived since the page loaded: they feed out of the printer. */
   fresh: ReadonlySet<number>;
   readError: string | null;
+  /** Receipt checks run in the reader's browser (useReceiptChecks). */
+  checks: Record<number, CheckState>;
 }) {
-  const [checks, setChecks] = useState<Record<number, CheckState>>({});
-  // A line is queued once; a poll that re-runs the effect must not cancel checks already in flight.
-  const queued = useRef(new Set<number>());
-  const mounted = useRef(false);
-
-  useEffect(() => {
-    mounted.current = true;
-    return () => {
-      mounted.current = false;
-    };
-  }, []);
-
-  // ---- receipt checks, in the browser ----
-  useEffect(() => {
-    const pending = book.lines.filter((l) => !queued.current.has(l.index));
-    if (pending.length === 0) return;
-    pending.forEach((l) => queued.current.add(l.index));
-    const queue = [...pending];
-    const worker = async () => {
-      while (queue.length > 0) {
-        const line = queue.shift()!;
-        const result = await checkLine(book.owner, line);
-        if (mounted.current) setChecks((c) => ({ ...c, [line.index]: result }));
-      }
-    };
-    for (let i = 0; i < CHECK_CONCURRENCY; i++) void worker();
-  }, [book.lines, book.owner]);
-
   const newestFirst = useMemo(() => [...book.lines].sort((a, b) => b.index - a.index), [book.lines]);
   const decimals = useMemo(() => decimalsFor(book.lines.map((l) => l.amount)), [book.lines]);
   const subtotals = useMemo(
@@ -69,6 +44,7 @@ export function Roll({
   const checkedCount = Object.values(checks).filter((c) => c.state === "checked").length;
   const watch: WatchState = watchState(book);
   const newestIndex = newestFirst[0]?.index;
+  const allChecked = book.lines.length > 0 && checkedCount === book.lines.length;
 
   return (
     <section aria-label="Signature component" className="roll-wrap">
@@ -123,6 +99,17 @@ export function Roll({
         )}
 
         <div className="total">
+          {allChecked && (
+            <div className="stamp-verified" role="status">
+              <BadgeCheck aria-hidden strokeWidth={2.4} />
+              <span>
+                <b>
+                  Verified {checkedCount}/{book.lines.length}
+                </b>
+                in your browser
+              </span>
+            </div>
+          )}
           <div className="total-row">
             <span className="total-label">Total received</span>
             <span className="total-figure">

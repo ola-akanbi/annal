@@ -61,3 +61,11 @@ Append-only. To change a decision, add a new entry that supersedes it.
 - Glass nav with icons on every page. The live demo book moves to `/book/<demo>`.
 **Alternatives:** Handed-over and roll-as-page structures; overprint-ink colour system (decision page, 2026-11-20).
 **Consequences:** Persuade-mode rules apply to `/`; Read rules still govern the statement column. Reveals are IntersectionObserver-driven and visible by default (scroll-driven `view()` timelines left captured pages blank).
+
+## D-009 · Dot-matrix figures and a redesigned book page · 2026-11-20 · accepted · extends D-008
+**Context:** The project lead asked for more creative typography, a far stronger book page, and no GitHub link on the site.
+**Decision:**
+- Money is set in Doto, a variable dot-matrix face: every amount, total, line number, the hero figure and the band's address. Weight is pinned in `font-variation-settings` (`"wght" 900, "ROND" 40`), and figures settle from square to round dots as they print. Archivo Expanded stays for headlines; Martian Mono for hashes and labels.
+- Book page: a halftone marigold band with a deterministic identity mark for the wallet, live status, four live stats (total, lines, verified in this browser, median print time) and a share card with a dot-style QR, copy link, native share and print. Below it, the chain split, a printer head the roll feeds out of (LED follows the watcher's state), a "Verified n/n in your browser" stamp on the total, and the newest line's trail drawn to scale in seconds.
+- GitHub links removed from the site (nav and footer).
+**Consequences:** The receipt checks now live in a shared hook (`useReceiptChecks`), so the stats band and the roll show the same verification state.

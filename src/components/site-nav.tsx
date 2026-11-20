@@ -1,9 +1,8 @@
 import Link from "next/link";
 import { BookOpen, ShieldCheck, Wallet, Workflow } from "lucide-react";
 import { DEMO_BOOK } from "@/lib/annal";
-import { AnnalMark, GitHubMark } from "./marks";
+import { AnnalMark } from "./marks";
 
-const REPO = "https://github.com/ola-akanbi/annal";
 
 /** The site header: glass over whatever field sits under it. */
 export function SiteNav() {
@@ -27,10 +26,6 @@ export function SiteNav() {
             <ShieldCheck aria-hidden strokeWidth={2.2} />
             Why trust it
           </Link>
-          <a href={REPO} target="_blank" rel="noreferrer">
-            <GitHubMark size={16} />
-            GitHub
-          </a>
         </nav>
         <Link href="/#open" className="nav-cta">
           <Wallet aria-hidden strokeWidth={2.2} />
@@ -41,4 +36,3 @@ export function SiteNav() {
   );
 }
 
-export { REPO };

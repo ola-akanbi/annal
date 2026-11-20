@@ -1,16 +1,21 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, BadgeCheck, Printer, ShieldCheck, Timer, TriangleAlert } from "lucide-react";
 import { BOOK, DEMO_BOOK, REACTIVE, SOURCES, addressUrl } from "@/lib/annal";
-import type { BookState } from "@/lib/book";
-import { shortHex } from "@/lib/format";
-import site from "@/lib/site.json";
-import { ChainMark } from "./marks";
+import type { BookLine, BookState } from "@/lib/book";
+import { formatDate, formatTime, formatUsdc, shortHex } from "@/lib/format";
+import { ChainSplit } from "./chain-split";
+import { CopyButton } from "./copy-button";
+import { Identicon } from "./identicon";
+import { LatestTrail } from "./latest-trail";
 import { OpenBook } from "./open-book";
-import { SiteNav } from "./site-nav";
+import { PrinterHead } from "./printer";
 import { Roll } from "./roll";
+import { ShareCard } from "./share-card";
+import { SiteNav } from "./site-nav";
 import { useLiveBook } from "./use-live-book";
+import { useReceiptChecks } from "./use-receipt-checks";
 import { watchState } from "./watch";
 
 function lreact(wei: string | null): string {
@@ -21,115 +26,177 @@ function lreact(wei: string | null): string {
   return `${whole}.${frac} lREACT`;
 }
 
+const delayOf = (l: BookLine) => (l.originAt > 0 ? Math.max(0, l.writtenAt - l.originAt) : null);
+
+function medianDelay(lines: BookLine[]): number | null {
+  const xs = lines.map(delayOf).filter((d): d is number => d !== null).sort((a, b) => a - b);
+  if (xs.length === 0) return null;
+  const m = Math.floor(xs.length / 2);
+  return xs.length % 2 ? xs[m] : Math.round((xs[m - 1] + xs[m]) / 2);
+}
+
 export function BookView({ initial, demo, fast }: { initial: BookState; demo: boolean; fast: boolean }) {
   const { book, fresh, readError } = useLiveBook(initial, fast);
+  const checks = useReceiptChecks(book);
   const watch = watchState(book);
   const debt = book.reactive.debt === null ? null : BigInt(book.reactive.debt);
+  const isDemo = demo || book.owner.toLowerCase() === DEMO_BOOK.toLowerCase();
+  const newest = book.lines.reduce<BookLine | undefined>((a, l) => (!a || l.index > a.index ? l : a), undefined);
+  const verified = Object.values(checks).filter((c) => c.state === "checked").length;
+  const mismatches = Object.values(checks).filter((c) => c.state === "mismatch").length;
+  const med = medianDelay(book.lines);
 
   return (
     <>
-    <SiteNav />
-    <main className="counter">
-      <aside className="rail rail-left" aria-label="About this book">
-        <h1 className="thesis">{site.thesis}</h1>
-        <p className="lede">{site.lede}</p>
+      <SiteNav />
+      <main className="book-page">
+        {/* ───────── the band: who, how much, and how to hand it over ───────── */}
+        <section className="book-band" aria-label="This book">
+          <div className="band-inner">
+            <div className="band-id">
+              <Identicon address={book.owner} size={76} />
+              <div>
+                <p className="band-kind">Income book{isDemo && " · live demo"}</p>
+                <h1 className="band-title">
+                  {shortHex(book.owner, 6, 4)}
+                  <CopyButton value={book.owner} label="Copy this wallet's address" />
+                </h1>
+                <p className="band-status" aria-live="polite">
+                  <span className="live-dot" data-state={watch.dot} aria-hidden />
+                  {watch.status}
+                  {book.watchingSince > 0 && (
+                    <span className="band-since">
+                      since {formatDate(book.watchingSince)}, {formatTime(book.watchingSince)}
+                    </span>
+                  )}
+                </p>
+              </div>
+            </div>
 
-        <div className="watch">
-          <div className="watch-status" aria-live="polite">
-            <span className="live-dot" data-state={watch.dot} aria-hidden />
-            {watch.status}
+            <dl className="band-stats">
+              <div className="bstat bstat-total">
+                <dt>Total received</dt>
+                <dd>
+                  <span className="dotnum">{formatUsdc(book.total)}</span>
+                  <small>USDC</small>
+                </dd>
+              </div>
+              <div className="bstat">
+                <dt>
+                  <Printer aria-hidden strokeWidth={2.3} /> Lines
+                </dt>
+                <dd>
+                  <span className="dotnum">{book.lines.length}</span>
+                </dd>
+              </div>
+              <div className="bstat">
+                <dt>
+                  {mismatches > 0 ? <TriangleAlert aria-hidden strokeWidth={2.3} /> : <BadgeCheck aria-hidden strokeWidth={2.3} />}{" "}
+                  Verified here
+                </dt>
+                <dd>
+                  <span className="dotnum">{verified}</span>
+                  <small>/ {book.lines.length}</small>
+                </dd>
+              </div>
+              <div className="bstat">
+                <dt>
+                  <Timer aria-hidden strokeWidth={2.3} /> Median print
+                </dt>
+                <dd>
+                  <span className="dotnum">{med ?? "–"}</span>
+                  {med !== null && <small>s</small>}
+                </dd>
+              </div>
+            </dl>
+
+            <ShareCard path={`/book/${book.owner}`} />
           </div>
-          <ul className="watch-chains" aria-label="Chains this book watches">
-            {SOURCES.map((s) => {
-              const n = book.lines.filter((l) => l.originChainId === s.chainId).length;
-              return (
-                <li key={s.key}>
-                  <span className="chain-name">
-                    <ChainMark chain={s.key} size={16} />
-                    {s.name}
-                  </span>
-                  <span>
-                    {n} {n === 1 ? "line" : "lines"}
-                  </span>
-                </li>
-              );
-            })}
-          </ul>
-          {watch.note && <p className="watch-note">{watch.note}</p>}
+        </section>
+
+        {/* ───────── the counter: split · printer and roll · trail ───────── */}
+        <div className="counter book-counter">
+          <aside className="rail rail-left" aria-label="About this book">
+            <ChainSplit book={book} />
+            {watch.note && <p className="watch-note">{watch.note}</p>}
+            {isDemo ? (
+              <div className="rail-cta">
+                <h2>Want one like this?</h2>
+                <OpenBook label="Open your own book" />
+              </div>
+            ) : watch.kind === "unopened" ? (
+              <div className="rail-cta">
+                <h2>Is this your wallet?</h2>
+                <OpenBook forOwner={book.owner} label="Open this book" />
+              </div>
+            ) : (
+              <div className="rail-cta">
+                <Link href={`/book/${DEMO_BOOK}`} className="key key-quiet">
+                  See the demo book
+                </Link>
+              </div>
+            )}
+          </aside>
+
+          <div className="press">
+            <PrinterHead watch={watch} block={book.block} />
+            <Roll book={book} fresh={fresh} readError={readError} checks={checks} />
+          </div>
+
+          <aside className="rail rail-right notes" aria-label="How to trust it">
+            <LatestTrail owner={book.owner} line={newest} />
+            <section>
+              <h2>
+                <ShieldCheck aria-hidden strokeWidth={2.3} /> Why you can trust it
+              </h2>
+              <p>
+                Nobody types in this book, including its owner. Lines arrive only from one Reactive Network contract, and only
+                for Circle&rsquo;s USDC on {SOURCES.map((s) => s.short).join(", ")}. A token that merely calls itself USDC is
+                never printed.
+              </p>
+            </section>
+            <section>
+              <h2>The machine</h2>
+              <dl className="machine">
+                <div>
+                  <dt>AnnalReactive · {REACTIVE.name}</dt>
+                  <dd>
+                    <a href={addressUrl(REACTIVE.explorer, REACTIVE.address)} target="_blank" rel="noreferrer">
+                      {shortHex(REACTIVE.address, 6, 4)}
+                      <ArrowUpRight aria-hidden strokeWidth={2} />
+                    </a>
+                    <br />
+                    {debt === null
+                      ? "Health unknown right now."
+                      : debt > 0n
+                        ? "Owes fees: paused until topped up."
+                        : `Funded with ${lreact(book.reactive.balance)}, owes nothing.`}
+                  </dd>
+                </div>
+                <div>
+                  <dt>AnnalBook · {BOOK.name}</dt>
+                  <dd>
+                    <a href={addressUrl(BOOK.explorer, BOOK.address)} target="_blank" rel="noreferrer">
+                      {shortHex(BOOK.address, 6, 4)}
+                      <ArrowUpRight aria-hidden strokeWidth={2} />
+                    </a>
+                    <br />
+                    No owner, no admin. Writes only through Reactive&rsquo;s callback proxy.
+                  </dd>
+                </div>
+              </dl>
+            </section>
+            <section>
+              <h2>Limits</h2>
+              <ul>
+                <li>Testnet only.</li>
+                <li>USDC only. Plain ETH transfers leave no log to copy.</li>
+                <li>If the watcher runs out of funds, payments made meanwhile aren&rsquo;t printed. The status says so.</li>
+              </ul>
+            </section>
+          </aside>
         </div>
-
-        {demo || book.owner.toLowerCase() === DEMO_BOOK.toLowerCase() ? (
-          <OpenBook />
-        ) : watch.kind === "unopened" ? (
-          <OpenBook forOwner={book.owner} label="Open this book" />
-        ) : (
-          <div className="open-flow">
-            <Link href="/" className="key key-quiet">
-              See the demo book
-            </Link>
-          </div>
-        )}
-      </aside>
-
-      <Roll book={book} fresh={fresh} readError={readError} />
-
-      <aside className="rail rail-right notes" aria-label="How to trust it">
-        <section>
-          <h2>Why you can trust it</h2>
-          <p>
-            Nobody types in this book, including its owner. Lines arrive only from one Reactive Network contract, and only
-            for Circle&rsquo;s USDC on {SOURCES.map((s) => s.short).join(", ")}. A token that merely calls itself USDC is
-            never printed.
-          </p>
-        </section>
-        <section>
-          <h2>Check any line</h2>
-          <p>
-            Open a line to see the payment, the Reactive transaction that read it and the callback that wrote it. Your
-            browser fetches each payment&rsquo;s receipt from its own chain and ticks the line only if every field matches.
-          </p>
-        </section>
-        <section>
-          <h2>The machine</h2>
-          <dl className="machine">
-            <div>
-              <dt>AnnalReactive · {REACTIVE.name}</dt>
-              <dd>
-                <a href={addressUrl(REACTIVE.explorer, REACTIVE.address)} target="_blank" rel="noreferrer">
-                  {shortHex(REACTIVE.address, 6, 4)}
-                  <ArrowUpRight aria-hidden strokeWidth={2} />
-                </a>
-                <br />
-                {debt === null
-                  ? "Health unknown right now."
-                  : debt > 0n
-                    ? `Owes fees: paused until topped up.`
-                    : `Funded with ${lreact(book.reactive.balance)}, owes nothing.`}
-              </dd>
-            </div>
-            <div>
-              <dt>AnnalBook · {BOOK.name}</dt>
-              <dd>
-                <a href={addressUrl(BOOK.explorer, BOOK.address)} target="_blank" rel="noreferrer">
-                  {shortHex(BOOK.address, 6, 4)}
-                  <ArrowUpRight aria-hidden strokeWidth={2} />
-                </a>
-                <br />
-                No owner, no admin. Writes only through Reactive&rsquo;s callback proxy.
-              </dd>
-            </div>
-          </dl>
-        </section>
-        <section>
-          <h2>Limits</h2>
-          <ul>
-            <li>Testnet only.</li>
-            <li>USDC only. Plain ETH transfers leave no log to copy.</li>
-            <li>If the watcher runs out of funds, payments made meanwhile aren&rsquo;t printed. The status says so.</li>
-          </ul>
-        </section>
-      </aside>
-    </main>
+      </main>
     </>
   );
 }

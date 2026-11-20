@@ -1,14 +1,25 @@
 import type { Metadata, Viewport } from "next";
-import { Archivo, Martian_Mono } from "next/font/google";
+import { Archivo, Doto, Martian_Mono } from "next/font/google";
 import site from "@/lib/site.json";
 import "./globals.css";
 import "./landing.css";
+import "./book.css";
 
 // Archivo reads; its expanded width sets the total the way a register prints a double-width total.
 const archivo = Archivo({
   subsets: ["latin"],
   axes: ["wdth"],
   variable: "--font-archivo",
+  display: "swap",
+});
+
+// Doto is the register's print head: every amount, total and line number is set in dots, and the
+// ROND axis lets the dots settle from square to round as a figure prints.
+const doto = Doto({
+  subsets: ["latin"],
+  axes: ["ROND"],
+  weight: "variable",
+  variable: "--font-doto",
   display: "swap",
 });
 
@@ -36,7 +47,7 @@ export const viewport: Viewport = { themeColor: site.themeColor };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${archivo.variable} ${martian.variable}`}>
+    <html lang="en" className={`${archivo.variable} ${martian.variable} ${doto.variable}`}>
       <body>{children}</body>
     </html>
   );
