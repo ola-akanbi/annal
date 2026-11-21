@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "side-tab",
+        "value": "*",
+        "files": [
+          "src/app/globals.css"
+        ],
+        "createdAt": "2026-11-21T07:26:02.751Z",
+        "reason": "user confirmed: see.md asks for a border-l-4 accent bar in each row's chain colour; it encodes the payment's source chain, not decoration"
+      }
+    ]
+  }
+}
