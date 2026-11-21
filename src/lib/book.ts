@@ -177,17 +177,31 @@ export type LineTrail = {
   callbackAt: number | null;
 };
 
-/** Lasna block nearest to (at or after) `ts`, by binary search on block timestamps. */
-async function lasnaBlockAtOrAfter(ts: number): Promise<bigint> {
-  let lo = REACTIVE.deployBlock;
-  let hi = await lasna.getBlockNumber();
-  while (lo < hi) {
-    const mid = (lo + hi) / 2n;
-    const b = await lasna.getBlock({ blockNumber: mid });
-    if (Number(b.timestamp) < ts) lo = mid + 1n;
-    else hi = mid;
+/**
+ * The first Lasna block at or after `ts`, and Lasna's head. Interpolates on block timestamps,
+ * falling back to plain bisection every other step, so it settles in a handful of reads rather
+ * than one per bit of the block number.
+ */
+async function lasnaBlockAtOrAfter(ts: number): Promise<{ block: bigint; head: bigint }> {
+  const [first, last] = await Promise.all([lasna.getBlock({ blockNumber: REACTIVE.deployBlock }), lasna.getBlock()]);
+  const head = last.number;
+  if (Number(first.timestamp) >= ts) return { block: first.number, head };
+  if (Number(last.timestamp) < ts) return { block: head, head };
+  // Invariant: lo.t < ts <= hi.t
+  let lo = { n: first.number, t: Number(first.timestamp) };
+  let hi = { n: head, t: Number(last.timestamp) };
+  for (let step = 0; hi.n - lo.n > 1n; step++) {
+    let mid =
+      step % 2 === 0 && hi.t > lo.t
+        ? lo.n + ((hi.n - lo.n) * BigInt(ts - lo.t)) / BigInt(hi.t - lo.t)
+        : (lo.n + hi.n) / 2n;
+    if (mid <= lo.n) mid = lo.n + 1n;
+    if (mid >= hi.n) mid = hi.n - 1n;
+    const t = Number((await lasna.getBlock({ blockNumber: mid })).timestamp);
+    if (t < ts) lo = { n: mid, t };
+    else hi = { n: mid, t };
   }
-  return lo;
+  return { block: hi.n, head };
 }
 
 async function findCallback(owner: Address, index: number, writtenAt: number) {
@@ -211,13 +225,15 @@ async function findCallback(owner: Address, index: number, writtenAt: number) {
 }
 
 async function findReaction(owner: Address, originChainId: number, originTxHash: Hex, logIndex: number, writtenAt: number) {
-  const start = await lasnaBlockAtOrAfter(writtenAt - 120);
+  const { block: start, head } = await lasnaBlockAtOrAfter(writtenAt - 120);
+  // Lasna refuses a range that runs past its head, which every freshly printed line would.
+  const end = start + 600n > head ? head : start + 600n;
   const logs = await lasna.getLogs({
     address: REACTIVE.address,
     event: annalReactiveAbi.find((x) => x.type === "event" && x.name === "Copied")!,
     args: { owner, originChainId: BigInt(originChainId) },
     fromBlock: start,
-    toBlock: start + 600n,
+    toBlock: end,
   });
   const match = logs.find(
     (l) => BigInt(l.args.originTxHash ?? 0n) === BigInt(originTxHash) && Number(l.args.logIndex) === logIndex,

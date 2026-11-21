@@ -20,7 +20,7 @@ import {
   WalletIcon,
 } from "@phosphor-icons/react";
 import { BOOK, DEMO_BOOK, REACTIVE, SAME_ADDRESS_NOTE, SOURCES, addressUrl, sourceByChainId, txUrl } from "@/lib/annal";
-import type { BookLine, BookState, LineTrail } from "@/lib/book";
+import type { BookLine, BookState } from "@/lib/book";
 import { findUnprinted, formatUnitsPlain, type Unprinted } from "@/lib/explorers";
 import { formatTime, formatUsdc, lineNumber, shortHex } from "@/lib/format";
 import site from "@/lib/site.json";
@@ -29,6 +29,7 @@ import { DotNumber, usdcNumber } from "./dot-number";
 import { AnnalMark, CHAIN_COLOR, ChainMark } from "./marks";
 import { OpenBook } from "./open-book";
 import { useLiveBook } from "./use-live-book";
+import { useTrail } from "./use-trail";
 import { watchState } from "./watch";
 
 const delayOf = (l: BookLine) => (l.originAt > 0 ? Math.max(0, l.writtenAt - l.originAt) : null);
@@ -146,7 +147,6 @@ export function Landing({ initial }: { initial: BookState }) {
   const { book } = useLiveBook(initial);
   const [now, setNow] = useState<number | null>(null);
   const [unprinted, setUnprinted] = useState<Unprinted[]>([]);
-  const [trail, setTrail] = useState<LineTrail | null>(null);
   const watch = watchState(book);
 
   useEffect(() => {
@@ -162,6 +162,9 @@ export function Landing({ initial }: { initial: BookState }) {
   const newestDelay = newest ? delayOf(newest) : null;
   const delays = book.lines.map(delayOf).filter((d): d is number => d !== null);
   const med = median(delays);
+  // Shared, de-duplicated lookup: a live re-read must not re-request a trail that never changes.
+  const trailState = useTrail(book.owner, newest);
+  const trail = trailState.status === "ready" ? trailState.trail : null;
   const printedKey = book.lines.map((l) => l.originTxHash + l.logIndex).join(",");
 
   useEffect(() => {
@@ -175,25 +178,6 @@ export function Landing({ initial }: { initial: BookState }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [book.owner, book.openedAt, printedKey]);
 
-  useEffect(() => {
-    if (!newest) return;
-    const q = new URLSearchParams({
-      owner: book.owner,
-      index: String(newest.index),
-      chain: String(newest.originChainId),
-      tx: newest.originTxHash,
-      log: String(newest.logIndex),
-      at: String(newest.writtenAt),
-    });
-    let cancelled = false;
-    fetch(`/api/trail?${q}`)
-      .then((r) => (r.ok ? r.json() : null))
-      .then((t) => !cancelled && setTrail(t))
-      .catch(() => {});
-    return () => {
-      cancelled = true;
-    };
-  }, [book.owner, newest]);
 
   const tickerItems = [
     ...newestFirst.map((l) => {
