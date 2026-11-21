@@ -45,7 +45,7 @@ export const SOURCES: readonly Source[] = [
     usdc: "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
     rpc: "https://sepolia.base.org",
     checkRpcs: ["https://sepolia.base.org", "https://base-sepolia-rpc.publicnode.com"],
-    explorer: "https://sepolia.basescan.org",
+    explorer: "https://base-sepolia.blockscout.com",
     blockscout: "https://base-sepolia.blockscout.com",
   },
   {
@@ -67,7 +67,7 @@ export const BOOK = {
   address: "0x653B62A39Aea06998c152b48F150175B2645c8Bd" as Address,
   name: "Base Sepolia",
   rpc: "https://sepolia.base.org",
-  explorer: "https://sepolia.basescan.org",
+  explorer: "https://base-sepolia.blockscout.com",
   /** First block the book could have logs in (its deploy block). */
   deployBlock: 61020484n,
   /** Verified source (exact match on Blockscout and Sourcify, 2026-11-21). */
