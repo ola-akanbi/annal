@@ -1,0 +1,24 @@
+E-012 · The submission film's take: real transactions on camera (2026-11-21, production app)
+
+Fresh owner (key generated in the recording browser, never left it): 0x1AD3275a567BEBd79daBc889897fe1Dd55fEAA17
+  gas funding from annal-deployer, Base Sepolia: 0xf4ac179533ac1e289a118d37cf41183737db65283e8dbc528cf14e74672e4bda
+  open() on AnnalBook, Base Sepolia:             0x3a927282589c6ac29988b6f1479f01f55aede306c05c531d0f5955058f238ed2
+  openedAt 1795253874 · watchingSince 1795253875 (Reactive confirmed 1 s later, read on-chain after the take)
+
+Live payments filmed into that book (Circle test USDC, 1.00 each, from annal-deployer):
+  Unichain Sepolia 0x16895bac27188eadeb118597826b8d04015b63e430957a1ef7c0286311cf8b4e -> line No. 001, "printed in 1 s"
+  Base Sepolia     0xe56f27266196010bf3711f770aeb990b552be81332ecfae7577a9836c77452b4 -> line No. 002, "printed in 2 s"
+  lineCount(owner) = 2 after the take.
+
+On screen the Unichain line appears about 9 s after the command starts: the command waits for its own
+receipt, and the page re-reads the book every 1.5 s. The book's own figure ("printed in N s", block
+timestamp to writtenAt) is what the film shows as the delay.
+
+Also filmed: the demo book's line No. 003 trail (E-005 loop 4), the look-alike comparison (E-004), the
+forged record() refused live with NotAuthorized(0xa7D5…7444, 0x476F…3585) and the mined forgery
+0x7e5721dc… on Blockscout (E-004), the reader's view at 390 px (E-007), the numbers from E-009.
+
+Found while filming and fixed in d75e9c9: right after open(), Base Sepolia's public RPC can lag the
+block, and the page told the new owner "No book has been opened"; it now says the book is opening.
+
+Master: internal/film/film/annal-master.mp4 (2:29.8, 1920x1080, -16 LUFS). Not committed (gitignored, 37.7 MB).

@@ -1,6 +1,8 @@
 # Annal: the submission film
 
-**Limit:** under 3:00 (DoraHacks submission rule). **Target: 2:40**, leaving 20 s of margin.
+**Limit:** under 3:00 (DoraHacks submission rule). **Rendered: 2:29.8** (1920×1080, −16 LUFS), 30 s of margin. Master at `internal/film/film/annal-master.mp4`; real transactions in it: E-012.
+
+**As produced:** the hook card is silent (5 s); chapter 4 holds until the second line prints (32 s, the waits kept); chapter 8 is the numbers card. The voice is ElevenLabs, synthesised from the caption lines in `internal/film/scripts/narration.ts`.
 **Judged from:** the submission only; the film is the demo. Rubric: Execution (reactive txs and callbacks on-chain), Integration (the reactive contract does real work), Usefulness (a problem real users have), Craft. Track: Set It and Forget It ("is this something you'd actually leave running?").
 **Thesis, verbatim:** *One income book for every chain you're paid on. Every line is copied from the payment's own log, and links back to it.*
 **Tagline for the end card:** *Nobody types in this book.*
