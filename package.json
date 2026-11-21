@@ -12,7 +12,8 @@
     "gate:contracts": "cd contracts && forge fmt --check && forge lint --deny warnings && forge build --sizes && forge test",
     "gate": "npm run lint -- --max-warnings=0 && npm run typecheck && npm run build && npm run gate:contracts",
     "abi": "cd contracts && forge build >/dev/null && cd .. && node scripts/gen-abi.mjs",
-    "vercel:lekan": "vercel --global-config ~/.config/vercel-lekan --scope lekan6"
+    "vercel:lekan": "vercel --global-config ~/.config/vercel-lekan --scope lekan6",
+    "harness:latency": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON harness/latency.ts"
   },
   "dependencies": {
     "@number-flow/react": "0.6.2",
