@@ -1,9 +1,9 @@
 # State
-_Last verified: 2026-11-21 14:30 UTC_
+_Last verified: 2026-11-21 15:20 UTC at c27678c_
 
 **Thesis:** One income book for every chain you're paid on. Every line is copied from the payment's own log, and links back to it. (Claims table: qualified. Copy must name Ethereum, Base and Unichain Sepolia.)
 **Milestone:** M1 · Walking skeleton (checkpoint 2026-11-26 05:49 UTC). M0 closed. · **Deadline:** 2026-12-05 20:00 UTC (time left: the clock line)
-**Next action:** fill the DoraHacks form from `internal/SUBMISSION.md`, then `/hackathon preflight` before submitting. Film: https://youtu.be/Hb0ndXJAirs (unlisted, re-cut with the new hero; delete the old EggEfW50Ets upload).
+**Next action:** submit on DoraHacks from `internal/SUBMISSION.md` (links pinned to 22d7a22 still resolve), then `git tag submission && git push origin submission`. Preflight passed 2026-11-21 except the items only the project lead can do (phone on cellular, captions attached, old video deleted).
 **Blocked on:** nothing.
 
 ## Works (verified this session)
@@ -26,6 +26,7 @@ _Last verified: 2026-11-21 14:30 UTC_
 | README as a proof surface: thesis + chains, live links, three-transaction table per demo line, refusals with tx links, latency table, read-only `cast` checks, clean-clone tests, line-level permalinks, limits | verify block run verbatim (C-8); clean clone → 21 passed; permalinks 200 | README.md, claims C-5–C-8 |
 | Submission film v2 rendered (own world: amber counter, dot-matrix wipes, receipt hook and end card, 3D phone + real QR + real printed statement, composed score, sampled printer/stamp effects): 2:29.8, 10 chapters, live open + two live payments printing on camera, refusals, phone reader, numbers, end card; 0 silences, claim on screen at 0:10 | contact sheet + frame checks; on-chain read of the filmed book (2 lines, confirmed 1 s after open) | E-012 |
 | Cold-judge benchmark (sponsor, design, generalist, ai-screen): 15/20 combined, AI screen PASS; fixes shipped: multi-RPC receipt check (demo book 3/3), hero leads with the thesis, phone overflow gone at 360–1440, open button in the hero with errors on their own line, calendar-day dates, "Set once, keeps running" + second book + drain limit in README, judge/prize talk removed from public docs, exact captions | `internal/benchmarks/2026-11-21-7ca9898.md`; local render at 320–1440; gate green | this commit |
+| Preflight 2026-11-21: README verify block verbatim OK; watcher 10.89 lREACT, debt 0 on both sides; gitleaks clean; repo public; 34 README links 200 + app/Etherscan/Uniscan in a browser (Basescan 403 to bots → Base links moved to Blockscout); thesis + og:image in raw HTML; signature visible at 0.7 s; no sideways scroll at 375 on all three pages; demo book 3/3; video plays logged out | terminal + headless browser, production | commit c27678c |
 | Contracts gate: 21 tests, lint with warnings denied, fmt check | `npm run gate:contracts` | E-006 |
 | Landing page in production (live-ticker hero from the newest real payment, ticker, live stats, animated three-chain flow with real tx links, look-alike comparison, audiences, contracts and verify command, final call to action) + glass nav with icons, full-colour brand (D-008) | browser on https://annal-sooty.vercel.app at 1440 and 390 wide, every section rendered, no horizontal scroll, console clean | commit 074b520 |
 | UI refinement in production (D-010): ledger-band rows with chain accent bars, row ↔ inspector sync ("Inspecting"), Motion drawers with inset proof panel and emerald verdict, chain filters + filtered subtotal + expand/collapse all, Phosphor icons, copy toasts, NumberFlow figures, three-colour core, solid nav, shared-address caption | browser on https://annal-sooty.vercel.app at 1440 and 390 wide: filter, expand-all and selection exercised, console clean | commit b08f0d0 |
