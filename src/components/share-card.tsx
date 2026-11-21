@@ -49,8 +49,8 @@ export function ShareCard({ path }: { path: string }) {
     <aside className="share" aria-label="Share this book">
       <div className="share-qr">{url ? <DotQr text={url} /> : <div className="qr qr-pending" />}</div>
       <div className="share-body">
-        <h2>Hand it over</h2>
-        <p>Send this link to a landlord, an accountant or a visa officer. They need no wallet to check it.</p>
+        <h2>Share this book</h2>
+        <p>Anyone with the link can check every line against the chain it came from. No wallet needed.</p>
         <div className="share-actions">
           <button
             type="button"

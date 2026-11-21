@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { BOOK, REACTIVE, sourceByChainId, txUrl } from "@/lib/annal";
 import type { BookLine } from "@/lib/book";
 import type { CheckState } from "@/lib/check";
-import { formatTime, formatUsdc, iso, lineNumber, shortHex } from "@/lib/format";
+import { formatDate, formatTime, formatUsdc, iso, lineNumber, shortHex } from "@/lib/format";
 import { CopyButton } from "./copy-button";
 import { CHAIN_COLOR, ChainMark } from "./marks";
 import { EASE } from "./motion";
@@ -108,8 +108,14 @@ export function Line({
             {selected && <span className="inspecting">Inspecting</span>}
           </span>
           <span className="line-sub">
-            from {shortHex(line.payer)} · <time dateTime={iso(line.writtenAt)}>{formatTime(line.writtenAt)}</time>
+            from {shortHex(line.payer)} ·{" "}
+            <time dateTime={iso(line.writtenAt)}>
+              {formatDate(line.writtenAt)}, {formatTime(line.writtenAt)}
+            </time>
             {delay !== null && <> · printed in {delay} s</>}
+          </span>
+          <span className="line-sub print-only">
+            {chainName} tx {line.originTxHash} · log #{line.logIndex}
           </span>
         </span>
         <span className="amount">{formatUsdc(line.amount, decimals)}</span>

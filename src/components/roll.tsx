@@ -7,6 +7,7 @@ import { BOOK, SOURCES, addressUrl, type SourceKey } from "@/lib/annal";
 import type { BookState } from "@/lib/book";
 import type { CheckState } from "@/lib/check";
 import { decimalsFor, formatDate, formatTime, formatUsdc, iso, shortHex } from "@/lib/format";
+import site from "@/lib/site.json";
 import { CopyButton } from "./copy-button";
 import { DotNumber, usdcNumber } from "./dot-number";
 import { Line } from "./line";
@@ -54,6 +55,20 @@ export function Roll({
   const watch: WatchState = watchState(book);
   const newestIndex = newestFirst[0]?.index;
   const allChecked = book.lines.length > 0 && checkedCount === book.lines.length;
+  const opened = book.openedAt > 0;
+  const period = useMemo(() => {
+    if (book.lines.length === 0) return null;
+    const ts = book.lines.map((l) => l.writtenAt);
+    const [a, b] = [formatDate(Math.min(...ts)), formatDate(Math.max(...ts))];
+    return a === b ? a : `${a} to ${b}`;
+  }, [book.lines]);
+
+  // Filtering keeps the inspector on a line the reader can still see.
+  const applyFilter = (f: Filter) => {
+    setFilter(f);
+    const shown = f === "all" ? newestFirst : newestFirst.filter((l) => SOURCES.find((x) => x.key === f)?.chainId === l.originChainId);
+    if (shown.length > 0 && !shown.some((l) => l.index === selected)) onSelect(shown[0].index);
+  };
 
   const toggle = (index: number) =>
     setOpen((o) => {
@@ -90,6 +105,12 @@ export function Roll({
               <>
                 Opened <time dateTime={iso(book.openedAt)}>{formatDate(book.openedAt)}</time>,{" "}
                 {formatTime(book.openedAt)} · kept on {BOOK.name}
+                {period && (
+                  <>
+                    <br />
+                    Statement period: {period}
+                  </>
+                )}
               </>
             ) : (
               <>No book has been opened for this wallet.</>
@@ -106,7 +127,7 @@ export function Roll({
         {book.lines.length > 0 && (
           <div className="register-bar">
             <div className="filters" role="group" aria-label="Show lines from">
-              <button type="button" className="filter" aria-pressed={filter === "all"} onClick={() => setFilter("all")}>
+              <button type="button" className="filter" aria-pressed={filter === "all"} onClick={() => applyFilter("all")}>
                 All <span className="filter-n">({book.lines.length})</span>
               </button>
               {perChain.map(({ s, count }) => (
@@ -116,7 +137,7 @@ export function Roll({
                   className="filter"
                   aria-pressed={filter === s.key}
                   disabled={count === 0}
-                  onClick={() => setFilter(s.key)}
+                  onClick={() => applyFilter(s.key)}
                 >
                   <ChainMark chain={s.key} size={14} />
                   {s.short} <span className="filter-n">({count})</span>
@@ -170,6 +191,7 @@ export function Roll({
           </p>
         )}
 
+        {opened && (
         <div className="total" data-stamped={allChecked || undefined}>
           {allChecked && (
             <div className="stamp-verified" role="status">
@@ -205,6 +227,7 @@ export function Roll({
             })}
           </ul>
         </div>
+        )}
 
         <footer className="roll-foot">
           <p>
@@ -213,14 +236,22 @@ export function Roll({
               ? "nothing to check yet"
               : `${checkedCount} of ${book.lines.length} checked against the origin chain from your browser`}
           </p>
-          <p>Nobody can write in this book, including its owner. Every line was copied by Reactive Network from the payment&rsquo;s own log.</p>
+          <p>
+            {site.thesis} Reactive Network does the copying, on{" "}
+            {SOURCES.slice(0, -1)
+              .map((x) => x.name)
+              .join(", ")}{" "}
+            and {SOURCES[SOURCES.length - 1].name}. Nobody can write in this book, including its owner.
+          </p>
           <p className="asof">
             {readError ? (
               <>Last read failed: {readError}</>
             ) : (
               <>
                 As of {BOOK.name} block {Number(book.block).toLocaleString("en-US")} ·{" "}
-                <time dateTime={iso(book.readAt)}>{formatTime(book.readAt)}</time>
+                <time dateTime={iso(book.readAt)}>
+                  {formatDate(book.readAt)}, {formatTime(book.readAt)}
+                </time>
               </>
             )}
           </p>
@@ -228,7 +259,8 @@ export function Roll({
 
         <hr className="perf" />
 
-        <Unprinted owner={book.owner} lines={book.lines} openedAt={book.openedAt} />
+        {/* With no book, every transfer would be "not printed": nothing to compare against. */}
+        {opened && <Unprinted owner={book.owner} lines={book.lines} openedAt={book.openedAt} />}
 
         <div className="roll-end" aria-hidden="true" />
       </article>

@@ -5,7 +5,7 @@ import { ArrowUpRightIcon, PrinterIcon, SealCheckIcon, ShieldCheckIcon, TimerIco
 import { useState } from "react";
 import { BOOK, DEMO_BOOK, REACTIVE, SAME_ADDRESS_NOTE, SOURCES, addressUrl } from "@/lib/annal";
 import type { BookLine, BookState } from "@/lib/book";
-import { formatDate, formatTime, shortHex } from "@/lib/format";
+import { formatDate, formatTime, formatUsdc, shortHex } from "@/lib/format";
 import { ChainSplit } from "./chain-split";
 import { CopyButton } from "./copy-button";
 import { Identicon } from "./identicon";
@@ -28,6 +28,24 @@ function lreact(wei: string | null): string {
   return `${whole}.${frac} lREACT`;
 }
 
+const names = (xs: readonly { name: string }[], joiner: string) =>
+  xs.length <= 1 ? (xs[0]?.name ?? "") : `${xs.slice(0, -1).map((x) => x.name).join(", ")} ${joiner} ${xs[xs.length - 1].name}`;
+
+const CHAIN_LIST_OR = names(SOURCES, "or");
+
+/** One plain sentence for a reader with no wallet: how much, from where, over what dates, and that it's testnet. */
+function bookSummary(book: BookState, isDemo: boolean): string {
+  const testnet = "Testnet: these are test USDC with no cash value.";
+  if (book.openedAt === 0) return "No book has been opened for this wallet, so nothing is recorded here.";
+  if (book.lines.length === 0) return `Nothing received yet. ${testnet}`;
+  const used = SOURCES.filter((s) => book.lines.some((l) => l.originChainId === s.chainId));
+  const first = Math.min(...book.lines.map((l) => l.writtenAt));
+  const last = Math.max(...book.lines.map((l) => l.writtenAt));
+  const when = formatDate(first) === formatDate(last) ? `on ${formatDate(first)}` : `between ${formatDate(first)} and ${formatDate(last)}`;
+  const count = `${book.lines.length} ${book.lines.length === 1 ? "payment" : "payments"}`;
+  return `${isDemo ? "The live demo book. " : ""}${formatUsdc(book.total)} USDC received in ${count} on ${names(used, "and")}, ${when}. ${testnet}`;
+}
+
 const delayOf = (l: BookLine) => (l.originAt > 0 ? Math.max(0, l.writtenAt - l.originAt) : null);
 
 function medianDelay(lines: BookLine[]): number | null {
@@ -47,6 +65,8 @@ export function BookView({ initial, demo, fast }: { initial: BookState; demo: bo
   const verified = Object.values(checks).filter((c) => c.state === "checked").length;
   const mismatches = Object.values(checks).filter((c) => c.state === "mismatch").length;
   const med = medianDelay(book.lines);
+  const opened = book.openedAt > 0;
+  const summary = bookSummary(book, isDemo);
   const [picked, setPicked] = useState<number | undefined>(undefined);
   const selected = picked !== undefined && book.lines.some((l) => l.index === picked) ? picked : newest?.index;
   const selectedLine = book.lines.find((l) => l.index === selected);
@@ -61,11 +81,12 @@ export function BookView({ initial, demo, fast }: { initial: BookState; demo: bo
             <div className="band-id">
               <Identicon address={book.owner} size={76} />
               <div>
-                <p className="band-kind">Income book{isDemo && " · live demo"}</p>
                 <h1 className="band-title">
+                  <span className="sr-only">Income book of </span>
                   {shortHex(book.owner, 6, 4)}
                   <CopyButton value={book.owner} label="Copy this wallet's address" what="Wallet address copied" />
                 </h1>
+                <p className="band-summary">{summary}</p>
                 <p className="band-status" aria-live="polite">
                   <span className="live-dot" data-state={watch.dot} aria-hidden />
                   {watch.status}
@@ -78,6 +99,7 @@ export function BookView({ initial, demo, fast }: { initial: BookState; demo: bo
               </div>
             </div>
 
+            {opened && (
             <dl className="band-stats">
               <div className="bstat bstat-total">
                 <dt>Total received</dt>
@@ -114,15 +136,16 @@ export function BookView({ initial, demo, fast }: { initial: BookState; demo: bo
                 </dd>
               </div>
             </dl>
+            )}
 
-            <ShareCard path={`/book/${book.owner}`} />
+            {opened && <ShareCard path={`/book/${book.owner}`} />}
           </div>
         </section>
 
         {/* ───────── the counter: split · printer and roll · trail ───────── */}
         <div className="counter book-counter">
           <aside className="rail rail-left" aria-label="About this book">
-            <ChainSplit book={book} />
+            {opened && <ChainSplit book={book} />}
             {watch.note && <p className="watch-note">{watch.note}</p>}
             {isDemo ? (
               <div className="rail-cta">
@@ -136,13 +159,10 @@ export function BookView({ initial, demo, fast }: { initial: BookState; demo: bo
               </div>
             ) : (
               <div className="rail-cta">
-                <h2>Get paid into it</h2>
+                <h2>How a line gets here</h2>
                 <p className="rail-cta-body">
-                  Ask whoever pays you to send Circle USDC to this wallet on{" "}
-                  {SOURCES.slice(0, -1)
-                    .map((s) => s.name)
-                    .join(", ")}{" "}
-                  or {SOURCES[SOURCES.length - 1].name}. Each payment prints here on its own.
+                  Any Circle USDC payment to this wallet on {CHAIN_LIST_OR} prints here on its own, seconds after its
+                  block. Nobody types it in.
                 </p>
                 <p className="rail-cta-addr">
                   <code title={book.owner}>{shortHex(book.owner, 8, 6)}</code>
@@ -169,7 +189,7 @@ export function BookView({ initial, demo, fast }: { initial: BookState; demo: bo
               </h2>
               <p>
                 Nobody types in this book, including its owner. Lines arrive only from one Reactive Network contract, and only
-                for Circle&rsquo;s USDC on {SOURCES.map((s) => s.short).join(", ")}. A token that merely calls itself USDC is
+                for Circle&rsquo;s USDC on {names(SOURCES, "and")}. A token that merely calls itself USDC is
                 never printed.
               </p>
             </section>

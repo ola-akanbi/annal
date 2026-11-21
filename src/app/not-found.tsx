@@ -1,14 +1,31 @@
 import Link from "next/link";
-import site from "@/lib/site.json";
+import { DEMO_BOOK } from "@/lib/annal";
+import { SiteNav } from "@/components/site-nav";
 
 export default function NotFound() {
   return (
-    <main className="mx-auto max-w-5xl px-4 py-24 sm:px-8">
-      <p className="text-sm opacity-70">{site.name}</p>
-      <h1 className="mt-2 text-3xl font-semibold">There&rsquo;s nothing at this address.</h1>
-      <Link href="/" className="mt-6 inline-block underline underline-offset-4">
-        Back to {site.name}
-      </Link>
-    </main>
+    <>
+      <SiteNav />
+      <main className="nf">
+        <div className="nf-slip">
+          <p className="nf-code" aria-hidden>
+            404
+          </p>
+          <h1>No book at this address.</h1>
+          <p>
+            A book link ends in a wallet address: <code>/book/0x</code> followed by 40 hexadecimal characters. Check the
+            link you were sent, or look at a real one.
+          </p>
+          <div className="nf-actions">
+            <Link className="key" href={`/book/${DEMO_BOOK}`}>
+              See the demo book
+            </Link>
+            <Link className="key key-quiet" href="/">
+              How Annal works
+            </Link>
+          </div>
+        </div>
+      </main>
+    </>
   );
 }

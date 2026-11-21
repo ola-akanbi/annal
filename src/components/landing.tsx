@@ -47,7 +47,8 @@ function ago(seconds: number): string {
   if (seconds < 60) return `${seconds}\u00a0s ago`;
   if (seconds < 3600) return `${Math.floor(seconds / 60)}\u00a0min ago`;
   if (seconds < 86400) return `${Math.floor(seconds / 3600)}\u00a0h ago`;
-  return `${Math.floor(seconds / 86400)}\u00a0d ago`;
+  const days = Math.floor(seconds / 86400);
+  return days === 1 ? "yesterday" : `${days}\u00a0days ago`;
 }
 
 /** Hides only blocks below the fold at load, then reveals each as it enters view. */
@@ -89,6 +90,34 @@ function Stat({ value, decimals = 0, unit, label, icon }: { value: number; decim
       </span>
       <span className="stat-label">{label}</span>
     </div>
+  );
+}
+
+/** The same flow, stacked for phones: the wide diagram would shrink its labels to a few pixels. */
+function FlowStack() {
+  return (
+    <ol className="flow-stack" aria-hidden>
+      <li className="fs-chains">
+        {SOURCES.map((s) => (
+          <span key={s.key} className="fs-chain">
+            <ChainMark chain={s.key} size={20} />
+            {s.short}
+          </span>
+        ))}
+      </li>
+      <li className="fs-arrow" />
+      <li className="fs-node">
+        <LightningIcon aria-hidden weight="bold" />
+        <b>Reactive</b>
+        <span>Lasna</span>
+      </li>
+      <li className="fs-arrow" />
+      <li className="fs-book">
+        <AnnalMark size={28} />
+        <b>Your book</b>
+        <span>Base Sepolia</span>
+      </li>
+    </ol>
   );
 }
 
@@ -353,6 +382,7 @@ export function Landing({ initial }: { initial: BookState }) {
         <div className="how-grid">
           <div className="how-flow reveal">
             <FlowDiagram />
+            <FlowStack />
           </div>
           <ol className="steps">
             <li className="step reveal">

@@ -39,7 +39,7 @@
 .band-id {
   display: flex;
   gap: 1.1rem;
-  align-items: center;
+  align-items: flex-start; /* the summary runs several lines; the mark sits with the address */
 }
 
 .identicon {
@@ -50,17 +50,19 @@
     0 14px 28px -12px rgb(14 14 16 / 0.6);
 }
 
-.band-kind {
-  margin: 0;
-  font-family: var(--font-print);
-  font-size: 0.75rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--sun-text-soft);
+/* the reader's one-sentence statement: amount, chains, dates, testnet */
+.band-summary {
+  margin: 0.7rem 0 0;
+  max-width: 54ch;
+  font-size: 1.0625rem;
+  line-height: 1.45;
+  font-weight: 600;
+  color: var(--ink);
+  text-wrap: pretty;
 }
 
 .band-title {
-  margin: 0.2rem 0 0;
+  margin: 0;
   display: flex;
   align-items: center;
   gap: 0.4rem;
@@ -93,7 +95,7 @@
 
 .band-since {
   font-family: var(--font-print);
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   color: var(--ink-text-soft);
 }
 
@@ -371,7 +373,7 @@
 .stamp-verified span {
   display: grid;
   line-height: 1.05;
-  font-size: 0.625rem;
+  font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -451,7 +453,7 @@
   display: block;
   font-family: var(--font-print);
   font-weight: 400;
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   color: var(--sun-text-soft);
 }
 
@@ -646,7 +648,7 @@
   align-items: center;
   gap: 0.2rem;
   font-family: var(--font-print);
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   color: var(--sun);
 }
 
@@ -742,22 +744,64 @@
 }
 
 @media print {
+  /* A statement on paper: who, how much, every line with its origin tx. No controls, no glow. */
+  * {
+    text-shadow: none !important;
+    animation: none !important;
+  }
+  .book-page {
+    margin-top: 0; /* no nav on paper to float under */
+  }
   .book-band {
     background: #fff;
-    padding-top: 1rem;
+    padding: 0 0 1rem;
     border: 0;
   }
   .share,
   .printer,
   .rail-cta,
-  .nav {
-    display: none;
+  .rail-left,
+  .nav,
+  .register-bar,
+  .inspecting,
+  .filtered-sub,
+  .watch-note,
+  .line-no svg {
+    display: none !important;
   }
   .band-stats {
     background: #fff;
     color: #000;
     box-shadow: none;
     border: 1px solid #000;
+  }
+  .band-stats dt,
+  .band-stats dd,
+  .bstat .dotnum,
+  .bstat-total .dotnum,
+  .band-stats small {
+    color: #000 !important;
+  }
+  .book-counter {
+    display: block;
+  }
+  .line {
+    break-inside: avoid;
+  }
+  .line[data-selected],
+  .line[data-newest] {
+    background: #fff !important;
+  }
+  .line-head {
+    color: #000;
+  }
+  .print-only {
+    display: block !important;
+  }
+  .stamp-verified {
+    position: static;
+    transform: none;
+    margin-bottom: 0.5rem;
   }
 }
 
@@ -808,20 +852,23 @@
 }
 
 .inspector-pill {
+  flex: none;
+  white-space: nowrap;
   padding: 0.2rem 0.55rem;
   border-radius: 999px;
   background: var(--sun);
   color: var(--ink);
   font-family: var(--font-print);
-  font-size: 0.625rem;
+  font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
 .inspector-hint {
+  text-align: right;
   font-family: var(--font-print);
-  font-size: 0.625rem;
+  font-size: 0.75rem;
   color: var(--ink-text-soft);
 }
 
@@ -848,4 +895,36 @@
   inline-size: 1rem;
   block-size: 1rem;
   margin-top: 0.1rem;
+}
+
+/* print-only details: each line's origin transaction, since closed drawers don't print */
+.print-only {
+  display: none;
+}
+
+/* Phone: the drawer already carries each line's trail, so the detached inspector goes; every control
+   gets a 44px target. */
+@media (max-width: 860px) {
+  .book-counter .rail-right .trail-card {
+    display: none;
+  }
+  .trail-detail a,
+  .unprinted a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+  .filter,
+  .bulk,
+  .pill {
+    min-height: 44px;
+  }
+  .trail-text a,
+  .machine dd a,
+  .roll-owner a,
+  .rail-cta-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
 }

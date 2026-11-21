@@ -20,7 +20,9 @@ export function Inspector({ owner, line, newest }: { owner: string; line: BookLi
   const t1 = trail.status === "ready" ? trail.trail.reactiveAt : null;
   const t2 = (trail.status === "ready" ? trail.trail.callbackAt : null) ?? line.writtenAt;
   const span = t0 ? Math.max(1, t2 - t0) : null;
-  const pos = (t: number | null) => (t0 && span && t ? Math.min(100, Math.max(0, ((t - t0) / span) * 100)) : null);
+  // Clamped: a Lasna stamp can read a second before the origin block (separate clocks), and it still
+  // belongs on the scale between payment and print.
+  const pos = (t: number | null) => (t0 && span && t !== null ? Math.min(100, Math.max(0, ((t - t0) / span) * 100)) : null);
   const found = trail.status === "ready";
 
   const steps = [
@@ -54,7 +56,7 @@ export function Inspector({ owner, line, newest }: { owner: string; line: BookLi
     <section className="trail-card" aria-label={`Inspecting ${lineNumber(line.index)}`} aria-live="polite">
       <div className="inspector-top">
         <span className="inspector-pill">{newest ? "Newest line" : "Inspecting"}</span>
-        <span className="inspector-hint">Pick any line on the roll</span>
+        <span className="inspector-hint">Pick any line</span>
       </div>
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
@@ -110,7 +112,16 @@ export function Inspector({ owner, line, newest }: { owner: string; line: BookLi
                     <small>{trail.status === "error" ? "not found just now" : "finding…"}</small>
                   )}
                 </span>
-                <span className="trail-t">{t0 && s.at ? `+${s.at - t0} s` : ""}</span>
+                <span
+                  className="trail-t"
+                  title={
+                    t0 && s.at && i > 0 && s.at <= t0
+                      ? "Same second as the payment's block. Each chain keeps its own clock, so a stamp can read up to a second early."
+                      : undefined
+                  }
+                >
+                  {!t0 || !s.at ? "" : i === 0 ? "0 s" : s.at <= t0 ? "same s" : `+${s.at - t0} s`}
+                </span>
               </li>
             ))}
           </ol>
