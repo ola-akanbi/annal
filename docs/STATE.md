@@ -1,9 +1,9 @@
 # State
-_Last verified: 2026-11-21 08:45 UTC at 599a61d_
+_Last verified: 2026-11-21 09:15 UTC at bee55ab_
 
 **Thesis:** One income book for every chain you're paid on. Every line is copied from the payment's own log, and links back to it. (Claims table: qualified. Copy must name Ethereum, Base and Unichain Sepolia.)
 **Milestone:** M1 · Walking skeleton (checkpoint 2026-11-26 05:49 UTC). M0 closed. · **Deadline:** 2026-12-05 20:00 UTC (time left: the clock line)
-**Next action:** the M3 UI pass (`impeccable critique`, then `polish`), then the README proof section.
+**Next action:** the README proof section (every factual sentence backed by a verified claims row), then the demo video script.
 **Blocked on:** nothing.
 
 ## Works (verified this session)
@@ -21,6 +21,7 @@ _Last verified: 2026-11-21 08:45 UTC at 599a61d_
 | Landing numbered section labels (01–05) | browser at 1440 and 390 wide, no horizontal scroll | commit 2931aca |
 | Contracts source-verified, exact match: Sourcify (both), Blockscout (AnnalBook); "Verified source" links on landing and book pages | Sourcify v2 API + Blockscout API; browser at 1440/390 | E-010 |
 | Link previews from real book data: landing card (demo book receipt + thesis) and a per-book card (`/book/[address]/opengraph-image` + twitter-image); thesis-only fallback when the chain is unreachable or the book is empty | production: both 200 image/png, og:image and twitter:image absolute production URLs, rendered in the browser | commit 599a61d |
+| UI pass (D-012): reader-first band summary, dated lines + statement period, honest same-second clock skew, print stylesheet, unopened state, phone layout (44px targets, stacked flow, no text < 12px), branded 404 | production at 1440 and 390: summary, dated lines and \"same s\" live; no overflow; console clean | commit bee55ab |
 | Contracts gate: 21 tests, lint with warnings denied, fmt check | `npm run gate:contracts` | E-006 |
 | Landing page in production (live-ticker hero from the newest real payment, ticker, live stats, animated three-chain flow with real tx links, look-alike comparison, audiences, contracts and verify command, final call to action) + glass nav with icons, full-colour brand (D-008) | browser on https://annal-sooty.vercel.app at 1440 and 390 wide, every section rendered, no horizontal scroll, console clean | commit 074b520 |
 | UI refinement in production (D-010): ledger-band rows with chain accent bars, row ↔ inspector sync ("Inspecting"), Motion drawers with inset proof panel and emerald verdict, chain filters + filtered subtotal + expand/collapse all, Phosphor icons, copy toasts, NumberFlow figures, three-colour core, solid nav, shared-address caption | browser on https://annal-sooty.vercel.app at 1440 and 390 wide: filter, expand-all and selection exercised, console clean | commit b08f0d0 |
@@ -33,7 +34,7 @@ _Last verified: 2026-11-21 08:45 UTC at 599a61d_
 | AnnalReactive | Reactive Lasna | `0x653B62A39Aea06998c152b48F150175B2645c8Bd` (10.99 lREACT ≈ 750 payments at ~0.0145 each, debt 0) | 2026-11-21 08:23 UTC |
 | AnnalBook | Base Sepolia | `0x653B62A39Aea06998c152b48F150175B2645c8Bd` (0.00399 ETH, debt 0) | 2026-11-19 22:20 UTC |
 | LookalikeUSDC (demo only) | Base Sepolia | `0x4D2579b6E0f6273618Cd95Ff57Ae07653E9106Ca` | 2026-11-19 22:15 UTC |
-| Web app (landing `/` + book `/book/[address]`) | Vercel production, `lekan6/annal` | https://annal-sooty.vercel.app (commit 599a61d) | 2026-11-21 08:45 UTC |
+| Web app (landing `/` + book `/book/[address]`) | Vercel production, `lekan6/annal` | https://annal-sooty.vercel.app (commit bee55ab) | 2026-11-21 09:15 UTC |
 | Open-flow test book | — | `0x219B05463962bCc922f1ce3d7fB0374BD501bDD5`, 31 lines (open-flow test + harness) | 2026-11-21 07:50 UTC |
 | Demo book owner (freelancer) | — | `0xa7D557BF0C7312EAF186a6A81159a3650aA77444`, 3 lines | 2026-11-19 22:20 UTC |
 

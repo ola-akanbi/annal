@@ -88,3 +88,14 @@ Append-only. To change a decision, add a new entry that supersedes it.
 - AnnalBook (Base Sepolia) is source-verified with an exact match on Sourcify and Blockscout; AnnalReactive (Lasna) with an exact match on Sourcify (Reactscan has no source view). The site links each contract to its verified source. Basescan (Etherscan) needs an API key and is not verified yet.
 **Consequences:** Commits no longer show a CI status at all. The claim "CI runs the gate on every push" must not be made anywhere; the README says the gate runs locally.
 
+## D-012 · UI pass from a dual-agent critique: a reader-first statement · 2026-11-21 · accepted · refines D-009/D-010
+**Context:** An Impeccable critique (an isolated design review plus detector and measured browser evidence) scored the book page 23/40. The issues were a negative "+-1 s" in the inspector, lines with no dates, a broken print, owner-directed copy shown to readers, a zero statement for unopened wallets, a detached inspector and sub-44px targets on phones, and 9–11px labels.
+**Decision:**
+- The book band leads with one plain sentence for a reader with no wallet: amount, payment count, chains used, date range, and "Testnet: test USDC with no cash value". The eyebrow above the address is removed.
+- Every line carries its date; the roll head states the statement period; the footer carries the thesis.
+- Cross-chain clock skew is shown honestly ("same s", with a tooltip), never as a negative offset.
+- Print is a first-class output: controls hidden, figures black, each line's full origin tx hash printed.
+- Unopened wallets show no statement furniture. Phones lose the detached inspector (the drawer carries the trail), get 44px targets and a stacked flow diagram. Nothing renders under 12px.
+- Kept on purpose: the LED glow on ink figures (D-009's register display), the stamp's overshoot easing, the pulsing printer LED (live state), and the numbered landing section labels (the project lead asked for them).
+**Consequences:** The four-up stats band still repeats the roll's total; folding it into the roll head is the next design question if the band reads as a dashboard to judges.
+

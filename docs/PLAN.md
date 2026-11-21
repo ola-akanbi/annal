@@ -36,7 +36,8 @@ All checkpoints count from `Started:`.
 - [x] Top up AnnalReactive before the demo and the video: 11.00 lREACT, about 750 payments. → E-011
 
 ### M3 · UI pass
-- [ ] Placeholder.
+- [x] `impeccable critique` (dual-agent, 23/40) and polish of every priority issue, verified in production. → D-012, commit bee55ab
+- [ ] Re-run critique after the README and video to confirm the score moved; decide on folding the stats band into the roll head.
 
 ### M4 · Proof surface
 - [ ] Placeholder.
