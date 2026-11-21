@@ -1,9 +1,9 @@
 # State
-_Last verified: 2026-11-21 08:15 UTC at f13dcba_
+_Last verified: 2026-11-21 08:20 UTC_
 
 **Thesis:** One income book for every chain you're paid on. Every line is copied from the payment's own log, and links back to it. (Claims table: qualified. Copy must name Ethereum, Base and Unichain Sepolia.)
 **Milestone:** M1 · Walking skeleton (checkpoint 2026-11-26 05:49 UTC). M0 closed. · **Deadline:** 2026-12-05 20:00 UTC (time left: the clock line)
-**Next action:** source-verify AnnalBook (Base Sepolia, Blockscout/Sourcify) and AnnalReactive (check Lasna's explorer), then the link-preview image.
+**Next action:** convert the Sepolia ETH the project lead is sending to the deployer into lREACT (faucet `request()`, read `max_payout()` first) and top up AnnalReactive with `depositTo`; then the link-preview image.
 **Blocked on:** nothing.
 
 ## Works (verified this session)
@@ -19,6 +19,7 @@ _Last verified: 2026-11-21 08:15 UTC at f13dcba_
 | Trail lookup works for freshly printed lines (was 502: Lasna range past its head); landing requests the trail once, not per poll | production `/api/trail` 200 in 1.6 s; 1 request in 20 s, console clean | commit 22551fe |
 | Latency over 24 real payments (8 per chain): 24/24 printed, 0 missed, all fields equal the origin receipt; median 1 s, p90 2 s, max 3 s from origin block to line | `npm run harness:latency` | E-009 |
 | Landing numbered section labels (01–05) | browser at 1440 and 390 wide, no horizontal scroll | commit 2931aca |
+| Contracts source-verified, exact match: Sourcify (both), Blockscout (AnnalBook); "Verified source" links on landing and book pages | Sourcify v2 API + Blockscout API; browser at 1440/390 | E-010 |
 | Contracts gate: 21 tests, lint with warnings denied, fmt check | `npm run gate:contracts` | E-006 |
 | Landing page in production (live-ticker hero from the newest real payment, ticker, live stats, animated three-chain flow with real tx links, look-alike comparison, audiences, contracts and verify command, final call to action) + glass nav with icons, full-colour brand (D-008) | browser on https://annal-sooty.vercel.app at 1440 and 390 wide, every section rendered, no horizontal scroll, console clean | commit 074b520 |
 | UI refinement in production (D-010): ledger-band rows with chain accent bars, row ↔ inspector sync ("Inspecting"), Motion drawers with inset proof panel and emerald verdict, chain filters + filtered subtotal + expand/collapse all, Phosphor icons, copy toasts, NumberFlow figures, three-colour core, solid nav, shared-address caption | browser on https://annal-sooty.vercel.app at 1440 and 390 wide: filter, expand-all and selection exercised, console clean | commit b08f0d0 |
@@ -36,8 +37,8 @@ _Last verified: 2026-11-21 08:15 UTC at f13dcba_
 | Demo book owner (freelancer) | — | `0xa7D557BF0C7312EAF186a6A81159a3650aA77444`, 3 lines | 2026-11-19 22:20 UTC |
 
 ## Broken or unverified
-- **CI can't run:** the `ola-akanbi` account is locked for a billing issue (run 44622607530 annotation). The operator accepted the local gate (`npm run gate`) as the gate of record.
-- Contracts aren't source-verified on any explorer yet (Blockscout/Sourcify for Base Sepolia; check whether Lasna's explorer supports verification).
+- **CI is manual-only (D-011):** the `ola-akanbi` account is billing-locked, so both workflows trigger only on `workflow_dispatch`. Gate of record: `npm run gate` locally + `gitleaks git`.
+- Basescan (Etherscan) shows AnnalBook unverified: it needs an Etherscan API key. Sourcify and Blockscout are verified (E-010).
 - Cross-chain latency carries ±1 s clock skew between chains; only Base → Base is exact (counted in 200 ms blocks).
 - The open flow was run with an injected EIP-1193 provider (E-008), not a wallet extension: MetaMask's own add/switch-chain prompts are unexercised.
 - `ui-audit.mjs` hasn't run against production (this machine's terminal can't reach Vercel; the browser can).

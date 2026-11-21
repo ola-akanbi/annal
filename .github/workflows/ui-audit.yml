@@ -4,11 +4,17 @@ name: ui-audit
 # regression shows up the day it's introduced. Needs the repo connected to Vercel's GitHub app,
 # which posts the deployment statuses. For protected previews, add the project's
 # "Protection Bypass for Automation" secret as VERCEL_AUTOMATION_BYPASS_SECRET.
-on: deployment_status
+# Manual for now (D-011), for the same billing lock as ci.yml: restore `on: deployment_status`
+# once the account can run Actions again. Until then the audit runs through a local browser.
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: Deployment URL to audit
+        required: true
 
 jobs:
   audit:
-    if: github.event.deployment_status.state == 'success'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7.0.1
@@ -19,7 +25,7 @@ jobs:
       - run: npm i -g @playwright/cli@0.1.23
       - name: Audit the deployed first screen
         env:
-          URL: ${{ github.event.deployment_status.environment_url }}
+          URL: ${{ inputs.url }}
           BYPASS: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
         run: |
           args=(--phrase "$(node -p "require('./src/lib/site.json').thesis")" --out ui-audit)

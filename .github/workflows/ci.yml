@@ -1,9 +1,11 @@
 name: ci
 
+# Manual for now (D-011): the repo owner's GitHub account is billing-locked, so every automatic
+# run failed before a step started and left a red X on each commit. The gate of record is
+# `npm run gate` run locally, plus `gitleaks git` before each push. Restore the push and
+# pull_request triggers once the account can run Actions again.
 on:
-  push:
-    branches: [main]
-  pull_request:
+  workflow_dispatch:
 
 jobs:
   gate:

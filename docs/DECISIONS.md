@@ -79,3 +79,12 @@ Append-only. To change a decision, add a new entry that supersedes it.
 - Motion: `MotionConfig reducedMotion="user"` app-wide; NumberFlow on the dot-matrix totals and print-time figures; Motion for new-line entry and inspector swaps.
 - Two contracts, one address: explained by a caption and tooltip (`SAME_ADDRESS_NOTE`). It is the deployer's nonce 0 on each chain with CREATE, not a display bug and not CREATE2.
 **Consequences:** `useTrail` shares one trail request per line between the drawer and the inspector.
+
+## D-011 · CI workflows switched to manual; contracts source-verified · 2026-11-21 · accepted · project lead
+**Context:** The repo owner's GitHub account is locked for a billing issue, so both workflows (`ci` on every push, `ui-audit` on every Vercel deployment) failed before any step ran, and every commit on the public repo showed a red X. The project lead had already accepted the local gate as the gate of record, and asked for the red X to go.
+**Decision:**
+- Both workflows keep their full steps but trigger only on `workflow_dispatch`. They are not deleted, so the gate stays readable in the repo and can be restored by putting the old triggers back.
+- The gate of record is `npm run gate` (lint with warnings denied, typecheck, build, forge fmt/lint/build/test) run locally before every push.
+- AnnalBook (Base Sepolia) is source-verified with an exact match on Sourcify and Blockscout; AnnalReactive (Lasna) with an exact match on Sourcify (Reactscan has no source view). The site links each contract to its verified source. Basescan (Etherscan) needs an API key and is not verified yet.
+**Consequences:** Commits no longer show a CI status at all. The claim "CI runs the gate on every push" must not be made anywhere; the README says the gate runs locally.
+

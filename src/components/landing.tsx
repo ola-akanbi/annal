@@ -15,6 +15,7 @@ import {
   LightningIcon,
   PrinterIcon,
   ProhibitIcon,
+  SealCheckIcon,
   ShieldCheckIcon,
   TimerIcon,
   WalletIcon,
@@ -511,17 +512,27 @@ export function Landing({ initial }: { initial: BookState }) {
             <span className="contract-tag">Reactive Lasna</span>
             <h3>AnnalReactive</h3>
             <p>Subscribes to Circle USDC transfers to every opened wallet on all three chains, and asks for a callback for each one.</p>
-            <a href={addressUrl(REACTIVE.explorer, REACTIVE.address)} target="_blank" rel="noreferrer" title={SAME_ADDRESS_NOTE}>
-              {shortHex(REACTIVE.address, 8, 6)} <ArrowUpRightIcon aria-hidden weight="bold" />
-            </a>
+            <div className="contract-links">
+              <a href={addressUrl(REACTIVE.explorer, REACTIVE.address)} target="_blank" rel="noreferrer" title={SAME_ADDRESS_NOTE}>
+                {shortHex(REACTIVE.address, 8, 6)} <ArrowUpRightIcon aria-hidden weight="bold" />
+              </a>
+              <a className="contract-source" href={REACTIVE.source} target="_blank" rel="noreferrer">
+                <SealCheckIcon aria-hidden weight="fill" /> Verified source
+              </a>
+            </div>
           </div>
           <div className="contract reveal">
             <span className="contract-tag">Base Sepolia</span>
             <h3>AnnalBook</h3>
             <p>Accepts lines only from the callback proxy on behalf of AnnalReactive, and only for Circle&rsquo;s USDC. No admin function.</p>
-            <a href={addressUrl(BOOK.explorer, BOOK.address)} target="_blank" rel="noreferrer" title={SAME_ADDRESS_NOTE}>
-              {shortHex(BOOK.address, 8, 6)} <ArrowUpRightIcon aria-hidden weight="bold" />
-            </a>
+            <div className="contract-links">
+              <a href={addressUrl(BOOK.explorer, BOOK.address)} target="_blank" rel="noreferrer" title={SAME_ADDRESS_NOTE}>
+                {shortHex(BOOK.address, 8, 6)} <ArrowUpRightIcon aria-hidden weight="bold" />
+              </a>
+              <a className="contract-source" href={BOOK.source} target="_blank" rel="noreferrer">
+                <SealCheckIcon aria-hidden weight="fill" /> Verified source
+              </a>
+            </div>
           </div>
           
           <div className="verify reveal">

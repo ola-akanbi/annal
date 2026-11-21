@@ -66,7 +66,7 @@ Looked up on 2026-11-19, never from memory. Re-check before any upgrade.
 | App | `npm run lint -- --max-warnings=0` · `npm run typecheck` · `npm run build` |
 | Contracts | `forge fmt --check` · `forge lint --deny warnings` · `forge build --sizes` · `forge test` (run from `contracts/`, or `npm run gate:contracts`) |
 
-All green before any milestone closes. CI runs the same on every push, plus a gitleaks scan of the whole history.
+All green before any milestone closes. CI is manual-only while the GitHub account is billing-locked (D-011): run `npm run gate` locally before every push, and `gitleaks git --redact` over the whole history before any milestone closes.
 
 ## Where things live
 | Concern | File |

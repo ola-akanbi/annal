@@ -1171,6 +1171,22 @@
   block-size: 0.9rem;
 }
 
+.contract-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1.1rem;
+}
+
+/* emerald is reserved for verified proof: the source matches the deployed bytecode exactly */
+.contract a.contract-source {
+  font-family: var(--font-archivo);
+  font-weight: 700;
+  color: var(--verified-line);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .verify-head {
   display: flex;
   align-items: center;

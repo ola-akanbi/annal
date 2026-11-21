@@ -32,7 +32,7 @@ All checkpoints count from `Started:`.
 
 ### M2 · Core claim
 - [x] Latency measured over ≥ 20 payments: 24 real payments, 8 per chain, 24/24 printed with fields matching; median 1 s, max 3 s. → E-009
-- [ ] Contracts source-verified on the explorers.
+- [x] Contracts source-verified: Sourcify exact match on both, Blockscout on Base Sepolia; linked from the site. Basescan pending an Etherscan API key. → E-010
 - [ ] Top up AnnalReactive before the demo and the video (1.00 lREACT left after E-009).
 
 ### M3 · UI pass

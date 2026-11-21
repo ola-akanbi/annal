@@ -62,6 +62,8 @@ export const BOOK = {
   explorer: "https://sepolia.basescan.org",
   /** First block the book could have logs in (its deploy block). */
   deployBlock: 61020484n,
+  /** Verified source (exact match on Blockscout and Sourcify, 2026-11-21). */
+  source: "https://base-sepolia.blockscout.com/address/0x653B62A39Aea06998c152b48F150175B2645c8Bd?tab=contract",
 } as const;
 
 /** The reactive side: AnnalReactive on Reactive Lasna. */
@@ -73,6 +75,8 @@ export const REACTIVE = {
   explorer: "https://lasna.reactscan.net",
   systemContract: "0x8888888888888888888888888888888888888888" as Address,
   deployBlock: 8762495n,
+  /** Verified source (exact match on Sourcify, 2026-11-21). Reactscan has no source view. */
+  source: "https://repo.sourcify.dev/5318007/0x653B62A39Aea06998c152b48F150175B2645c8Bd",
 } as const;
 
 /** A real book with real payments, used for `/`. */

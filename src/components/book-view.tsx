@@ -182,6 +182,11 @@ export function BookView({ initial, demo, fast }: { initial: BookState; demo: bo
                     <a href={addressUrl(REACTIVE.explorer, REACTIVE.address)} target="_blank" rel="noreferrer" title={SAME_ADDRESS_NOTE}>
                       {shortHex(REACTIVE.address, 6, 4)}
                       <ArrowUpRightIcon aria-hidden weight="bold" />
+                    </a>{" "}
+                    ·{" "}
+                    <a href={REACTIVE.source} target="_blank" rel="noreferrer">
+                      verified source
+                      <ArrowUpRightIcon aria-hidden weight="bold" />
                     </a>
                     <br />
                     {debt === null
@@ -196,6 +201,11 @@ export function BookView({ initial, demo, fast }: { initial: BookState; demo: bo
                   <dd>
                     <a href={addressUrl(BOOK.explorer, BOOK.address)} target="_blank" rel="noreferrer" title={SAME_ADDRESS_NOTE}>
                       {shortHex(BOOK.address, 6, 4)}
+                      <ArrowUpRightIcon aria-hidden weight="bold" />
+                    </a>{" "}
+                    ·{" "}
+                    <a href={BOOK.source} target="_blank" rel="noreferrer">
+                      verified source
                       <ArrowUpRightIcon aria-hidden weight="bold" />
                     </a>
                     <br />
