@@ -41,6 +41,7 @@ All checkpoints count from `Started:`.
 
 ### M4 · Proof surface
 - [x] README proof section: every factual sentence backed by a claims row re-checked live today (C-1–C-8). → README.md
+- [x] Run of show and film script, every line tied to a verified claim. → docs/RUNOFSHOW.md, docs/VIDEO.md
 - [ ] Demo video (< 3 min) recorded on the finished UI, embedded in the README.
 - [ ] Benchmark run.
 

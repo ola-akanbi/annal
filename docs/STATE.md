@@ -1,9 +1,9 @@
 # State
-_Last verified: 2026-11-21 09:25 UTC_
+_Last verified: 2026-11-21 09:45 UTC_
 
 **Thesis:** One income book for every chain you're paid on. Every line is copied from the payment's own log, and links back to it. (Claims table: qualified. Copy must name Ethereum, Base and Unichain Sepolia.)
 **Milestone:** M1 · Walking skeleton (checkpoint 2026-11-26 05:49 UTC). M0 closed. · **Deadline:** 2026-12-05 20:00 UTC (time left: the clock line)
-**Next action:** the run of show and demo video (`/hackathon runofshow`), then the submission draft.
+**Next action:** produce the film from `docs/VIDEO.md` with the system in `internal/film/` (capture shots 1–7, narration, captions, score, render ≤ 2:40), then the submission draft (`/hackathon submit`).
 **Blocked on:** nothing.
 
 ## Works (verified this session)
