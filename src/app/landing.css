@@ -152,26 +152,28 @@
   max-width: 92rem;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
-  gap: 2rem 4rem;
+  grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr);
+  gap: 1.25rem 4rem;
   align-items: end;
 }
 
+/* Display: one size step below the hero, set solid but never touching. Two lines per couplet. */
 .section-head h2 {
   margin: 0;
   font-weight: 900;
-  font-stretch: 112%;
-  font-size: clamp(2.6rem, 1.6rem + 4vw, 5.5rem);
-  line-height: 0.92;
-  letter-spacing: -0.045em;
+  font-stretch: 106%;
+  font-size: clamp(2.35rem, 1.1rem + 3.5vw, 4.5rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
   text-wrap: balance;
 }
 
 .section-head p {
   margin: 0;
+  padding-bottom: 0.35em; /* sits on the heading's last baseline, not its descender */
   font-size: 1.1875rem;
   line-height: 1.5;
-  max-width: 38ch;
+  max-width: 40ch;
   text-wrap: pretty;
 }
 
@@ -336,15 +338,19 @@
 
 .hero-sub {
   margin: 1.75rem 0 0;
-  max-width: 44ch;
-  font-size: 1.1875rem;
-  line-height: 1.5;
-  color: var(--sun-text-soft);
+  max-width: 40ch;
+  font-size: 1.25rem;
+  line-height: 1.45;
+  font-weight: 500;
+  color: var(--ink);
+  text-wrap: pretty;
 }
 
-.hero-sub strong {
-  color: var(--ink);
-  font-weight: 700;
+.hero-prov {
+  margin: 0.6rem 0 0;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--sun-text-soft);
 }
 
 .hero-actions {
@@ -410,13 +416,15 @@
   padding: 0.6rem 0;
   font-family: var(--font-print);
   font-size: 0.75rem;
-  letter-spacing: 0.1em;
+  letter-spacing: 0;
+  white-space: nowrap;
   text-transform: uppercase;
   color: #525252;
   border-bottom: 1px solid var(--perforation);
 }
 
 .mini-feed svg {
+  flex: none;
   inline-size: 0.85rem;
   block-size: 0.85rem;
 }
@@ -835,8 +843,9 @@
 .step h3 {
   margin: 0.2rem 0 0;
   font-size: 1.4rem;
+  line-height: 1.15;
   font-weight: 800;
-  letter-spacing: -0.005em;
+  letter-spacing: -0.01em;
 }
 
 .step p {
@@ -1056,8 +1065,12 @@
 
 .who-card {
   position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  column-gap: 0.9rem;
   border-radius: 28px;
-  padding: 2rem;
+  padding: 1.75rem 1.75rem 2rem;
   background: rgb(255 255 255 / 0.72);
   backdrop-filter: blur(8px);
   overflow: hidden;
@@ -1072,28 +1085,29 @@
 .who-icon {
   display: inline-grid;
   place-items: center;
-  inline-size: 3.25rem;
-  block-size: 3.25rem;
-  border-radius: 16px;
+  inline-size: 2.6rem;
+  block-size: 2.6rem;
+  border-radius: 12px;
   background: var(--ink);
   color: var(--sun);
 }
 
 .who-icon svg {
-  inline-size: 1.5rem;
-  block-size: 1.5rem;
+  inline-size: 1.3rem;
+  block-size: 1.3rem;
 }
 
 .who-card h3 {
-  margin: 1.5rem 0 0;
-  font-size: 1.65rem;
+  margin: 0;
+  font-size: 1.5rem;
+  line-height: 1.1;
   font-weight: 900;
-  letter-spacing: -0.005em;
-  word-spacing: 0.04em;
+  letter-spacing: -0.01em;
 }
 
 .who-card p {
-  margin: 0.6rem 0 0;
+  grid-column: 1 / -1;
+  margin: 1rem 0 0;
   line-height: 1.5;
   color: #2b2410;
 }
@@ -1145,8 +1159,9 @@
 .contract h3 {
   margin: 1.1rem 0 0;
   font-size: 1.6rem;
+  line-height: 1.1;
   font-weight: 900;
-  letter-spacing: -0.005em;
+  letter-spacing: -0.01em;
 }
 
 .contract p {
@@ -1229,7 +1244,7 @@
 }
 
 .final-inner {
-  max-width: 60rem;
+  max-width: 76rem;
   margin: 0 auto;
   text-align: center;
 }
@@ -1237,10 +1252,11 @@
 .final h2 {
   margin: 0;
   font-weight: 900;
-  font-stretch: 118%;
-  font-size: clamp(2.8rem, 1.6rem + 5vw, 6rem);
-  line-height: 0.92;
-  letter-spacing: -0.045em;
+  font-stretch: 110%;
+  font-size: clamp(2.5rem, 1.1rem + 4.2vw, 5rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
 }
 
 .final p {

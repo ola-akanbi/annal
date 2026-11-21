@@ -283,15 +283,13 @@ export function Landing({ initial }: { initial: BookState }) {
                 <span className="hero-line">{site.thesis}</span>
               </h1>
             )}
-            <p className="hero-sub">
-              <strong>{site.thesis}</strong>{" "}
-              {newest && newestSource && (
-                <>
-                  That one came from {newestSource.name}
-                  {now !== null ? `, ${ago(now - newest.writtenAt)}` : ` at ${formatTime(newest.writtenAt)}`}.
-                </>
-              )}
-            </p>
+            <p className="hero-sub">{site.thesis}</p>
+            {newest && newestSource && (
+              <p className="hero-prov">
+                That one came from {newestSource.name}
+                {now !== null ? `, ${ago(now - newest.writtenAt)}` : ` at ${formatTime(newest.writtenAt)}`}.
+              </p>
+            )}
             <div className="hero-actions">
               <Link href="#open" className="btn btn-ink">
                 <WalletIcon aria-hidden weight="bold" />
