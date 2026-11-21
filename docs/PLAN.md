@@ -40,7 +40,9 @@ All checkpoints count from `Started:`.
 - [ ] Re-run critique after the README and video to confirm the score moved; decide on folding the stats band into the roll head.
 
 ### M4 · Proof surface
-- [ ] Placeholder.
+- [x] README proof section: every factual sentence backed by a claims row re-checked live today (C-1–C-8). → README.md
+- [ ] Demo video (< 3 min) recorded on the finished UI, embedded in the README.
+- [ ] Benchmark run.
 
 ## Cut list
 Things deliberately not being built. Each entry links the DECISIONS entry that cut it.

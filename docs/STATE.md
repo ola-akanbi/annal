@@ -1,9 +1,9 @@
 # State
-_Last verified: 2026-11-21 09:15 UTC at bee55ab_
+_Last verified: 2026-11-21 09:25 UTC_
 
 **Thesis:** One income book for every chain you're paid on. Every line is copied from the payment's own log, and links back to it. (Claims table: qualified. Copy must name Ethereum, Base and Unichain Sepolia.)
 **Milestone:** M1 · Walking skeleton (checkpoint 2026-11-26 05:49 UTC). M0 closed. · **Deadline:** 2026-12-05 20:00 UTC (time left: the clock line)
-**Next action:** the README proof section (every factual sentence backed by a verified claims row), then the demo video script.
+**Next action:** the run of show and demo video (`/hackathon runofshow`), then the submission draft.
 **Blocked on:** nothing.
 
 ## Works (verified this session)
@@ -23,6 +23,7 @@ _Last verified: 2026-11-21 09:15 UTC at bee55ab_
 | Link previews from real book data: landing card (demo book receipt + thesis) and a per-book card (`/book/[address]/opengraph-image` + twitter-image); thesis-only fallback when the chain is unreachable or the book is empty | production: both 200 image/png, og:image and twitter:image absolute production URLs, rendered in the browser | commit 599a61d |
 | UI pass (D-012): reader-first band summary, dated lines + statement period, honest same-second clock skew, print stylesheet, unopened state, phone layout (44px targets, stacked flow, no text < 12px), branded 404 | production at 1440 and 390: summary, dated lines and \"same s\" live; no overflow; console clean | commit bee55ab |
 | Landing type reset: section headings 68px / -0.03em / leading 1 in a wider column (two lines per couplet), closing headline two lines, solid h3 leading, audience icons inline, hero thesis in one voice | production at 1440 and 390, no horizontal scroll | commit 757d580 |
+| README as a proof surface: thesis + chains, live links, three-transaction table per demo line, refusals with tx links, latency table, read-only `cast` checks, clean-clone tests, line-level permalinks, limits | verify block run verbatim (C-8); clean clone → 21 passed; permalinks 200 | README.md, claims C-5–C-8 |
 | Contracts gate: 21 tests, lint with warnings denied, fmt check | `npm run gate:contracts` | E-006 |
 | Landing page in production (live-ticker hero from the newest real payment, ticker, live stats, animated three-chain flow with real tx links, look-alike comparison, audiences, contracts and verify command, final call to action) + glass nav with icons, full-colour brand (D-008) | browser on https://annal-sooty.vercel.app at 1440 and 390 wide, every section rendered, no horizontal scroll, console clean | commit 074b520 |
 | UI refinement in production (D-010): ledger-band rows with chain accent bars, row ↔ inspector sync ("Inspecting"), Motion drawers with inset proof panel and emerald verdict, chain filters + filtered subtotal + expand/collapse all, Phosphor icons, copy toasts, NumberFlow figures, three-colour core, solid nav, shared-address caption | browser on https://annal-sooty.vercel.app at 1440 and 390 wide: filter, expand-all and selection exercised, console clean | commit b08f0d0 |
