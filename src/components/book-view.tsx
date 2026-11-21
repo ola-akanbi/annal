@@ -136,8 +136,21 @@ export function BookView({ initial, demo, fast }: { initial: BookState; demo: bo
               </div>
             ) : (
               <div className="rail-cta">
-                <Link href={`/book/${DEMO_BOOK}`} className="key key-quiet">
-                  See the demo book
+                <h2>Get paid into it</h2>
+                <p className="rail-cta-body">
+                  Ask whoever pays you to send Circle USDC to this wallet on{" "}
+                  {SOURCES.slice(0, -1)
+                    .map((s) => s.name)
+                    .join(", ")}{" "}
+                  or {SOURCES[SOURCES.length - 1].name}. Each payment prints here on its own.
+                </p>
+                <p className="rail-cta-addr">
+                  <code title={book.owner}>{shortHex(book.owner, 8, 6)}</code>
+                  <CopyButton value={book.owner} label="Copy this wallet's address" what="Wallet address copied" />
+                </p>
+                <Link href={`/book/${DEMO_BOOK}`} className="rail-cta-link">
+                  See a book with lines on every chain
+                  <ArrowUpRightIcon aria-hidden weight="bold" />
                 </Link>
               </div>
             )}

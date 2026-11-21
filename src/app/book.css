@@ -474,6 +474,65 @@
   margin-top: 0.9rem;
 }
 
+.rail-cta-body {
+  margin: 0.55rem 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--sun-text-soft);
+}
+
+.rail-cta-addr {
+  margin: 0.9rem 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.45rem 0.45rem 0.45rem 0.85rem;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.rail-cta-addr code {
+  font-family: var(--font-print);
+  font-size: 0.8125rem;
+  letter-spacing: 0.01em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rail-cta-addr .copy {
+  color: var(--paper);
+}
+
+.rail-cta-link {
+  margin-top: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1.5px;
+}
+
+.rail-cta-link svg {
+  transition: transform 180ms var(--ease-out);
+}
+
+.rail-cta-link:hover svg {
+  transform: translate(2px, -2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rail-cta-link svg {
+    transition: none;
+  }
+}
+
 .rail-cta .open-flow p {
   color: var(--sun-text-soft);
 }
