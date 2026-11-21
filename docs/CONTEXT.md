@@ -29,7 +29,7 @@ Both Annal contracts sit at the same address because each was the deployer's fir
 | Circle USDC, Ethereum Sepolia | `0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238` | Circle testnet list | `symbol()` = USDC, `decimals()` = 6, 2026-11-19 |
 | Circle USDC, Base Sepolia | `0x036CbD53842c5426634e7929541eC2318f3dCF7e` | Circle testnet list | `symbol()` = USDC, `decimals()` = 6, 2026-11-19 |
 | Circle USDC, Unichain Sepolia | `0x31d0220469e10c4E71834a79b1f276d740d3768F` | Circle testnet list | `symbol()` = USDC, `decimals()` = 6, 2026-11-19 |
-| Lasna faucet (send Sepolia ETH, receive lREACT) | Ethereum Sepolia `0x9b9BB25f1A81078C544C829c5EB7822d747Cf434` · Base Sepolia `0x2afaFD298b23b62760711756088F75B7409f5967` | Reactive-Network/testnet-faucet README | README only; ratio and per-request cap not yet read |
+| Lasna faucet (send Sepolia ETH, receive lREACT) | Ethereum Sepolia `0x9b9BB25f1A81078C544C829c5EB7822d747Cf434` · Base Sepolia `0x2afaFD298b23b62760711756088F75B7409f5967` | Reactive-Network/testnet-faucet README | Source read 2026-11-21 (`src/faucet/ReactiveFaucetL1.sol`): `request()` only emits `PaymentRequest(receiver, amount)`; an off-chain relayer pays on Lasna. `max_payout` is in ETH wei (5e19 = 50 ETH on Ethereum Sepolia); anything above it is kept. 0.1 ETH paid 10.5 lREACT to the receiver within one 15 s check (E-011) |
 
 ## SDKs and APIs
 | Package | Pinned | Calls we use | Verified in |
@@ -42,6 +42,7 @@ Both Annal contracts sit at the same address because each was the deployer's fir
 - **`lasna-omni-rpc.rnk.dev` no longer resolves** (2026-11-19), though older posts cite it. Use `lasna-rpc.rnk.dev`.
 - **Wildcards:** `chainId 0` = any chain, `contract address(0)` = any contract, `REACTIVE_IGNORE` = any topic value. At least one criterion must be specific. Equality only, no OR: call `subscribe()` once per combination. A topic of `0` is a literal zero, not a wildcard. (Source: reactive-contracts.mdx + wildcard-table.js)
 - **`unsubscribe()` must match all six arguments exactly**, or it fails silently.
+- **Topping up a reactive contract:** AnnalReactive (via `AbstractPayer`) has a payable `receive()`, and the system contract charges it with `pay()` from its own balance, so a plain lREACT transfer tops it up while debt is 0. The pinned reactive-lib-omni has no `depositTo`; that call lives on the system contract per economy.mdx and is only needed to settle a debt (E-011).
 - **Debt silences everything:** any debt > 0 stops `react()` (Reactive side) or delivery (callback side, `InDebt`). Fund the reactive contract with `depositTo()` on the system contract. Fund the book with `depositTo()` on the Base Sepolia callback proxy. A plain transfer doesn't settle debt. (Source: economy.mdx)
 - **Callback payload:** the first 160 bits are replaced with the requesting reactive contract's address. Declare an `address` first argument and pass `address(0)`. (Source: reactive-contracts.mdx)
 - **Callbacks are billed to the recipient**, in the destination chain's native currency. A failed callback is still billed.

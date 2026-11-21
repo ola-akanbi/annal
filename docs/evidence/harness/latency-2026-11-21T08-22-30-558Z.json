@@ -1,0 +1,77 @@
+{
+  "startedAt": "2026-11-21T08:22:30.558Z",
+  "owner": "0x219B05463962bCc922f1ce3d7fB0374BD501bDD5",
+  "payer": "0x4713b56012F67a84114D6a65Cd8924E7850b691E",
+  "book": "0x653B62A39Aea06998c152b48F150175B2645c8Bd",
+  "reactive": "0x653B62A39Aea06998c152b48F150175B2645c8Bd",
+  "runs": 1,
+  "rows": [
+    {
+      "run": 0,
+      "chain": "base",
+      "amount": "10000",
+      "originTx": "0x706bd6e09a4d1663dd146e10b0148e3577f09d3749e24e339c9b787da476f5fc",
+      "originBlock": "61637428",
+      "originAt": 1795249354,
+      "reactiveTx": "0x5256844698a0d09447ca1e58f3b26cda98b32b9e9f195bd37601b7102eff00ae",
+      "reactiveAt": 1795249353,
+      "callbackTx": "0x41b09c5a12ddd2c82d765ed1dcb438a4d768ea449781f867a2d251acb9e85353",
+      "callbackBlock": "61637433",
+      "writtenAt": 1795249355,
+      "delaySec": 1,
+      "baseBlocks": 5,
+      "seenAfterMs": 1004,
+      "index": 30,
+      "fieldsMatch": true
+    }
+  ],
+  "summary": {
+    "all": {
+      "sent": 1,
+      "printed": 1,
+      "missed": 0,
+      "fieldsMatch": 1,
+      "delaySec": {
+        "n": 1,
+        "min": 1,
+        "median": 1,
+        "p90": 1,
+        "max": 1
+      },
+      "seenAfterMs": {
+        "n": 1,
+        "min": 1004,
+        "median": 1004,
+        "p90": 1004,
+        "max": 1004
+      }
+    },
+    "base": {
+      "sent": 1,
+      "printed": 1,
+      "missed": 0,
+      "fieldsMatch": 1,
+      "delaySec": {
+        "n": 1,
+        "min": 1,
+        "median": 1,
+        "p90": 1,
+        "max": 1
+      },
+      "seenAfterMs": {
+        "n": 1,
+        "min": 1004,
+        "median": 1004,
+        "p90": 1004,
+        "max": 1004
+      }
+    },
+    "baseBlocks": {
+      "n": 1,
+      "min": 5,
+      "median": 5,
+      "p90": 5,
+      "max": 5
+    }
+  }
+}

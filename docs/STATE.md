@@ -3,7 +3,7 @@ _Last verified: 2026-11-21 08:20 UTC_
 
 **Thesis:** One income book for every chain you're paid on. Every line is copied from the payment's own log, and links back to it. (Claims table: qualified. Copy must name Ethereum, Base and Unichain Sepolia.)
 **Milestone:** M1 · Walking skeleton (checkpoint 2026-11-26 05:49 UTC). M0 closed. · **Deadline:** 2026-12-05 20:00 UTC (time left: the clock line)
-**Next action:** convert the Sepolia ETH the project lead is sending to the deployer into lREACT (faucet `request()`, read `max_payout()` first) and top up AnnalReactive with `depositTo`; then the link-preview image.
+**Next action:** the link-preview image (OG card), then the M3 UI pass (`impeccable critique`).
 **Blocked on:** nothing.
 
 ## Works (verified this session)
@@ -29,11 +29,11 @@ _Last verified: 2026-11-21 08:20 UTC_
 ## Deployed
 | What | Network | Address | Last checked |
 |---|---|---|---|
-| AnnalReactive | Reactive Lasna | `0x653B62A39Aea06998c152b48F150175B2645c8Bd` (1.00 lREACT ≈ 68 more payments at 0.0146 each, debt 0) | 2026-11-21 08:15 UTC |
+| AnnalReactive | Reactive Lasna | `0x653B62A39Aea06998c152b48F150175B2645c8Bd` (10.99 lREACT ≈ 750 payments at ~0.0145 each, debt 0) | 2026-11-21 08:23 UTC |
 | AnnalBook | Base Sepolia | `0x653B62A39Aea06998c152b48F150175B2645c8Bd` (0.00399 ETH, debt 0) | 2026-11-19 22:20 UTC |
 | LookalikeUSDC (demo only) | Base Sepolia | `0x4D2579b6E0f6273618Cd95Ff57Ae07653E9106Ca` | 2026-11-19 22:15 UTC |
 | Web app (landing `/` + book `/book/[address]`) | Vercel production, `lekan6/annal` | https://annal-sooty.vercel.app (commit 447a36c) | 2026-11-21 07:52 UTC |
-| Open-flow test book | — | `0x219B05463962bCc922f1ce3d7fB0374BD501bDD5`, 30 lines (open-flow test + harness) | 2026-11-21 07:50 UTC |
+| Open-flow test book | — | `0x219B05463962bCc922f1ce3d7fB0374BD501bDD5`, 31 lines (open-flow test + harness) | 2026-11-21 07:50 UTC |
 | Demo book owner (freelancer) | — | `0xa7D557BF0C7312EAF186a6A81159a3650aA77444`, 3 lines | 2026-11-19 22:20 UTC |
 
 ## Broken or unverified
