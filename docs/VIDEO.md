@@ -3,7 +3,7 @@
 **Limit:** under 3:00 (DoraHacks submission rule). **Rendered: 2:29.8** (1920×1080, −16 LUFS), 30 s of margin. Master at `internal/film/film/annal-master.mp4`; real transactions in it: E-012.
 
 **As produced (v2):** the stage is the app's amber halftone counter; chapters change through a dot-matrix wipe (print dots grow until they touch) and carry a dot-matrix "No. 0N"; the hook prints out of the Annal register as a receipt and tears off; the reader's scene is a 3D counter where a phone scans the book's real QR (encoded from the share link) and swings round to the live book while the app's real print layout of the statement feeds out of a slot; the end card prints the tagline and is stamped VERIFIED. The score is composed and synthesised in code (`internal/film/scripts/compose.ts`: felt piano, marimba, vibraphone, pads, sub, and a dot-matrix print-head percussion, on the edit's beat grid, a four-note motif that resolves when the first payment prints). Effects (printer feed, tear, stamp, click, scan chime, paper) are ElevenLabs sound generations placed on measured moments. The voice is ElevenLabs, from the caption lines.
-**Judged from:** the submission only; the film is the demo. Rubric: Execution (reactive txs and callbacks on-chain), Integration (the reactive contract does real work), Usefulness (a problem real users have), Craft. Track: Set It and Forget It ("is this something you'd actually leave running?").
+**Seen as:** part of the submission; the film is the demo. Rubric: Execution (reactive txs and callbacks on-chain), Integration (the reactive contract does real work), Usefulness (a problem real users have), Craft. Track: Set It and Forget It ("is this something you'd actually leave running?").
 **Thesis, verbatim:** *One income book for every chain you're paid on. Every line is copied from the payment's own log, and links back to it.*
 **Tagline for the end card:** *Nobody types in this book.*
 **Built with:** the film system in `internal/film/` (shoot → narration → captions → score → Remotion composition → master), content replaced, machinery kept.
@@ -181,4 +181,4 @@ ffmpeg -ss 10 -i out/film.mp4 -frames:v 1 at-10s.png      # the hook and the cla
 ffmpeg -i out/film.mp4 -af silencedetect=n=-40dB:d=0.35 -f null - 2>&1 | grep -c silence_start
 ```
 
-Then `/benchmark judge` on the rendered film, upload (unlisted, anyone with the link), play it in a private window, and embed the link at the top of the README.
+Then a cold review of the rendered film, upload (unlisted, anyone with the link), play it in a private window, and embed the link at the top of the README.

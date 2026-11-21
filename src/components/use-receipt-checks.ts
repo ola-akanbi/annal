@@ -5,6 +5,8 @@ import type { BookState } from "@/lib/book";
 import { checkLine, type CheckState } from "@/lib/check";
 
 const CONCURRENCY = 4;
+const RETRIES = 3;
+const RETRY_MS = 2_500;
 
 /**
  * Checks every line against its origin receipt, in the reader's browser, four at a time.
@@ -30,7 +32,12 @@ export function useReceiptChecks(book: BookState): Record<number, CheckState> {
     const worker = async () => {
       while (queue.length > 0) {
         const line = queue.shift()!;
-        const result = await checkLine(book.owner, line);
+        // A public RPC can briefly lack a receipt another node has: retry before settling on "unchecked".
+        let result = await checkLine(book.owner, line);
+        for (let attempt = 1; result.state === "unchecked" && attempt <= RETRIES && mounted.current; attempt++) {
+          await new Promise((r) => setTimeout(r, RETRY_MS * attempt));
+          result = await checkLine(book.owner, line);
+        }
         if (mounted.current) setChecks((c) => ({ ...c, [line.index]: result }));
       }
     };

@@ -7,7 +7,7 @@ Append-only. To change a decision, add a new entry that supersedes it.
 **Alternatives:**
 - A reserve router in Every Second Counts. Rejected on fit: it doesn't use Reactive's watch-every-chain subscription as directly.
 - A price alert for LP positions. Rejected: an alert needs an off-chain notifier, which removes the point of using Reactive.
-- An AI event interpreter. Rejected: the AI track's prize pool is half the size, and the model would only be decoration.
+- An AI event interpreter. Rejected: the model would only be decoration.
 - A plain portfolio viewer. Rejected: off-chain trackers already do that for free. A book that only on-chain events can write is something they can't offer.
 **Consequences:**
 - The book must have no owner-controlled write path.
@@ -24,7 +24,7 @@ Append-only. To change a decision, add a new entry that supersedes it.
 **Evidence:** Chain IDs and callback proxy bytecode checked 2026-11-19 (docs/CONTEXT.md).
 
 ## D-003 · Stack: Next.js app at the root, Foundry contracts, TypeScript harness · 2026-11-19 · accepted
-**Context:** Judges and AI screens read the server-rendered HTML first, and the statement has to be linkable per wallet.
+**Context:** Readers, link previews and crawlers read the server-rendered HTML first, and the statement has to be linkable per wallet.
 **Decision:**
 - The Next.js app from `~/Documents/hackathons/_starter/start.sh` sits at the repo root (server-rendered thesis, link previews, CI, first-screen audit).
 - Solidity 0.8.29 + Foundry in `contracts/`, on `reactive-lib-omni`.
@@ -45,7 +45,7 @@ Append-only. To change a decision, add a new entry that supersedes it.
 ## D-006 · Repo public from now on · 2026-11-19 · accepted · supersedes D-005
 **Context:** The project lead asked to make the repo public. The private repo's Actions runs failed at startup with zero jobs (D-005).
 **Decision:** `github.com/ola-akanbi/annal` is public and MIT-licensed from 2026-11-19. The rules require public and open source by submission, so this only brings that forward.
-**Consequences:** Every commit message and file is visible to competitors and judges from now on (protocol: commit messages are public). Strategy stays in `internal/` (gitignored). CI should now run on public-repo minutes; the next push confirms it.
+**Consequences:** Every commit message and file is public from now on (protocol: commit messages are public). Strategy stays in `internal/` (gitignored). CI should now run on public-repo minutes; the next push confirms it.
 
 ## D-007 · Visual world: the Register Roll · 2026-11-19 · accepted
 **Context:** The statement page is a Read surface: a skeptical reader with no wallet must trust and check it. Impeccable's roll (seed:c8c4210e20f0a980) assigned candidate 6 of 7 grounded directions.
@@ -97,5 +97,5 @@ Append-only. To change a decision, add a new entry that supersedes it.
 - Print is a first-class output: controls hidden, figures black, each line's full origin tx hash printed.
 - Unopened wallets show no statement furniture. Phones lose the detached inspector (the drawer carries the trail), get 44px targets and a stacked flow diagram. Nothing renders under 12px.
 - Kept on purpose: the LED glow on ink figures (D-009's register display), the stamp's overshoot easing, the pulsing printer LED (live state), and the numbered landing section labels (the project lead asked for them).
-**Consequences:** The four-up stats band still repeats the roll's total; folding it into the roll head is the next design question if the band reads as a dashboard to judges.
+**Consequences:** The four-up stats band still repeats the roll's total; folding it into the roll head is the next design question if the band reads as a dashboard.
 

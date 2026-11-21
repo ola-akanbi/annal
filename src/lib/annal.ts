@@ -15,6 +15,11 @@ export type Source = {
   /** Circle's testnet USDC on this chain: the only token Annal records. */
   usdc: Address;
   rpc: string;
+  /**
+   * RPCs the reader's browser asks for an origin receipt, in order (CORS-open, checked 2026-11-21).
+   * A public RPC can answer `null` for a receipt another node has, so the check tries the next.
+   */
+  checkRpcs: readonly string[];
   explorer: string;
   /** Blockscout instance used for the explorers'-view comparison (CORS: *). */
   blockscout: string;
@@ -28,6 +33,7 @@ export const SOURCES: readonly Source[] = [
     short: "Ethereum",
     usdc: "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238",
     rpc: "https://ethereum-sepolia-rpc.publicnode.com",
+    checkRpcs: ["https://1rpc.io/sepolia", "https://eth-sepolia.blockscout.com/api/eth-rpc", "https://ethereum-sepolia-rpc.publicnode.com"],
     explorer: "https://sepolia.etherscan.io",
     blockscout: "https://eth-sepolia.blockscout.com",
   },
@@ -38,6 +44,7 @@ export const SOURCES: readonly Source[] = [
     short: "Base",
     usdc: "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
     rpc: "https://sepolia.base.org",
+    checkRpcs: ["https://sepolia.base.org", "https://base-sepolia-rpc.publicnode.com"],
     explorer: "https://sepolia.basescan.org",
     blockscout: "https://base-sepolia.blockscout.com",
   },
@@ -48,6 +55,7 @@ export const SOURCES: readonly Source[] = [
     short: "Unichain",
     usdc: "0x31d0220469e10c4E71834a79b1f276d740d3768F",
     rpc: "https://sepolia.unichain.org",
+    checkRpcs: ["https://sepolia.unichain.org", "https://unichain-sepolia.blockscout.com/api/eth-rpc"],
     explorer: "https://sepolia.uniscan.xyz",
     blockscout: "https://unichain-sepolia.blockscout.com",
   },

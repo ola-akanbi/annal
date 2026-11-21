@@ -9,7 +9,7 @@ web
 ## Users
 **Primary:** a freelancer paid in USDC by clients on several chains (Ethereum, Base and Unichain Sepolia on testnet). From time to time they have to prove their income to someone who doesn't trust a screenshot or a spreadsheet: a landlord, an accountant, a visa or loan officer. Their job is to hand over one statement covering every chain, and have the reader believe it without trusting them.
 
-**Secondary (the evaluation scene):** Reactive Network's judges, with about four minutes per entry. They need to see the reactive transaction and the callback it triggered, and to judge whether the reactive contract does real work.
+**Secondary: developers evaluating the integration**, often with a few minutes to spare. They need to see the reactive transaction and the callback it triggered, and whether the reactive contract does real work.
 
 **Reader of a shared book:** whoever receives the link. They have no wallet and no crypto background, and they want to know whether the numbers are real.
 
@@ -25,7 +25,7 @@ Off-chain trackers and explorers can already *show* payments across chains. What
 - **Opening:** connect a wallet on Base Sepolia, press "Open my book" (one transaction). Within about a second Reactive confirms it's watching that wallet on every source chain.
 - **Living with it:** nothing to run. Payments land as lines about 1–3 seconds after their block.
 - **Sharing:** each book has a public URL, `/book/<address>`. The owner sends it to the reader. The reader needs no wallet; the page re-checks every line against the origin chain's receipt in their browser.
-- **Judging:** judges open a demo book by link, follow any line to its origin transaction, the Lasna reactive transaction and the Base Sepolia callback, and can open a book themselves with a testnet wallet.
+- **Evaluating:** a reviewer opens a demo book by link, follow any line to its origin transaction, the Lasna reactive transaction and the Base Sepolia callback, and can open a book themselves with a testnet wallet.
 
 ## Capabilities and Constraints
 - Sources fixed at deployment: Circle USDC on Ethereum Sepolia (11155111), Base Sepolia (84532), Unichain Sepolia (1301). The book lives on Base Sepolia. The reactive contract runs on Reactive Lasna. Testnet only.

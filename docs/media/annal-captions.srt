@@ -1,0 +1,111 @@
+1
+00:00:05,633 --> 00:00:10,300
+You're paid in USDC on three chains, and your landlord wants proof.
+
+2
+00:00:10,333 --> 00:00:12,333
+Annal keeps one book for all of it.
+
+3
+00:00:12,367 --> 00:00:15,233
+Every line is copied from the payment's own log.
+
+4
+00:00:16,067 --> 00:00:23,700
+A reactive contract on Lasna watches Circle's USDC on Ethereum, Base and Unichain for payments to you.
+
+5
+00:00:23,733 --> 00:00:27,567
+When one lands, it calls back the book on Base Sepolia.
+
+6
+00:00:27,600 --> 00:00:29,267
+Nothing else can write there.
+
+7
+00:00:30,900 --> 00:00:33,033
+Opening a book is one transaction.
+
+8
+00:00:33,067 --> 00:00:35,033
+It's the only thing you ever do.
+
+9
+00:00:46,167 --> 00:00:49,367
+Seconds later, Reactive confirms it's watching.
+
+10
+00:00:49,400 --> 00:00:51,233
+Nobody pressed a button.
+
+11
+00:00:55,167 --> 00:00:57,467
+A client pays you on Unichain.
+
+12
+00:01:05,100 --> 00:01:08,900
+There it is: copied from Unichain's log, written on Base.
+
+13
+00:01:10,900 --> 00:01:13,667
+Pay on Base, and it prints in the same book.
+
+14
+00:01:24,200 --> 00:01:31,400
+Every line opens to its trail: the payment, the reactive transaction on Lasna, and the callback that wrote it.
+
+15
+00:01:31,433 --> 00:01:35,300
+And the reader's own browser checks it against the origin chain's receipt.
+
+16
+00:01:36,767 --> 00:01:40,833
+Someone sent this wallet 500 of a token called USD Coin.
+
+17
+00:01:40,867 --> 00:01:42,600
+Explorers list it.
+
+18
+00:01:43,300 --> 00:01:45,000
+The book printed nothing.
+
+19
+00:01:45,033 --> 00:01:47,800
+Reactive only listens to Circle's contracts.
+
+20
+00:01:53,367 --> 00:01:55,267
+Even the owner can't write a line.
+
+21
+00:01:55,300 --> 00:01:57,000
+The chain refuses it.
+
+22
+00:01:57,033 --> 00:01:59,267
+There's no owner and no admin.
+
+23
+00:01:59,300 --> 00:02:01,167
+Nobody types in this book.
+
+24
+00:02:02,567 --> 00:02:04,367
+Your landlord opens a link.
+
+25
+00:02:04,400 --> 00:02:08,633
+No wallet, and no trust in you: just lines they can check.
+
+26
+00:02:11,733 --> 00:02:18,833
+Twenty-four real payments across three chains: every one printed, a median of one second after its block.
+
+27
+00:02:20,100 --> 00:02:22,500
+One income book for every chain you're paid on.
+
+28
+00:02:22,533 --> 00:02:27,200
+Every line is copied from the payment's own log, and links back to it.

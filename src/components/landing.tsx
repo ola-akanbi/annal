@@ -42,13 +42,18 @@ function median(xs: number[]): number | null {
   return s.length % 2 ? s[m] : Math.round((s[m - 1] + s[m]) / 2);
 }
 
-function ago(seconds: number): string {
+/** The thesis, split for the hero: the job as the headline, the mechanism under it. */
+const THESIS_HEAD = site.thesis.slice(0, site.thesis.indexOf(".") + 1);
+const THESIS_TAIL = site.thesis.slice(site.thesis.indexOf(".") + 1).trim();
+
+function ago(seconds: number, nowUnix?: number, thenUnix?: number): string {
   if (seconds < 10) return "just now";
   if (seconds < 60) return `${seconds}\u00a0s ago`;
   if (seconds < 3600) return `${Math.floor(seconds / 60)}\u00a0min ago`;
   if (seconds < 86400) return `${Math.floor(seconds / 3600)}\u00a0h ago`;
-  const days = Math.floor(seconds / 86400);
-  return days === 1 ? "yesterday" : `${days}\u00a0days ago`;
+  // Calendar days in UTC, so a line from two dates ago never reads "yesterday".
+  const days = nowUnix !== undefined && thenUnix !== undefined ? Math.floor(nowUnix / 86400) - Math.floor(thenUnix / 86400) : Math.floor(seconds / 86400);
+  return days <= 1 ? "yesterday" : `${days}\u00a0days ago`;
 }
 
 /** Hides only blocks below the fold at load, then reveals each as it enters view. */
@@ -263,38 +268,30 @@ export function Landing({ initial }: { initial: BookState }) {
               {watch.kind === "watching" ? "Live · Reactive is watching" : watch.status}
               <span className="live-pill-block">block {Number(book.block).toLocaleString("en-US")}</span>
             </p>
-            {newest && newestSource ? (
-              <h1 className="hero-h1">
+            <h1 className="hero-h1 hero-thesis">{THESIS_HEAD}</h1>
+            <p className="hero-sub">
+              {THESIS_TAIL} Paid on {SOURCES.slice(0, -1).map((x) => x.name).join(", ")} or {SOURCES[SOURCES.length - 1]!.name}, every USDC
+              payment lands in one book that nobody can type in, not even you.
+            </p>
+            {newest && newestSource && (
+              <div className="hero-print" aria-label="The newest line in the demo book">
                 <span className="hero-amount">
                   <DotNumber value={usdcNumber(newest.amount)} decimals={2} />
                   <span className="hero-unit">USDC</span>
                 </span>
-                <span className="hero-line">
+                <p className="hero-print-line">
                   landed in the book{" "}
                   <span className="hero-chip" style={{ background: CHAIN_COLOR[newestSource.key] }}>
-                    <ChainMark chain={newestSource.key} size={30} />
+                    <ChainMark chain={newestSource.key} size={22} />
                     {newestDelay !== null ? <DotNumber value={newestDelay} suffix=" s" /> : newestSource.short}
                   </span>{" "}
-                  {newestDelay !== null ? "after its block." : "from its own log."}
-                </span>
-              </h1>
-            ) : (
-              <h1 className="hero-h1">
-                <span className="hero-line">{site.thesis}</span>
-              </h1>
-            )}
-            <p className="hero-sub">{site.thesis}</p>
-            {newest && newestSource && (
-              <p className="hero-prov">
-                That one came from {newestSource.name}
-                {now !== null ? `, ${ago(now - newest.writtenAt)}` : ` at ${formatTime(newest.writtenAt)}`}.
-              </p>
+                  {newestDelay !== null ? "after its block" : "from its own log"}, paid on {newestSource.name}
+                  {now !== null ? `, ${ago(now - newest.writtenAt, now, newest.writtenAt)}` : ` at ${formatTime(newest.writtenAt)}`}.
+                </p>
+              </div>
             )}
             <div className="hero-actions">
-              <Link href="#open" className="btn btn-ink">
-                <WalletIcon aria-hidden weight="bold" />
-                Open your book
-              </Link>
+              <OpenBook label="Open your book" hint={false} />
               <Link href={`/book/${DEMO_BOOK}`} className="btn btn-glass">
                 See the live book
                 <ArrowRightIcon aria-hidden weight="bold" />

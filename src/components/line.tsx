@@ -18,7 +18,7 @@ function Mark({ check }: { check: CheckState }) {
       : check.state === "mismatch"
         ? "Does not match the origin receipt"
         : check.state === "unchecked"
-          ? "Not checked: origin chain unreachable"
+          ? "Not checked yet: no public RPC returned the origin receipt"
           : "Checking the origin receipt";
   return (
     <span className="mark" data-check={check.state} role="img" aria-label={label} title={label}>

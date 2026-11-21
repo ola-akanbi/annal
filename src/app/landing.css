@@ -179,7 +179,7 @@
 
 @media (max-width: 860px) {
   .section-head {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -273,12 +273,47 @@
   letter-spacing: -0.045em;
 }
 
+/* the job, first: the thesis's first sentence is the headline */
+.hero-thesis {
+  margin: 1.6rem 0 0;
+  max-width: 16ch;
+  font-size: clamp(2.5rem, 1.2rem + 3.6vw, 4.6rem);
+  font-stretch: 106%;
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+  animation: print-in 0.9s var(--ease-out) both;
+}
+
+/* the proof, under it: the newest real line in the demo book, live */
+.hero-print {
+  margin-top: 1.5rem;
+  padding-top: 1.1rem;
+  border-top: 2px dashed rgb(14 14 14 / 0.22);
+  max-width: 34rem;
+}
+
+.hero-print-line {
+  margin: 0.5rem 0 0;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.hero-print .hero-chip {
+  font-size: 0.95rem;
+  padding: 0.1rem 0.6rem 0.1rem 0.2rem;
+  gap: 0.4rem;
+  vertical-align: 0;
+}
+
 .hero-amount {
   display: block;
   font-family: var(--font-dot);
   font-weight: 900;
   font-variation-settings: "wght" 900, "ROND" 40;
-  font-size: clamp(5rem, 2rem + 10vw, 12rem);
+  font-size: clamp(2.6rem, 1.4rem + 3.4vw, 4.4rem);
   line-height: 0.8;
   letter-spacing: -0.01em;
   font-variant-numeric: tabular-nums;
@@ -337,7 +372,7 @@
 }
 
 .hero-sub {
-  margin: 1.75rem 0 0;
+  margin: 1.4rem 0 0;
   max-width: 40ch;
   font-size: 1.25rem;
   line-height: 1.45;
@@ -600,7 +635,7 @@
 
 @media (max-width: 980px) {
   .hero-inner {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr); /* a bare 1fr won't shrink below its widest child */
     gap: 3.5rem;
   }
   .hero-roll {
@@ -651,7 +686,7 @@
   font-family: var(--font-dot);
   font-weight: 900;
   font-variation-settings: "wght" 900, "ROND" 40;
-  font-size: clamp(3.2rem, 2rem + 3.6vw, 5.5rem);
+  font-size: clamp(2.6rem, 1.6rem + 3.6vw, 5.5rem); /* the USDC total fits a half-width cell at 375 */
   line-height: 0.9;
   letter-spacing: 0;
   font-variant-numeric: tabular-nums;
@@ -879,7 +914,7 @@
 
 @media (max-width: 980px) {
   .how-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -1041,7 +1076,7 @@
 
 @media (max-width: 860px) {
   .versus {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -1114,7 +1149,7 @@
 
 @media (max-width: 860px) {
   .who-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -1230,7 +1265,10 @@
 
 @media (max-width: 980px) {
   .machine-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .machine-sec .same-address {
+    grid-column: auto; /* a 1 / 3 span would add an implicit second column on a one-column grid */
   }
 }
 
@@ -1264,6 +1302,20 @@
   max-width: 40ch;
   font-size: 1.1875rem;
   color: var(--sun-text-soft);
+}
+
+/* The open button's status and errors take their own line under the buttons, so nothing shifts sideways. */
+.hero-actions .open-flow,
+.final-actions .open-flow {
+  display: contents;
+}
+
+.hero-actions .open-flow p,
+.final-actions .open-flow p {
+  order: 3;
+  flex-basis: 100%;
+  max-width: none;
+  margin: 0.2rem 0 0;
 }
 
 .final-actions {
@@ -1357,7 +1409,7 @@
 
 @media (max-width: 720px) {
   .foot-inner {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -1585,5 +1637,13 @@
     background: #fff;
     border-radius: 8px;
     box-shadow: inset 0 0 0 1.5px var(--ink);
+  }
+}
+
+/* The narrowest phones: the unit drops under its figure rather than pushing the page sideways. */
+@media (max-width: 380px) {
+  .stat-value {
+    flex-wrap: wrap;
+    white-space: normal;
   }
 }

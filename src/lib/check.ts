@@ -14,14 +14,12 @@ export type CheckState =
 
 const TRANSFER = "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef";
 
-const clients = new Map<number, PublicClient>();
-function clientFor(chainId: number): PublicClient | undefined {
-  const source = sourceByChainId(chainId);
-  if (!source) return undefined;
-  let c = clients.get(chainId);
+const clients = new Map<string, PublicClient>();
+function clientAt(url: string): PublicClient {
+  let c = clients.get(url);
   if (!c) {
-    c = createPublicClient({ transport: http(source.rpc, { timeout: 10_000, retryCount: 1 }) }) as PublicClient;
-    clients.set(chainId, c);
+    c = createPublicClient({ transport: http(url, { timeout: 8_000, retryCount: 0 }) }) as PublicClient;
+    clients.set(url, c);
   }
   return c;
 }
@@ -31,16 +29,24 @@ const topicToAddress = (topic: Hex | undefined) => (topic ? getAddress(`0x${topi
 export async function checkLine(owner: string, line: BookLine): Promise<CheckState> {
   const source = sourceByChainId(line.originChainId);
   const chainName = source?.name ?? `chain ${line.originChainId}`;
-  const client = clientFor(line.originChainId);
-  if (!source || !client) {
+  if (!source) {
     return { state: "mismatch", chainName, reason: `${chainName} isn't one of this book's sources.` };
   }
 
+  // Ask each public RPC in turn; the first that has the receipt decides. None proves nothing either way.
   let receipt;
-  try {
-    receipt = await client.getTransactionReceipt({ hash: line.originTxHash });
-  } catch {
-    return { state: "unchecked", chainName, reason: `Couldn't reach ${chainName} from your browser.` };
+  let client: PublicClient | undefined;
+  for (const url of source.checkRpcs) {
+    try {
+      client = clientAt(url);
+      receipt = await client.getTransactionReceipt({ hash: line.originTxHash });
+      break;
+    } catch {
+      receipt = undefined;
+    }
+  }
+  if (!receipt || !client) {
+    return { state: "unchecked", chainName, reason: `None of ${chainName}'s public RPCs returned this receipt just now.` };
   }
 
   if (receipt.status !== "success") {

@@ -24,6 +24,14 @@ A freelancer paid in USDC on several chains sometimes has to prove that income t
 
 Annal keeps the book on-chain and lets nobody write in it, the owner included. The owner opens a book with one transaction. From then on a Reactive Network contract watches Circle's USDC on each chain for transfers to that wallet, and writes each one into the book through Reactive's callback proxy, copied field by field from the payment's own log. The reader opens a link: no wallet, and every line is re-checked against its origin chain in their browser.
 
+## Set once, keeps running
+
+**Why you'd leave it on.** If you're paid in USDC on more than one chain, the day someone asks for proof of income is the day you need every payment, in one place, that you couldn't have edited. Annal keeps that record from the day you open it, so the proof already exists when you're asked.
+
+**What running it takes.** Opening a book is one transaction, and it's the only thing the owner ever does. There's no server to keep up and no bot to babysit. The watcher is a Reactive contract that pays for each payment it copies out of its own balance, about 0.015 lREACT a payment. It holds 10.89 lREACT today, enough for roughly 700 more, and anyone can top it up. Every book page shows the watcher's balance and debt live, and says plainly if it ever runs dry.
+
+**A book that's been lived in.** Besides the three-line demo, [this book](https://annal-sooty.vercel.app/book/0x219B05463962bCc922f1ce3d7fB0374BD501bDD5) holds 31 lines from the open-flow test and the 24-payment latency run, across all three chains.
+
 ## Proof: nothing here is a mockup
 
 Everything below is live. Click it.
@@ -148,6 +156,7 @@ Node 26, Next.js 16, viem, Foundry 1.8.3, Solidity 0.8.29, [`reactive-lib-omni`]
 - **Three sources, fixed at deployment.** Adding a chain means deploying a new pair.
 - **No completeness promise if the watcher runs dry.** If AnnalReactive runs out of lREACT, payments made meanwhile are not printed, and the book page says so. The explorers' comparison on each book lists anything it left out.
 - **A line records a payment, not its reason.** A self-payment from a second wallet prints like any other.
+- **Anyone can make the watcher spend.** Any wallet can open a book, and a zero-value Circle USDC transfer to a watched wallet still costs the shared watcher about 0.015 lREACT and prints a 0.00 line. Filtering dust needs a new deployment of both contracts, so it isn't in this one.
 - **CI runs by hand.** The repo owner's GitHub Actions are billing-locked, so the workflows are manual and the gate of record is `npm run gate` before every push ([D-011](docs/DECISIONS.md)).
 
 ## Repository

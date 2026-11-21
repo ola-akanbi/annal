@@ -701,7 +701,7 @@
     padding-top: 6.25rem;
   }
   .band-inner {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 1.25rem;
   }
   .band-stats {

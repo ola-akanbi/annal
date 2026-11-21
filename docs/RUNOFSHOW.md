@@ -2,7 +2,7 @@
 
 **Thesis in one line:** *One income book for every chain you're paid on. Every line is copied from the payment's own log, and links back to it.*
 
-Target: **about 3 minutes**, then Q&A. The event judges from the submission (repo, addresses, transaction hashes, a video under three minutes) and announces no live round, so this script exists for a call or a demo day if one is offered, and it is the spine of [`VIDEO.md`](VIDEO.md). Every value on screen is live; read numbers off the screen, never from this page.
+Target: **about 3 minutes**, then Q&A. The event reviews the submission (repo, addresses, transaction hashes, a video under three minutes) and announces no live round, so this script exists for a call or a demo day if one is offered, and it is the spine of [`VIDEO.md`](VIDEO.md). Every value on screen is live; read numbers off the screen, never from this page.
 
 **The one moment:** a payment sent on another chain prints itself onto the roll a second or two later, while everyone watches. Slow down there.
 
