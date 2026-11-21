@@ -1,9 +1,9 @@
 # State
-_Last verified: 2026-11-19 22:25 UTC at 3c41d8e_
+_Last verified: 2026-11-21 07:55 UTC at 447a36c_
 
 **Thesis:** One income book for every chain you're paid on. Every line is copied from the payment's own log, and links back to it. (Claims table: qualified. Copy must name Ethereum, Base and Unichain Sepolia.)
 **Milestone:** M1 · Walking skeleton (checkpoint 2026-11-26 05:49 UTC). M0 closed. · **Deadline:** 2026-12-05 20:00 UTC (time left: the clock line)
-**Next action:** exercise the open flow with a real browser wallet on a fresh address (open → Reactive confirms → first payment prints live), then build `harness/` for the ≥ 20-payment latency run (M2).
+**Next action:** build `harness/` for the ≥ 20-payment latency run (M2), then source-verify the contracts.
 **Blocked on:** nothing.
 
 ## Works (verified this session)
@@ -15,6 +15,8 @@ _Last verified: 2026-11-19 22:25 UTC at 3c41d8e_
 | Look-alike "USDC" (500) never written | book still 3 lines after 30 s | E-004 |
 | Owner's forged `record` refused on-chain | tx `0x7e5721dc…` status 0, `NotAuthorized` | E-004 |
 | Costs: ~0.015 lREACT per payment, ~0.0000013 ETH per callback, no debt | balances read on Lasna and Base | E-003 |
+| Open flow on production with a fresh browser wallet: "Open my book" → `open()` → Reactive confirmed 2 s later → 1 USDC on Base Sepolia printed live as No. 001 (2 s), receipt check 1/1, full trail in the inspector | browser on https://annal-sooty.vercel.app, wallet key generated in the tab | E-008 |
+| Trail lookup works for freshly printed lines (was 502: Lasna range past its head); landing requests the trail once, not per poll | production `/api/trail` 200 in 1.6 s; 1 request in 20 s, console clean | commit 22551fe |
 | Contracts gate: 21 tests, lint with warnings denied, fmt check | `npm run gate:contracts` | E-006 |
 | Landing page in production (live-ticker hero from the newest real payment, ticker, live stats, animated three-chain flow with real tx links, look-alike comparison, audiences, contracts and verify command, final call to action) + glass nav with icons, full-colour brand (D-008) | browser on https://annal-sooty.vercel.app at 1440 and 390 wide, every section rendered, no horizontal scroll, console clean | commit 074b520 |
 | UI refinement in production (D-010): ledger-band rows with chain accent bars, row ↔ inspector sync ("Inspecting"), Motion drawers with inset proof panel and emerald verdict, chain filters + filtered subtotal + expand/collapse all, Phosphor icons, copy toasts, NumberFlow figures, three-colour core, solid nav, shared-address caption | browser on https://annal-sooty.vercel.app at 1440 and 390 wide: filter, expand-all and selection exercised, console clean | commit b08f0d0 |
@@ -27,14 +29,15 @@ _Last verified: 2026-11-19 22:25 UTC at 3c41d8e_
 | AnnalReactive | Reactive Lasna | `0x653B62A39Aea06998c152b48F150175B2645c8Bd` (1.44 lREACT, debt 0) | 2026-11-19 22:20 UTC |
 | AnnalBook | Base Sepolia | `0x653B62A39Aea06998c152b48F150175B2645c8Bd` (0.00399 ETH, debt 0) | 2026-11-19 22:20 UTC |
 | LookalikeUSDC (demo only) | Base Sepolia | `0x4D2579b6E0f6273618Cd95Ff57Ae07653E9106Ca` | 2026-11-19 22:15 UTC |
-| Web app (landing `/` + book `/book/[address]`) | Vercel production, `lekan6/annal` | https://annal-sooty.vercel.app (commit b08f0d0) | 2026-11-21 08:25 local |
+| Web app (landing `/` + book `/book/[address]`) | Vercel production, `lekan6/annal` | https://annal-sooty.vercel.app (commit 447a36c) | 2026-11-21 07:52 UTC |
+| Open-flow test book | — | `0x219B05463962bCc922f1ce3d7fB0374BD501bDD5`, 1 line | 2026-11-21 07:50 UTC |
 | Demo book owner (freelancer) | — | `0xa7D557BF0C7312EAF186a6A81159a3650aA77444`, 3 lines | 2026-11-19 22:20 UTC |
 
 ## Broken or unverified
 - **CI can't run:** the `ola-akanbi` account is locked for a billing issue (run 44622607530 annotation). The operator accepted the local gate (`npm run gate`) as the gate of record.
 - Contracts aren't source-verified on any explorer yet (Blockscout/Sourcify for Base Sepolia; check whether Lasna's explorer supports verification).
 - Latency is n = 1 per chain. Needs ≥ 20 runs before any public number (M2, via `harness/`).
-- The open flow hasn't been run with a real browser wallet yet.
+- The open flow was run with an injected EIP-1193 provider (E-008), not a wallet extension: MetaMask's own add/switch-chain prompts are unexercised.
 - `ui-audit.mjs` hasn't run against production (this machine's terminal can't reach Vercel; the browser can).
 - This machine's terminal can't reach Vercel's IPs (216.198.79.3, 64.29.17.3; connect timeout even outside the sandbox), but a browser can. Run production audits through the browser.
 
