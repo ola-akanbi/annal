@@ -3,7 +3,7 @@ _Last verified: 2026-11-21 14:30 UTC_
 
 **Thesis:** One income book for every chain you're paid on. Every line is copied from the payment's own log, and links back to it. (Claims table: qualified. Copy must name Ethereum, Base and Unichain Sepolia.)
 **Milestone:** M1 · Walking skeleton (checkpoint 2026-11-26 05:49 UTC). M0 closed. · **Deadline:** 2026-12-05 20:00 UTC (time left: the clock line)
-**Next action:** upload `docs/media/annal-captions.srt` to the YouTube video (Subtitles → English → Upload file → With timing), then fill the DoraHacks form from `internal/SUBMISSION.md` and run `/hackathon preflight` before submitting.
+**Next action:** fill the DoraHacks form from `internal/SUBMISSION.md`, then `/hackathon preflight` before submitting. Film: https://youtu.be/Hb0ndXJAirs (unlisted, re-cut with the new hero; delete the old EggEfW50Ets upload).
 **Blocked on:** nothing.
 
 ## Works (verified this session)

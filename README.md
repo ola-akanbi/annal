@@ -4,7 +4,7 @@
 
 On testnet that means Circle USDC on Ethereum Sepolia, Base Sepolia and Unichain Sepolia, kept in one book on Base Sepolia and written only by a Reactive Network contract on Lasna.
 
-[![Film](https://img.shields.io/badge/film-2%3A30-F7C348?labelColor=0E0E0E&logo=youtube&logoColor=white)](https://youtu.be/EggEfW50Ets)
+[![Film](https://img.shields.io/badge/film-2%3A30-F7C348?labelColor=0E0E0E&logo=youtube&logoColor=white)](https://youtu.be/Hb0ndXJAirs)
 [![Live app](https://img.shields.io/badge/live-annal--sooty.vercel.app-F7C348?labelColor=0E0E0E)](https://annal-sooty.vercel.app)
 [![Demo book](https://img.shields.io/badge/demo%20book-3%20lines%2C%203%20chains-F7C348?labelColor=0E0E0E)](https://annal-sooty.vercel.app/book/0xa7D557BF0C7312EAF186a6A81159a3650aA77444)
 [![Tests](https://img.shields.io/badge/forge%20test-21%20passing-0E0E0E)](contracts/test/Annal.t.sol)
@@ -12,11 +12,11 @@ On testnet that means Circle USDC on Ethereum Sepolia, Base Sepolia and Unichain
 [![AnnalReactive source](https://img.shields.io/badge/AnnalReactive-exact%20match-047857?labelColor=0E0E0E)](https://repo.sourcify.dev/5318007/0x653B62A39Aea06998c152b48F150175B2645c8Bd)
 [![License: MIT](https://img.shields.io/badge/license-MIT-0E0E0E)](LICENSE)
 
-[Watch the film (2:30)](https://youtu.be/EggEfW50Ets) · [Live app](https://annal-sooty.vercel.app) · [Demo book](https://annal-sooty.vercel.app/book/0xa7D557BF0C7312EAF186a6A81159a3650aA77444) · [Verify it yourself](#verify-without-trusting-this-readme) · [How it works](#how-it-works) · [Evidence ledger](docs/EVIDENCE.md) · [Run it locally](#run-it-locally)
+[Watch the film (2:30)](https://youtu.be/Hb0ndXJAirs) · [Live app](https://annal-sooty.vercel.app) · [Demo book](https://annal-sooty.vercel.app/book/0xa7D557BF0C7312EAF186a6A81159a3650aA77444) · [Verify it yourself](#verify-without-trusting-this-readme) · [How it works](#how-it-works) · [Evidence ledger](docs/EVIDENCE.md) · [Run it locally](#run-it-locally)
 
 ![The demo book: 3.00 USDC from three chains, every line checked in the reader's browser](docs/media/annal-book.png)
 
-**The film, 2:30:** a fresh wallet opens a book, two payments on Unichain and Base Sepolia print on camera, a look-alike "USDC" and the owner's forged write are refused, and a reader checks the book on a phone with no wallet. Every transaction in it is real ([E-012](docs/evidence/E-012-film-take.txt)). [youtu.be/EggEfW50Ets](https://youtu.be/EggEfW50Ets)
+**The film, 2:30:** a fresh wallet opens a book, two payments on Unichain and Base Sepolia print on camera, a look-alike "USDC" and the owner's forged write are refused, and a reader checks the book on a phone with no wallet. Every transaction in it is real ([E-012](docs/evidence/E-012-film-take.txt)). [youtu.be/Hb0ndXJAirs](https://youtu.be/Hb0ndXJAirs)
 
 ## The problem
 
