@@ -18,10 +18,25 @@ export type WatchState = {
 
 const CHAINS = `${SOURCES.slice(0, -1).map((s) => s.name).join(", ")} or ${SOURCES.at(-1)!.name}`;
 
-export function watchState(book: BookState): WatchState {
+/**
+ * `opening`: the owner just sent `open()` (the page arrived with ?opened=1). Base Sepolia's public RPC
+ * can lag the block that holds it by a few seconds, so "no book" would be wrong; say we're waiting.
+ */
+export function watchState(book: BookState, opening = false): WatchState {
   const lasnaUnknown = book.reactive.watching === null || book.reactive.debt === null;
   const note = lasnaUnknown ? "Couldn't reach Reactive Lasna just now, so the watcher's health isn't confirmed." : null;
 
+  if (book.openedAt === 0 && opening) {
+    return {
+      kind: "waiting",
+      dot: "idle",
+      status: "Opening · waiting for Base Sepolia to show it",
+      feed: "Opening · waiting for the chain",
+      emptyTitle: "Your book is being opened.",
+      emptyBody: "The transaction is sent. This page shows it as soon as Base Sepolia's nodes catch up, usually within seconds.",
+      note,
+    };
+  }
   if (book.openedAt === 0) {
     return {
       kind: "unopened",

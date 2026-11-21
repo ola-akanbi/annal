@@ -58,7 +58,8 @@ function medianDelay(lines: BookLine[]): number | null {
 export function BookView({ initial, demo, fast }: { initial: BookState; demo: boolean; fast: boolean }) {
   const { book, fresh, readError } = useLiveBook(initial, fast);
   const checks = useReceiptChecks(book);
-  const watch = watchState(book);
+  const opening = fast && book.openedAt === 0;
+  const watch = watchState(book, opening);
   const debt = book.reactive.debt === null ? null : BigInt(book.reactive.debt);
   const isDemo = demo || book.owner.toLowerCase() === DEMO_BOOK.toLowerCase();
   const newest = book.lines.reduce<BookLine | undefined>((a, l) => (!a || l.index > a.index ? l : a), undefined);
@@ -66,7 +67,7 @@ export function BookView({ initial, demo, fast }: { initial: BookState; demo: bo
   const mismatches = Object.values(checks).filter((c) => c.state === "mismatch").length;
   const med = medianDelay(book.lines);
   const opened = book.openedAt > 0;
-  const summary = bookSummary(book, isDemo);
+  const summary = opening ? "Opening this book: the transaction is sent, and Base Sepolia shows it within seconds." : bookSummary(book, isDemo);
   const [picked, setPicked] = useState<number | undefined>(undefined);
   const selected = picked !== undefined && book.lines.some((l) => l.index === picked) ? picked : newest?.index;
   const selectedLine = book.lines.find((l) => l.index === selected);
@@ -178,7 +179,7 @@ export function BookView({ initial, demo, fast }: { initial: BookState; demo: bo
 
           <div className="press">
             <PrinterHead watch={watch} block={book.block} />
-            <Roll book={book} fresh={fresh} readError={readError} checks={checks} selected={selected} onSelect={setPicked} />
+            <Roll book={book} opening={opening} fresh={fresh} readError={readError} checks={checks} selected={selected} onSelect={setPicked} />
           </div>
 
           <aside className="rail rail-right notes" aria-label="How to trust it">

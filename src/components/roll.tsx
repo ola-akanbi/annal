@@ -19,6 +19,7 @@ type Filter = "all" | SourceKey;
 
 export function Roll({
   book,
+  opening = false,
   fresh,
   readError,
   checks,
@@ -26,6 +27,8 @@ export function Roll({
   onSelect,
 }: {
   book: BookState;
+  /** The owner just sent open(); the chain read may lag it by a few seconds. */
+  opening?: boolean;
   /** Line indexes that arrived since the page loaded: they feed out of the printer. */
   fresh: ReadonlySet<number>;
   readError: string | null;
@@ -52,7 +55,7 @@ export function Roll({
   const filtered = filter === "all" ? null : perChain.find((p) => p.s.key === filter)!;
   const allVisibleOpen = visible.length > 0 && visible.every((l) => open.has(l.index));
   const checkedCount = Object.values(checks).filter((c) => c.state === "checked").length;
-  const watch: WatchState = watchState(book);
+  const watch: WatchState = watchState(book, opening);
   const newestIndex = newestFirst[0]?.index;
   const allChecked = book.lines.length > 0 && checkedCount === book.lines.length;
   const opened = book.openedAt > 0;
@@ -112,6 +115,8 @@ export function Roll({
                   </>
                 )}
               </>
+            ) : opening ? (
+              <>Opening: waiting for Base Sepolia to show the transaction.</>
             ) : (
               <>No book has been opened for this wallet.</>
             )}
