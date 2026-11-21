@@ -2,8 +2,8 @@
 _Last verified: 2026-11-21 15:35 UTC at efdbae7_
 
 **Thesis:** One income book for every chain you're paid on. Every line is copied from the payment's own log, and links back to it. (Copy near it names Ethereum, Base and Unichain Sepolia.)
-**Milestone:** M4 · Proof surface: README, film, benchmark and preflight done. M0–M3 closed. · **Deadline:** 2026-12-05 20:00 UTC (time left: the clock line)
-**Next action:** the project lead submits on DoraHacks from `internal/SUBMISSION.md` (code links pinned to 22d7a22 still resolve), attaches `docs/media/annal-captions.srt` to https://youtu.be/Hb0ndXJAirs, deletes the old upload EggEfW50Ets, and optionally runs `git tag submission && git push origin submission`. PLAN M4, last item.
+**Milestone:** M5 · Submitted on DoraHacks 2026-11-21 (deadline 2026-12-05 20:00 UTC). · Results: not announced.
+**Next action:** keep the demo path live through judging: AnnalReactive funded (≥ 1 lREACT, debt 0), the app and video reachable. Push only fixes; the repo as submitted is the commit before any later push.
 **Blocked on:** nothing on our side.
 
 ## Works (verified 2026-11-21)

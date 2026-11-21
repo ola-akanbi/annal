@@ -46,7 +46,7 @@ All checkpoints count from `Started:`.
 - [x] Uploaded unlisted, plays logged out, embedded in the README: https://youtu.be/Hb0ndXJAirs (E-014).
 - [x] Benchmark run: cold judges 15/20, AI screen pass, fixes shipped (E-013, D-013).
 - [x] Preflight passed (E-014).
-- [ ] Submit on DoraHacks from `internal/SUBMISSION.md`; attach captions; delete the old video upload; optional `git tag submission` (project lead).
+- [x] Submitted on DoraHacks 2026-11-21 by the project lead, from `internal/SUBMISSION.md`.
 
 ## Cut list
 Things deliberately not being built. Each entry links the DECISIONS entry that cut it.
