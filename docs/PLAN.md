@@ -31,7 +31,9 @@ All checkpoints count from `Started:`.
 - [ ] Phone and tablet re-verified after every UI change (done for this build: `mobile-2.png`, `tablet-2.png`).
 
 ### M2 · Core claim
-- [ ] Placeholder.
+- [x] Latency measured over ≥ 20 payments: 24 real payments, 8 per chain, 24/24 printed with fields matching; median 1 s, max 3 s. → E-009
+- [ ] Contracts source-verified on the explorers.
+- [ ] Top up AnnalReactive before the demo and the video (1.00 lREACT left after E-009).
 
 ### M3 · UI pass
 - [ ] Placeholder.

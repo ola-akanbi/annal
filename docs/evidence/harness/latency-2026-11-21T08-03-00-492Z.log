@@ -1,0 +1,118 @@
+Harness: 24 payments to 0x219B05463962bCc922f1ce3d7fB0374BD501bDD5 from 0x4713b56012F67a84114D6a65Cd8924E7850b691E, chains base → unichain → ethereum
+#0 base     1s by block time (6 Base blocks), seen 1.7s after receipt, fields match
+#1 unichain 2s by block time, seen 3.3s after receipt, fields match
+#2 ethereum 2s by block time, seen 1.7s after receipt, fields match
+#3 base     1s by block time (6 Base blocks), seen 1.2s after receipt, fields match
+#4 unichain 2s by block time, seen 4.5s after receipt, fields match
+#5 ethereum 2s by block time, seen 1.9s after receipt, fields match
+#6 base     1s by block time (7 Base blocks), seen 1.8s after receipt, fields match
+#7 unichain 1s by block time, seen 3.8s after receipt, fields match
+#8 ethereum 3s by block time, seen 2.1s after receipt, fields match
+#9 base     1s by block time (9 Base blocks), seen 1.7s after receipt, fields match
+#10 unichain 1s by block time, seen 3.7s after receipt, fields match
+#11 ethereum 2s by block time, seen 2.3s after receipt, fields match
+#12 base     2s by block time (7 Base blocks), seen 1.1s after receipt, fields match
+#13 unichain 1s by block time, seen 2.7s after receipt, fields match
+#14 ethereum 2s by block time, seen 3.5s after receipt, fields match
+#15 base     1s by block time (8 Base blocks), seen 1.6s after receipt, fields match
+#16 unichain 2s by block time, seen 3.2s after receipt, fields match
+#17 ethereum 2s by block time, seen 1.9s after receipt, fields match
+#18 base     1s by block time (6 Base blocks), seen 1.7s after receipt, fields match
+#19 unichain 1s by block time, seen 3.1s after receipt, fields match
+#20 ethereum 1s by block time, seen 3.4s after receipt, fields match
+#21 base     1s by block time (7 Base blocks), seen 1.6s after receipt, fields match
+#22 unichain 1s by block time, seen 3.3s after receipt, fields match
+#23 ethereum 2s by block time, seen 3.4s after receipt, fields match
+
+Summary (delay = line writtenAt − origin block timestamp, seconds):
+{
+  "all": {
+    "sent": 24,
+    "printed": 24,
+    "missed": 0,
+    "fieldsMatch": 24,
+    "delaySec": {
+      "n": 24,
+      "min": 1,
+      "median": 1,
+      "p90": 2,
+      "max": 3
+    },
+    "seenAfterMs": {
+      "n": 24,
+      "min": 1065,
+      "median": 2221,
+      "p90": 3702,
+      "max": 4529
+    }
+  },
+  "base": {
+    "sent": 8,
+    "printed": 8,
+    "missed": 0,
+    "fieldsMatch": 8,
+    "delaySec": {
+      "n": 8,
+      "min": 1,
+      "median": 1,
+      "p90": 2,
+      "max": 2
+    },
+    "seenAfterMs": {
+      "n": 8,
+      "min": 1065,
+      "median": 1647.5,
+      "p90": 1774,
+      "max": 1774
+    }
+  },
+  "unichain": {
+    "sent": 8,
+    "printed": 8,
+    "missed": 0,
+    "fieldsMatch": 8,
+    "delaySec": {
+      "n": 8,
+      "min": 1,
+      "median": 1,
+      "p90": 2,
+      "max": 2
+    },
+    "seenAfterMs": {
+      "n": 8,
+      "min": 2716,
+      "median": 3283,
+      "p90": 4529,
+      "max": 4529
+    }
+  },
+  "ethereum": {
+    "sent": 8,
+    "printed": 8,
+    "missed": 0,
+    "fieldsMatch": 8,
+    "delaySec": {
+      "n": 8,
+      "min": 1,
+      "median": 2,
+      "p90": 3,
+      "max": 3
+    },
+    "seenAfterMs": {
+      "n": 8,
+      "min": 1700,
+      "median": 2221,
+      "p90": 3519,
+      "max": 3519
+    }
+  },
+  "baseBlocks": {
+    "n": 8,
+    "min": 6,
+    "median": 7,
+    "p90": 9,
+    "max": 9
+  }
+}
+
+Evidence: /Users/emmanuelist/Documents/hackathons/individuals/lekan/reactive/docs/evidence/harness/latency-2026-11-21T08-03-00-492Z.json
