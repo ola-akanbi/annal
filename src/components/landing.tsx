@@ -143,6 +143,19 @@ function FlowDiagram() {
   );
 }
 
+/** Section wayfinding: a dot-matrix number, a mono label and a rule. */
+function SectionLabel({ n, label }: { n: string; label: string }) {
+  return (
+    <p className="sec-label">
+      <span className="sec-no" aria-hidden>
+        {n}
+      </span>
+      {label}
+      <span className="sec-rule" aria-hidden />
+    </p>
+  );
+}
+
 export function Landing({ initial }: { initial: BookState }) {
   const { book } = useLiveBook(initial);
   const [now, setNow] = useState<number | null>(null);
@@ -325,6 +338,7 @@ export function Landing({ initial }: { initial: BookState }) {
       {/* ───────── how it works ───────── */}
       <section className="how" id="how">
         <div className="section-head reveal">
+          <SectionLabel n="01" label="How it works" />
           <h2>
             Three chains in.
             <br />
@@ -389,6 +403,7 @@ export function Landing({ initial }: { initial: BookState }) {
       {/* ───────── trust: the look-alike ───────── */}
       <section className="trust" id="trust">
         <div className="section-head reveal">
+          <SectionLabel n="02" label="What it refuses" />
           <h2>
             Explorers said {fake ? formatUnitsPlain(fake.value, fake.decimals, 0) : "500"} USDC.
             <br />
@@ -465,6 +480,7 @@ export function Landing({ initial }: { initial: BookState }) {
       {/* ───────── who it's for ───────── */}
       <section className="who">
         <div className="section-head reveal">
+          <SectionLabel n="03" label="Who it’s for" />
           <h2>Hand it to anyone who needs proof.</h2>
           <p>Paid in USDC on three chains? Send one link. The reader needs no wallet and no trust in you.</p>
         </div>
@@ -486,6 +502,7 @@ export function Landing({ initial }: { initial: BookState }) {
       {/* ───────── the machine ───────── */}
       <section className="machine-sec">
         <div className="section-head reveal">
+          <SectionLabel n="04" label="The machine" />
           <h2>Two contracts. No owner.</h2>
           <p>Nothing here asks you to trust us. Read the contracts, or ask the chain yourself.</p>
         </div>
@@ -533,6 +550,7 @@ export function Landing({ initial }: { initial: BookState }) {
       {/* ───────── final call ───────── */}
       <section className="final" id="open">
         <div className="final-inner reveal">
+          <SectionLabel n="05" label="Open yours" />
           <h2>
             Open your book.
             <br />
