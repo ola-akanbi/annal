@@ -91,3 +91,11 @@ export function isSourceToken(chainId: number, token: string): boolean {
 
 export const txUrl = (explorer: string, hash: string) => `${explorer}/tx/${hash}`;
 export const addressUrl = (explorer: string, address: string) => `${explorer}/address/${address}`;
+
+/**
+ * AnnalReactive (Lasna) and AnnalBook (Base Sepolia) are two different contracts that share one
+ * address: each was the deployer's first deployment on its own chain (nonce 0), and a CREATE
+ * address depends only on the deployer and its nonce. (docs/CONTEXT.md, "Our deployments")
+ */
+export const SAME_ADDRESS_NOTE =
+  "Same address, two contracts: each was the deployer's first deployment on its own chain, and a contract's address depends only on the deployer and that count.";

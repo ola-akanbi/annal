@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Archivo, Doto, Martian_Mono } from "next/font/google";
+import { Providers } from "@/components/motion";
+import { AppToaster } from "@/components/toaster";
 import site from "@/lib/site.json";
 import "./globals.css";
 import "./landing.css";
@@ -48,7 +50,10 @@ export const viewport: Viewport = { themeColor: site.themeColor };
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${archivo.variable} ${martian.variable} ${doto.variable}`}>
-      <body>{children}</body>
+      <body>
+        <Providers>{children}</Providers>
+        <AppToaster />
+      </body>
     </html>
   );
 }

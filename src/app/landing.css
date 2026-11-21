@@ -14,12 +14,11 @@
   gap: 1.5rem;
   padding: 0.55rem 0.6rem 0.55rem 0.9rem;
   border-radius: 999px;
-  background: rgb(255 255 255 / 0.5);
-  backdrop-filter: blur(18px) saturate(1.6);
-  -webkit-backdrop-filter: blur(18px) saturate(1.6);
-  box-shadow:
-    inset 0 0 0 1px rgb(255 255 255 / 0.6),
-    0 10px 30px -14px rgb(90 50 0 / 0.35);
+  background: rgb(250 246 238 / 0.97);
+  backdrop-filter: blur(24px) saturate(1.4);
+  -webkit-backdrop-filter: blur(24px) saturate(1.4);
+  border: 1px solid rgb(14 14 14 / 0.12);
+  box-shadow: 0 10px 28px -16px rgb(60 40 0 / 0.4);
 }
 
 .nav-logo {
@@ -54,7 +53,7 @@
 }
 
 .nav-links a:hover {
-  background: rgb(255 255 255 / 0.7);
+  background: rgb(14 14 14 / 0.06);
 }
 
 .nav-links svg {
@@ -220,9 +219,8 @@
   inline-size: 70rem;
   block-size: 70rem;
   background:
-    radial-gradient(circle at 60% 40%, rgb(255 255 255 / 0.75), transparent 45%),
-    radial-gradient(circle at 30% 70%, rgb(255 61 127 / 0.28), transparent 50%),
-    radial-gradient(circle at 80% 80%, rgb(0 82 255 / 0.18), transparent 55%);
+    radial-gradient(circle at 60% 40%, rgb(255 255 255 / 0.7), transparent 45%),
+    radial-gradient(circle at 25% 75%, rgb(250 248 243 / 0.45), transparent 50%);
   filter: blur(20px);
   pointer-events: none;
   animation: drift 18s ease-in-out infinite alternate;
@@ -416,7 +414,7 @@
   font-size: 0.625rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #0b7a3c;
+  color: #525252;
   border-bottom: 1px solid var(--perforation);
 }
 
@@ -480,7 +478,7 @@
 .mini-ok {
   inline-size: 1rem;
   block-size: 1rem;
-  color: #0b7a3c;
+  color: var(--verified);
 }
 
 .mini-total {
@@ -581,11 +579,11 @@
 }
 
 .tick-ok {
-  color: var(--live);
+  color: #34d399; /* emerald on ink: verified */
 }
 
 .tick-hot {
-  color: #ff8fb4;
+  color: #fda4af; /* rose on ink: unprinted */
 }
 
 @keyframes marquee {
@@ -640,6 +638,10 @@
 }
 
 .stat-value {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: nowrap;
+  white-space: nowrap;
   font-family: var(--font-dot);
   font-weight: 900;
   font-variation-settings: "wght" 900, "ROND" 40;
@@ -695,10 +697,8 @@
 .how-flow {
   border-radius: 28px;
   background:
-    radial-gradient(circle at 20% 20%, rgb(98 126 234 / 0.14), transparent 40%),
-    radial-gradient(circle at 20% 85%, rgb(245 13 180 / 0.12), transparent 40%),
-    radial-gradient(circle at 85% 50%, rgb(255 194 51 / 0.35), transparent 45%),
-    #f6f5f0;
+    radial-gradient(circle at 85% 50%, rgb(247 195 72 / 0.32), transparent 45%),
+    var(--paper);
   padding: clamp(1rem, 2vw, 2rem);
   box-shadow: inset 0 0 0 1px var(--perforation);
 }
@@ -824,7 +824,8 @@
   inline-size: 3.1rem;
   block-size: 3.1rem;
   border-radius: 16px;
-  color: #fff;
+  background: var(--ink);
+  color: var(--sun);
   box-shadow: 0 12px 24px -12px rgb(14 14 16 / 0.5);
 }
 
@@ -837,7 +838,7 @@
   margin: 0.2rem 0 0;
   font-size: 1.4rem;
   font-weight: 800;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.005em;
 }
 
 .step p {
@@ -877,13 +878,13 @@
 
 /* ═════════════════════ trust ═════════════════════ */
 .trust {
-  background: var(--hot);
-  color: var(--ink);
+  background: var(--ink);
+  color: var(--paper);
   padding: clamp(5rem, 9vw, 8rem) clamp(1rem, 3vw, 2.5rem);
 }
 
 .trust .section-head p {
-  color: #3d0a1c;
+  color: var(--ink-text-soft);
 }
 
 .versus {
@@ -900,13 +901,15 @@
 }
 
 .versus-explorer {
-  background: var(--ink);
+  background: var(--ink-raised);
   color: #fff;
+  box-shadow: inset 0 0 0 1px var(--ink-line);
 }
 
 .versus-book {
-  background: var(--paper-fresh);
-  box-shadow: 0 40px 60px -30px rgb(61 10 28 / 0.6);
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: 0 40px 60px -30px rgb(0 0 0 / 0.7);
 }
 
 .versus-label {
@@ -944,7 +947,7 @@
 }
 
 .versus-explorer li {
-  background: var(--ink-raised);
+  background: var(--ink);
   justify-content: flex-start;
 }
 
@@ -958,7 +961,7 @@
 }
 
 .versus-explorer .vs-fake {
-  box-shadow: inset 0 0 0 2px #ff8fb4;
+  box-shadow: inset 0 0 0 2px var(--hot);
 }
 
 .vs-token {
@@ -978,8 +981,14 @@
 }
 
 .versus-book .vs-fake {
-  background: #ffe3ec;
+  background: #fff1f2;
   color: var(--hot-ink);
+  box-shadow: inset 0 0 0 1px #fecdd3;
+}
+
+.versus-book .vs-fake s {
+  text-decoration-color: var(--hot);
+  text-decoration-thickness: 2px;
 }
 
 .vs-line {
@@ -995,7 +1004,7 @@
 .vs-ok {
   inline-size: 1.25rem;
   block-size: 1.25rem;
-  color: #0b7a3c;
+  color: var(--verified);
 }
 
 .stamp {
@@ -1020,7 +1029,7 @@
 .versus-why {
   margin: 1.2rem 0 0;
   font-size: 0.9375rem;
-  color: var(--print-soft);
+  color: #404040;
 }
 
 @media (max-width: 860px) {
@@ -1052,7 +1061,6 @@
   border-radius: 28px;
   padding: 2rem;
   background: rgb(255 255 255 / 0.72);
-  border-top: 6px solid var(--accent);
   backdrop-filter: blur(8px);
   overflow: hidden;
   transition: translate 0.35s var(--ease-spring), box-shadow 0.35s;
@@ -1069,8 +1077,8 @@
   inline-size: 3.25rem;
   block-size: 3.25rem;
   border-radius: 16px;
-  background: var(--accent);
-  color: #fff;
+  background: var(--ink);
+  color: var(--sun);
 }
 
 .who-icon svg {
@@ -1082,7 +1090,8 @@
   margin: 1.5rem 0 0;
   font-size: 1.65rem;
   font-weight: 900;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.005em;
+  word-spacing: 0.04em;
 }
 
 .who-card p {
@@ -1139,7 +1148,7 @@
   margin: 1.1rem 0 0;
   font-size: 1.6rem;
   font-weight: 900;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.005em;
 }
 
 .contract p {
@@ -1200,7 +1209,7 @@
 .final {
   background:
     radial-gradient(circle at 15% 20%, rgb(255 255 255 / 0.6), transparent 40%),
-    radial-gradient(circle at 85% 90%, rgb(255 61 127 / 0.35), transparent 45%),
+    radial-gradient(circle at 85% 90%, rgb(250 248 243 / 0.5), transparent 45%),
     var(--sun);
   padding: clamp(5rem, 10vw, 9rem) clamp(1rem, 3vw, 2.5rem);
 }
@@ -1340,5 +1349,35 @@
 @media (max-width: 480px) {
   .live-pill-block {
     display: none;
+  }
+}
+
+/* two contracts, one address: the caption under the cards */
+.machine-sec .same-address {
+  grid-column: 1 / 3;
+  display: flex;
+  gap: 0.55rem;
+  align-items: flex-start;
+  margin: 0;
+  padding: 0.9rem 1.1rem;
+  border-radius: 16px;
+  background: var(--ink-raised);
+  box-shadow: inset 0 0 0 1px var(--ink-line);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--ink-text-soft);
+}
+
+.machine-sec .same-address svg {
+  flex: none;
+  inline-size: 1.05rem;
+  block-size: 1.05rem;
+  margin-top: 0.15rem;
+  color: var(--sun);
+}
+
+@media (max-width: 980px) {
+  .machine-sec .same-address {
+    grid-column: auto;
   }
 }

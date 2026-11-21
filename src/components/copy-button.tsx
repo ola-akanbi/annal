@@ -1,16 +1,22 @@
 "use client";
 
-import { Check, Copy } from "lucide-react";
+import { CheckIcon, CopyIcon } from "@phosphor-icons/react";
 import { useState } from "react";
+import { toast } from "sonner";
 
-/** Copies `value`. The label names what is copied, so several buttons stay distinguishable. */
-export function CopyButton({ value, label }: { value: string; label: string }) {
+const preview = (v: string) => (v.length > 46 ? `${v.slice(0, 22)}…${v.slice(-18)}` : v);
+
+/**
+ * Copies `value` and confirms with a toast. `label` names what is copied (it is the button's
+ * accessible name, so several copy buttons stay distinguishable); `what` titles the toast.
+ */
+export function CopyButton({ value, label, what = "Copied" }: { value: string; label: string; what?: string }) {
   const [done, setDone] = useState(false);
   return (
     <button
       type="button"
       className="copy"
-      aria-label={done ? `${label}: copied` : label}
+      aria-label={label}
       title={label}
       onClick={async (e) => {
         e.preventDefault();
@@ -19,15 +25,13 @@ export function CopyButton({ value, label }: { value: string; label: string }) {
           await navigator.clipboard.writeText(value);
           setDone(true);
           setTimeout(() => setDone(false), 1600);
+          toast.success(what, { description: preview(value) });
         } catch {
-          // Clipboard blocked (permissions or insecure context): the value stays visible to select.
+          toast.error("Couldn't copy", { description: "Your browser blocked the clipboard. Select the text instead." });
         }
       }}
     >
-      {done ? <Check aria-hidden strokeWidth={2.5} /> : <Copy aria-hidden strokeWidth={2} />}
-      <span className="sr-only" aria-live="polite">
-        {done ? "Copied" : ""}
-      </span>
+      {done ? <CheckIcon aria-hidden weight="bold" /> : <CopyIcon aria-hidden weight="bold" />}
     </button>
   );
 }

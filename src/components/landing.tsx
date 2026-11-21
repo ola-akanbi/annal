@@ -1,29 +1,31 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
-  ArrowRight,
-  ArrowUpRight,
-  Ban,
-  BookOpen,
-  Calculator,
-  Check,
-  House,
-  Plane,
-  Printer,
-  Radio,
-  ShieldCheck,
-  Timer,
-  Wallet,
-  Zap,
-} from "lucide-react";
-import { BOOK, DEMO_BOOK, REACTIVE, SOURCES, addressUrl, sourceByChainId, txUrl } from "@/lib/annal";
+  AirplaneTiltIcon,
+  ArrowRightIcon,
+  ArrowUpRightIcon,
+  BookOpenIcon,
+  BroadcastIcon,
+  CalculatorIcon,
+  CheckIcon,
+  HouseIcon,
+  InfoIcon,
+  LightningIcon,
+  PrinterIcon,
+  ProhibitIcon,
+  ShieldCheckIcon,
+  TimerIcon,
+  WalletIcon,
+} from "@phosphor-icons/react";
+import { BOOK, DEMO_BOOK, REACTIVE, SAME_ADDRESS_NOTE, SOURCES, addressUrl, sourceByChainId, txUrl } from "@/lib/annal";
 import type { BookLine, BookState, LineTrail } from "@/lib/book";
 import { findUnprinted, formatUnitsPlain, type Unprinted } from "@/lib/explorers";
 import { formatTime, formatUsdc, lineNumber, shortHex } from "@/lib/format";
 import site from "@/lib/site.json";
 import { CopyButton } from "./copy-button";
+import { DotNumber, usdcNumber } from "./dot-number";
 import { AnnalMark, CHAIN_COLOR, ChainMark } from "./marks";
 import { OpenBook } from "./open-book";
 import { useLiveBook } from "./use-live-book";
@@ -75,46 +77,12 @@ function Reveals() {
   return null;
 }
 
-/** Counts up to `to` once the element scrolls into view (instant under reduced motion). */
-function useCountUp(to: number, decimals = 0) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const [value, setValue] = useState(to);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    let raf = 0;
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
-        io.disconnect();
-        const start = performance.now();
-        const run = (t: number) => {
-          const p = Math.min(1, (t - start) / 1100);
-          setValue(to * (1 - Math.pow(1 - p, 3)));
-          if (p < 1) raf = requestAnimationFrame(run);
-        };
-        setValue(0);
-        raf = requestAnimationFrame(run);
-      },
-      { threshold: 0.4 },
-    );
-    io.observe(el);
-    return () => {
-      io.disconnect();
-      cancelAnimationFrame(raf);
-    };
-  }, [to]);
-  return { ref, text: value.toFixed(decimals) };
-}
-
 function Stat({ value, decimals = 0, unit, label, icon }: { value: number; decimals?: number; unit?: string; label: string; icon: React.ReactNode }) {
-  const { ref, text } = useCountUp(value, decimals);
   return (
     <div className="stat reveal">
       <span className="stat-icon">{icon}</span>
       <span className="stat-value">
-        <span ref={ref}>{text}</span>
+        <DotNumber value={value} decimals={decimals} />
         {unit && <small>{unit}</small>}
       </span>
       <span className="stat-label">{label}</span>
@@ -154,7 +122,7 @@ function FlowDiagram() {
         <rect x="520" y="150" width="120" height="120" rx="28" />
         <foreignObject x="520" y="150" width="120" height="120">
           <div className="flow-node-inner">
-            <Zap aria-hidden strokeWidth={2.4} />
+            <LightningIcon aria-hidden weight="bold" />
             <b>Reactive</b>
             <span>Lasna</span>
           </div>
@@ -236,7 +204,7 @@ export function Landing({ initial }: { initial: BookState }) {
           {s && <ChainMark chain={s.key} size={16} />}
           <b>{lineNumber(l.index)}</b> {s?.name} · {formatUsdc(l.amount)} USDC
           {d !== null && <> · printed in {d} s</>}
-          <Check aria-hidden strokeWidth={3} className="tick-ok" />
+          <CheckIcon aria-hidden weight="bold" className="tick-ok" />
         </span>
       );
     }),
@@ -244,7 +212,7 @@ export function Landing({ initial }: { initial: BookState }) {
       .filter((u) => u.kind === "not-usdc")
       .map((u) => (
         <span className="tick-item tick-hot" key={u.key}>
-          <Ban aria-hidden strokeWidth={2.4} />
+          <ProhibitIcon aria-hidden weight="bold" />
           <s>
             {formatUnitsPlain(u.value, u.decimals)} &ldquo;{u.symbol}&rdquo;
           </s>{" "}
@@ -271,14 +239,14 @@ export function Landing({ initial }: { initial: BookState }) {
             {newest && newestSource ? (
               <h1 className="hero-h1">
                 <span className="hero-amount">
-                  {formatUsdc(newest.amount)}
+                  <DotNumber value={usdcNumber(newest.amount)} decimals={2} />
                   <span className="hero-unit">USDC</span>
                 </span>
                 <span className="hero-line">
                   landed in the book{" "}
                   <span className="hero-chip" style={{ background: CHAIN_COLOR[newestSource.key] }}>
                     <ChainMark chain={newestSource.key} size={30} />
-                    {newestDelay !== null ? `${newestDelay} s` : newestSource.short}
+                    {newestDelay !== null ? <DotNumber value={newestDelay} suffix=" s" /> : newestSource.short}
                   </span>{" "}
                   {newestDelay !== null ? "after its block." : "from its own log."}
                 </span>
@@ -299,12 +267,12 @@ export function Landing({ initial }: { initial: BookState }) {
             </p>
             <div className="hero-actions">
               <Link href="#open" className="btn btn-ink">
-                <Wallet aria-hidden strokeWidth={2.3} />
+                <WalletIcon aria-hidden weight="bold" />
                 Open your book
               </Link>
               <Link href={`/book/${DEMO_BOOK}`} className="btn btn-glass">
                 See the live book
-                <ArrowRight aria-hidden strokeWidth={2.3} />
+                <ArrowRightIcon aria-hidden weight="bold" />
               </Link>
             </div>
           </div>
@@ -316,7 +284,7 @@ export function Landing({ initial }: { initial: BookState }) {
                 <span>{shortHex(book.owner, 6, 4)}</span>
               </div>
               <div className="mini-feed">
-                <Radio aria-hidden strokeWidth={2.4} />
+                <BroadcastIcon aria-hidden weight="bold" />
                 {watch.feed}
               </div>
               <ol className="mini-lines">
@@ -333,7 +301,7 @@ export function Landing({ initial }: { initial: BookState }) {
                         </small>
                       </span>
                       <span className="mini-amt">{formatUsdc(l.amount)}</span>
-                      <Check aria-hidden strokeWidth={3} className="mini-ok" />
+                      <CheckIcon aria-hidden weight="bold" className="mini-ok" />
                     </li>
                   );
                 })}
@@ -341,12 +309,12 @@ export function Landing({ initial }: { initial: BookState }) {
               <div className="mini-total">
                 <span>Total received</span>
                 <b>
-                  {formatUsdc(book.total)}
+                  <DotNumber value={usdcNumber(book.total)} decimals={2} />
                   <small>USDC</small>
                 </b>
               </div>
               <div className="mini-open">
-                Open the full book <ArrowUpRight aria-hidden strokeWidth={2.4} />
+                Open the full book <ArrowUpRightIcon aria-hidden weight="bold" />
               </div>
             </div>
           </Link>
@@ -364,10 +332,10 @@ export function Landing({ initial }: { initial: BookState }) {
 
       {/* ───────── stats ───────── */}
       <section className="stats" aria-label="Live numbers from the demo book">
-        <Stat value={book.lines.length} label="lines printed" icon={<Printer aria-hidden strokeWidth={2.2} />} />
-        <Stat value={Number(formatUsdc(book.total).replace(/,/g, ""))} decimals={2} unit="USDC" label="received, every line checkable" icon={<BookOpen aria-hidden strokeWidth={2.2} />} />
-        <Stat value={med ?? 0} unit="s" label={med === null ? "median print time (measuring)" : "median print time, payment to line"} icon={<Timer aria-hidden strokeWidth={2.2} />} />
-        <Stat value={SOURCES.length} label="chains, one book" icon={<Zap aria-hidden strokeWidth={2.2} />} />
+        <Stat value={book.lines.length} label="lines printed" icon={<PrinterIcon aria-hidden weight="bold" />} />
+        <Stat value={usdcNumber(book.total)} decimals={2} unit="USDC" label="received, every line checkable" icon={<BookOpenIcon aria-hidden weight="bold" />} />
+        <Stat value={med ?? 0} unit="s" label={med === null ? "median print time (measuring)" : "median print time, payment to line"} icon={<TimerIcon aria-hidden weight="bold" />} />
+        <Stat value={SOURCES.length} label="chains, one book" icon={<LightningIcon aria-hidden weight="bold" />} />
       </section>
 
       {/* ───────── how it works ───────── */}
@@ -389,43 +357,43 @@ export function Landing({ initial }: { initial: BookState }) {
           </div>
           <ol className="steps">
             <li className="step reveal">
-              <span className="step-icon" style={{ background: "var(--eth)" }}>
-                <Wallet aria-hidden strokeWidth={2.2} />
+              <span className="step-icon">
+                <WalletIcon aria-hidden weight="bold" />
               </span>
               <div>
                 <h3>A client pays you</h3>
                 <p>USDC on Ethereum, Base or Unichain Sepolia, to your normal wallet. They don&rsquo;t need to know Annal exists.</p>
                 {newest && newestSource && (
                   <a className="proof" href={txUrl(newestSource.explorer, newest.originTxHash)} target="_blank" rel="noreferrer">
-                    {newestSource.short} tx {shortHex(newest.originTxHash, 6, 4)} <ArrowUpRight aria-hidden />
+                    {newestSource.short} tx {shortHex(newest.originTxHash, 6, 4)} <ArrowUpRightIcon aria-hidden weight="bold" />
                   </a>
                 )}
               </div>
             </li>
             <li className="step reveal">
-              <span className="step-icon" style={{ background: "var(--uni)" }}>
-                <Zap aria-hidden strokeWidth={2.2} />
+              <span className="step-icon">
+                <LightningIcon aria-hidden weight="bold" />
               </span>
               <div>
                 <h3>Reactive reads the log</h3>
                 <p>An ownerless reactive contract on Lasna sees the transfer&rsquo;s log the moment it&rsquo;s final and asks for a callback.</p>
                 {trail?.reactiveTx && (
                   <a className="proof" href={txUrl(REACTIVE.explorer, trail.reactiveTx)} target="_blank" rel="noreferrer">
-                    Lasna tx {shortHex(trail.reactiveTx, 6, 4)} <ArrowUpRight aria-hidden />
+                    Lasna tx {shortHex(trail.reactiveTx, 6, 4)} <ArrowUpRightIcon aria-hidden weight="bold" />
                   </a>
                 )}
               </div>
             </li>
             <li className="step reveal">
-              <span className="step-icon" style={{ background: "var(--base)" }}>
-                <Printer aria-hidden strokeWidth={2.2} />
+              <span className="step-icon">
+                <PrinterIcon aria-hidden weight="bold" />
               </span>
               <div>
                 <h3>The line prints</h3>
                 <p>The callback writes payer, amount, chain, tx hash and log index into your book on Base Sepolia. Nobody can type there.</p>
                 {trail?.callbackTx && (
                   <a className="proof" href={txUrl(BOOK.explorer, trail.callbackTx)} target="_blank" rel="noreferrer">
-                    Base tx {shortHex(trail.callbackTx, 6, 4)} <ArrowUpRight aria-hidden />
+                    Base tx {shortHex(trail.callbackTx, 6, 4)} <ArrowUpRightIcon aria-hidden weight="bold" />
                   </a>
                 )}
               </div>
@@ -450,7 +418,7 @@ export function Landing({ initial }: { initial: BookState }) {
         <div className="versus">
           <div className="versus-card versus-explorer reveal">
             <div className="versus-label">
-              <ShieldCheck aria-hidden strokeWidth={2.2} />
+              <ShieldCheckIcon aria-hidden weight="bold" />
               What an explorer lists
             </div>
             <ul>
@@ -482,7 +450,7 @@ export function Landing({ initial }: { initial: BookState }) {
                 <li className="vs-fake">
                   <s>{formatUnitsPlain(fake.value, fake.decimals)} &ldquo;USDC&rdquo;</s>
                   <span className="stamp">
-                    <Ban aria-hidden strokeWidth={2.6} />
+                    <ProhibitIcon aria-hidden weight="bold" />
                     Not printed
                   </span>
                 </li>
@@ -495,7 +463,7 @@ export function Landing({ initial }: { initial: BookState }) {
                       {s && <ChainMark chain={s.key} size={18} />}
                       {formatUsdc(l.amount)} · {s?.short}
                     </span>
-                    <Check aria-hidden strokeWidth={3} className="vs-ok" />
+                    <CheckIcon aria-hidden weight="bold" className="vs-ok" />
                   </li>
                 );
               })}
@@ -518,11 +486,11 @@ export function Landing({ initial }: { initial: BookState }) {
         </div>
         <div className="who-grid">
           {[
-            { icon: <House aria-hidden strokeWidth={2.1} />, title: "Your landlord", body: "Sees six months of income in one statement, each line ticked against its own chain." },
-            { icon: <Calculator aria-hidden strokeWidth={2.1} />, title: "Your accountant", body: "Gets payer, amount, date and chain for every payment, with the transaction behind it." },
-            { icon: <Plane aria-hidden strokeWidth={2.1} />, title: "A visa officer", body: "Reads a record the applicant couldn't have edited, and can check any line in a click." },
-          ].map((w, i) => (
-            <article className="who-card reveal" key={w.title} style={{ ["--accent" as string]: [CHAIN_COLOR.ethereum, CHAIN_COLOR.unichain, CHAIN_COLOR.base][i] }}>
+            { icon: <HouseIcon aria-hidden weight="bold" />, title: "Your landlord", body: "Sees six months of income in one statement, each line ticked against its own chain." },
+            { icon: <CalculatorIcon aria-hidden weight="bold" />, title: "Your accountant", body: "Gets payer, amount, date and chain for every payment, with the transaction behind it." },
+            { icon: <AirplaneTiltIcon aria-hidden weight="bold" />, title: "A visa officer", body: "Reads a record the applicant couldn't have edited, and can check any line in a click." },
+          ].map((w) => (
+            <article className="who-card reveal" key={w.title}>
               <span className="who-icon">{w.icon}</span>
               <h3>{w.title}</h3>
               <p>{w.body}</p>
@@ -542,22 +510,23 @@ export function Landing({ initial }: { initial: BookState }) {
             <span className="contract-tag">Reactive Lasna</span>
             <h3>AnnalReactive</h3>
             <p>Subscribes to Circle USDC transfers to every opened wallet on all three chains, and asks for a callback for each one.</p>
-            <a href={addressUrl(REACTIVE.explorer, REACTIVE.address)} target="_blank" rel="noreferrer">
-              {shortHex(REACTIVE.address, 8, 6)} <ArrowUpRight aria-hidden />
+            <a href={addressUrl(REACTIVE.explorer, REACTIVE.address)} target="_blank" rel="noreferrer" title={SAME_ADDRESS_NOTE}>
+              {shortHex(REACTIVE.address, 8, 6)} <ArrowUpRightIcon aria-hidden weight="bold" />
             </a>
           </div>
           <div className="contract reveal">
             <span className="contract-tag">Base Sepolia</span>
             <h3>AnnalBook</h3>
             <p>Accepts lines only from the callback proxy on behalf of AnnalReactive, and only for Circle&rsquo;s USDC. No admin function.</p>
-            <a href={addressUrl(BOOK.explorer, BOOK.address)} target="_blank" rel="noreferrer">
-              {shortHex(BOOK.address, 8, 6)} <ArrowUpRight aria-hidden />
+            <a href={addressUrl(BOOK.explorer, BOOK.address)} target="_blank" rel="noreferrer" title={SAME_ADDRESS_NOTE}>
+              {shortHex(BOOK.address, 8, 6)} <ArrowUpRightIcon aria-hidden weight="bold" />
             </a>
           </div>
+          
           <div className="verify reveal">
             <div className="verify-head">
               <span>Verify it yourself</span>
-              <CopyButton value={`cast call ${BOOK.address} "lineCount(address)(uint256)" ${DEMO_BOOK} --rpc-url ${BOOK.rpc}`} label="Copy the command" />
+              <CopyButton value={`cast call ${BOOK.address} "lineCount(address)(uint256)" ${DEMO_BOOK} --rpc-url ${BOOK.rpc}`} label="Copy the command" what="Command copied" />
             </div>
             <pre>
               <code>
@@ -570,6 +539,10 @@ export function Landing({ initial }: { initial: BookState }) {
               </code>
             </pre>
           </div>
+          <p className="same-address reveal">
+            <InfoIcon aria-hidden weight="bold" />
+            {SAME_ADDRESS_NOTE}
+          </p>
         </div>
       </section>
 
@@ -586,7 +559,7 @@ export function Landing({ initial }: { initial: BookState }) {
             <OpenBook label="Open my book" hint={false} />
             <Link href={`/book/${DEMO_BOOK}`} className="btn btn-glass">
               See the live book
-              <ArrowRight aria-hidden strokeWidth={2.3} />
+              <ArrowRightIcon aria-hidden weight="bold" />
             </Link>
           </div>
         </div>

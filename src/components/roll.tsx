@@ -1,23 +1,28 @@
 "use client";
 
-import { BadgeCheck } from "lucide-react";
-import { useMemo } from "react";
-import { BOOK, SOURCES, addressUrl } from "@/lib/annal";
+import { ArrowsInLineVerticalIcon, ArrowsOutLineVerticalIcon, SealCheckIcon } from "@phosphor-icons/react";
+import { AnimatePresence, LayoutGroup } from "motion/react";
+import { useMemo, useState } from "react";
+import { BOOK, SOURCES, addressUrl, type SourceKey } from "@/lib/annal";
 import type { BookState } from "@/lib/book";
 import type { CheckState } from "@/lib/check";
 import { decimalsFor, formatDate, formatTime, formatUsdc, iso, shortHex } from "@/lib/format";
 import { CopyButton } from "./copy-button";
+import { DotNumber, usdcNumber } from "./dot-number";
 import { Line } from "./line";
 import { CHAIN_COLOR, ChainMark } from "./marks";
 import { Unprinted } from "./unprinted";
 import { watchState, type WatchState } from "./watch";
 
+type Filter = "all" | SourceKey;
 
 export function Roll({
   book,
   fresh,
   readError,
   checks,
+  selected,
+  onSelect,
 }: {
   book: BookState;
   /** Line indexes that arrived since the page loaded: they feed out of the printer. */
@@ -25,26 +30,47 @@ export function Roll({
   readError: string | null;
   /** Receipt checks run in the reader's browser (useReceiptChecks). */
   checks: Record<number, CheckState>;
+  /** The line shown in the inspector panel. */
+  selected: number | undefined;
+  onSelect: (index: number) => void;
 }) {
+  const [filter, setFilter] = useState<Filter>("all");
+  const [open, setOpen] = useState<ReadonlySet<number>>(() => new Set());
+
   const newestFirst = useMemo(() => [...book.lines].sort((a, b) => b.index - a.index), [book.lines]);
   const decimals = useMemo(() => decimalsFor(book.lines.map((l) => l.amount)), [book.lines]);
-  const subtotals = useMemo(
+  const perChain = useMemo(
     () =>
-      SOURCES.map((s) => ({
-        key: s.key,
-        name: s.name,
-        count: book.lines.filter((l) => l.originChainId === s.chainId).length,
-        sum: book.lines
-          .filter((l) => l.originChainId === s.chainId)
-          .reduce((acc, l) => acc + BigInt(l.amount), 0n)
-          .toString(),
-      })),
+      SOURCES.map((s) => {
+        const lines = book.lines.filter((l) => l.originChainId === s.chainId);
+        return { s, count: lines.length, sum: lines.reduce((a, l) => a + BigInt(l.amount), 0n).toString() };
+      }),
     [book.lines],
   );
+  const visible = filter === "all" ? newestFirst : newestFirst.filter((l) => SOURCES.find((s) => s.key === filter)?.chainId === l.originChainId);
+  const filtered = filter === "all" ? null : perChain.find((p) => p.s.key === filter)!;
+  const allVisibleOpen = visible.length > 0 && visible.every((l) => open.has(l.index));
   const checkedCount = Object.values(checks).filter((c) => c.state === "checked").length;
   const watch: WatchState = watchState(book);
   const newestIndex = newestFirst[0]?.index;
   const allChecked = book.lines.length > 0 && checkedCount === book.lines.length;
+
+  const toggle = (index: number) =>
+    setOpen((o) => {
+      const n = new Set(o);
+      if (n.has(index)) n.delete(index);
+      else n.add(index);
+      return n;
+    });
+  const setAll = (expand: boolean) =>
+    setOpen((o) => {
+      const n = new Set(o);
+      for (const l of visible) {
+        if (expand) n.add(l.index);
+        else n.delete(l.index);
+      }
+      return n;
+    });
 
   return (
     <section aria-label="Signature component" className="roll-wrap">
@@ -57,7 +83,7 @@ export function Roll({
             <a href={addressUrl(BOOK.explorer, book.owner)} title={book.owner}>
               {shortHex(book.owner, 6, 4)}
             </a>
-            <CopyButton value={book.owner} label="Copy this wallet's address" />
+            <CopyButton value={book.owner} label="Copy this wallet's address" what="Wallet address copied" />
           </div>
           <p className="roll-meta">
             {book.openedAt > 0 ? (
@@ -77,31 +103,77 @@ export function Roll({
           {watch.feed}
         </div>
 
+        {book.lines.length > 0 && (
+          <div className="register-bar">
+            <div className="filters" role="group" aria-label="Show lines from">
+              <button type="button" className="filter" aria-pressed={filter === "all"} onClick={() => setFilter("all")}>
+                All <span className="filter-n">({book.lines.length})</span>
+              </button>
+              {perChain.map(({ s, count }) => (
+                <button
+                  key={s.key}
+                  type="button"
+                  className="filter"
+                  aria-pressed={filter === s.key}
+                  disabled={count === 0}
+                  onClick={() => setFilter(s.key)}
+                >
+                  <ChainMark chain={s.key} size={14} />
+                  {s.short} <span className="filter-n">({count})</span>
+                </button>
+              ))}
+            </div>
+            <button type="button" className="bulk" onClick={() => setAll(!allVisibleOpen)} aria-label={allVisibleOpen ? "Collapse all visible lines" : "Expand all visible lines"}>
+              {allVisibleOpen ? <ArrowsInLineVerticalIcon aria-hidden weight="bold" /> : <ArrowsOutLineVerticalIcon aria-hidden weight="bold" />}
+              {allVisibleOpen ? "Collapse all" : "Expand all"}
+            </button>
+          </div>
+        )}
+
         {book.lines.length === 0 ? (
           <div className="roll-empty">
             <strong>{watch.emptyTitle}</strong>
             {watch.emptyBody}
           </div>
         ) : (
-          <ol className="lines" reversed aria-label="Lines, newest first">
-            {newestFirst.map((l) => (
-              <Line
-                key={l.index}
-                owner={book.owner}
-                line={l}
-                decimals={decimals}
-                check={checks[l.index] ?? { state: "checking" }}
-                newest={l.index === newestIndex}
-                fresh={fresh.has(l.index)}
-              />
-            ))}
-          </ol>
+          <LayoutGroup>
+            <ol className="lines" reversed aria-label="Lines, newest first">
+              <AnimatePresence initial={false}>
+                {visible.map((l, i) => (
+                  <Line
+                    key={l.index}
+                    owner={book.owner}
+                    line={l}
+                    decimals={decimals}
+                    check={checks[l.index] ?? { state: "checking" }}
+                    newest={l.index === newestIndex}
+                    fresh={fresh.has(l.index)}
+                    open={open.has(l.index)}
+                    selected={l.index === selected}
+                    shade={i % 2 === 1}
+                    onActivate={() => {
+                      toggle(l.index);
+                      onSelect(l.index);
+                    }}
+                  />
+                ))}
+              </AnimatePresence>
+            </ol>
+          </LayoutGroup>
         )}
 
-        <div className="total">
+        {filtered && (
+          <p className="filtered-sub" role="status">
+            <ChainMark chain={filtered.s.key} size={14} />
+            Filtered subtotal · {filtered.s.name}: <b>{formatUsdc(filtered.sum)} USDC</b>
+            <span>The total below is the whole book.</span>
+          </p>
+        )}
+
+        <div className="total" data-stamped={allChecked || undefined}>
           {allChecked && (
             <div className="stamp-verified" role="status">
-              <BadgeCheck aria-hidden strokeWidth={2.4} />
+              <SealCheckIcon aria-hidden weight="fill" />
               <span>
                 <b>
                   Verified {checkedCount}/{book.lines.length}
@@ -113,20 +185,20 @@ export function Roll({
           <div className="total-row">
             <span className="total-label">Total received</span>
             <span className="total-figure">
-              {formatUsdc(book.total, 2)}
+              <DotNumber value={usdcNumber(book.total)} decimals={2} />
               <span className="total-unit">USDC</span>
             </span>
           </div>
           <ul className="subtotals" aria-label="By chain">
-            {subtotals.map((s) => {
-              const share = BigInt(book.total) > 0n ? Number((BigInt(s.sum) * 1000n) / BigInt(book.total)) / 10 : 0;
+            {perChain.map(({ s, count, sum }) => {
+              const share = BigInt(book.total) > 0n ? Number((BigInt(sum) * 1000n) / BigInt(book.total)) / 10 : 0;
               return (
-                <li key={s.name}>
+                <li key={s.key}>
                   <span className="sub-name">
                     <ChainMark chain={s.key} size={16} />
-                    {s.name} · {s.count} {s.count === 1 ? "line" : "lines"}
+                    {s.name} · {count} {count === 1 ? "line" : "lines"}
                   </span>
-                  <span className="amount">{formatUsdc(s.sum, decimals)}</span>
+                  <span className="amount">{formatUsdc(sum, decimals)}</span>
                   <span className="sub-bar" aria-hidden style={{ ["--share" as string]: `${share}%`, ["--chain" as string]: CHAIN_COLOR[s.key] }} />
                 </li>
               );
@@ -163,4 +235,3 @@ export function Roll({
     </section>
   );
 }
-

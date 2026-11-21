@@ -18,7 +18,6 @@
   background:
     radial-gradient(rgb(14 14 16 / 0.09) 1.2px, transparent 1.4px) 0 0 / 14px 14px,
     radial-gradient(circle at 85% 0%, rgb(255 255 255 / 0.65), transparent 40%),
-    radial-gradient(circle at 10% 100%, rgb(255 61 127 / 0.22), transparent 45%),
     var(--sun);
   border-bottom: 2px solid var(--ink);
 }
@@ -192,7 +191,7 @@
   margin: 0;
   font-size: 1.15rem;
   font-weight: 900;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.005em;
 }
 
 .share-body p {
@@ -289,8 +288,8 @@
 
 .printer[data-state="waiting"] .printer-led,
 .printer[data-state="unopened"] .printer-led {
-  background: var(--sun);
-  box-shadow: 0 0 10px 2px color-mix(in oklab, var(--sun) 70%, transparent);
+  background: var(--paper);
+  box-shadow: 0 0 8px 1px rgb(250 248 243 / 0.5);
 }
 
 .printer[data-state="unopened"] .printer-led {
@@ -338,32 +337,28 @@
     0 1px 0 rgb(255 255 255 / 0.08);
 }
 
-/* lines feed out of the slot */
-@starting-style {
-  .press .line[data-fresh] {
-    clip-path: inset(0 0 100% 0);
-    translate: 0 -2.5rem;
-    background: var(--sun-pale);
-  }
-}
 
 /* verified stamp on the total */
 .total {
   position: relative;
 }
 
+.total[data-stamped] {
+  padding-top: 3.4rem;
+}
+
 .stamp-verified {
   position: absolute;
-  top: -1.1rem;
-  right: 1rem;
+  top: 0.85rem;
+  right: 1.25rem;
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
   padding: 0.35rem 0.7rem;
-  border: 2.5px solid #0b7a3c;
+  border: 2.5px solid var(--verified);
   border-radius: 10px;
-  background: rgb(255 255 255 / 0.85);
-  color: #0b7a3c;
+  background: var(--verified-bg);
+  color: var(--verified);
   rotate: -7deg;
   animation: stamp 0.55s var(--ease-spring) both;
 }
@@ -405,7 +400,7 @@
   margin: 0;
   font-size: 1.2rem;
   font-weight: 900;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.005em;
   color: var(--ink);
 }
 
@@ -495,7 +490,7 @@
 .notes .trail-card h2 {
   color: #fff;
   font-size: 1.2rem;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.005em;
   text-transform: none;
 }
 
@@ -528,8 +523,9 @@
   position: absolute;
   inset: 0 auto 0 0;
   border-radius: 99px;
-  background: linear-gradient(90deg, var(--eth), var(--uni), var(--base));
-  opacity: 0.55;
+  inline-size: 100%;
+  background: var(--sun);
+  opacity: 0.35;
 }
 
 .trail-scale-dot {
@@ -741,4 +737,56 @@
     inline-size: 56px;
     block-size: 56px;
   }
+}
+
+/* inspector header */
+.inspector-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.9rem;
+}
+
+.inspector-pill {
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background: var(--sun);
+  color: var(--ink);
+  font-family: var(--font-print);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.inspector-hint {
+  font-family: var(--font-print);
+  font-size: 0.625rem;
+  color: var(--ink-text-soft);
+}
+
+.trail-card-fig {
+  color: var(--sun);
+  font-family: var(--font-dot);
+  font-variation-settings: "wght" 900, "ROND" 40;
+  font-size: 1.15rem;
+}
+
+/* two contracts, one address: say why */
+.same-address {
+  display: flex;
+  gap: 0.45rem;
+  align-items: flex-start;
+  margin: 0.9rem 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--sun-text-soft);
+}
+
+.same-address svg {
+  flex: none;
+  inline-size: 1rem;
+  block-size: 1rem;
+  margin-top: 0.1rem;
 }

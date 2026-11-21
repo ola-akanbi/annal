@@ -1,6 +1,7 @@
 "use client";
 
-import { Link2, Printer, Share2 } from "lucide-react";
+import { LinkSimpleIcon, PrinterIcon, ShareNetworkIcon } from "@phosphor-icons/react";
+import { toast } from "sonner";
 import { useEffect, useMemo, useState } from "react";
 import { encode } from "uqr";
 
@@ -60,22 +61,23 @@ export function ShareCard({ path }: { path: string }) {
                 await navigator.clipboard.writeText(url);
                 setCopied(true);
                 setTimeout(() => setCopied(false), 1600);
+                toast.success("Book link copied", { description: "Send it to anyone who needs to check your income." });
               } catch {
-                /* clipboard blocked: the QR still works */
+                toast.error("Couldn't copy the link", { description: "Your browser blocked the clipboard. Use the QR code instead." });
               }
             }}
           >
-            <Link2 aria-hidden strokeWidth={2.3} />
+            <LinkSimpleIcon aria-hidden weight="bold" />
             {copied ? "Link copied" : "Copy link"}
           </button>
           {canShare && (
             <button type="button" className="pill" onClick={() => url && navigator.share({ title: "My income book", url }).catch(() => {})}>
-              <Share2 aria-hidden strokeWidth={2.3} />
+              <ShareNetworkIcon aria-hidden weight="bold" />
               Share
             </button>
           )}
           <button type="button" className="pill" onClick={() => window.print()}>
-            <Printer aria-hidden strokeWidth={2.3} />
+            <PrinterIcon aria-hidden weight="bold" />
             Print
           </button>
         </div>

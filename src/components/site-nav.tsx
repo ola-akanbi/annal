@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BookOpen, ShieldCheck, Wallet, Workflow } from "lucide-react";
+import { BookOpenIcon, FlowArrowIcon, ShieldCheckIcon, WalletIcon } from "@phosphor-icons/react/dist/ssr";
 import { DEMO_BOOK } from "@/lib/annal";
 import { AnnalMark } from "./marks";
 
@@ -15,20 +15,20 @@ export function SiteNav() {
         </Link>
         <nav aria-label="Main" className="nav-links">
           <Link href="/#how">
-            <Workflow aria-hidden strokeWidth={2.2} />
+            <FlowArrowIcon aria-hidden weight="bold" />
             How it works
           </Link>
           <Link href={`/book/${DEMO_BOOK}`}>
-            <BookOpen aria-hidden strokeWidth={2.2} />
+            <BookOpenIcon aria-hidden weight="bold" />
             Live book
           </Link>
           <Link href="/#trust">
-            <ShieldCheck aria-hidden strokeWidth={2.2} />
+            <ShieldCheckIcon aria-hidden weight="bold" />
             Why trust it
           </Link>
         </nav>
         <Link href="/#open" className="nav-cta">
-          <Wallet aria-hidden strokeWidth={2.2} />
+          <WalletIcon aria-hidden weight="bold" />
           Open your book
         </Link>
       </div>

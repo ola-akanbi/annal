@@ -1,6 +1,7 @@
 import { keccak256, toBytes } from "viem";
 
-const PALETTE = ["#0e0e10", "#627eea", "#0052ff", "#f50db4", "#ff3d7f", "#22c96b"];
+// Brand tones only: an identity mark is not a status, so no chain or signal colours.
+const PALETTE = ["#0e0e0e", "#3a3220", "#7a5a10", "#c9921a", "#f7c348", "#5c4a1c"];
 
 /** A deterministic 5×5 mirrored mark for a wallet: the same address always draws the same face. */
 export function Identicon({ address, size = 64 }: { address: string; size?: number }) {

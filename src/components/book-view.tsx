@@ -1,14 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowUpRight, BadgeCheck, Printer, ShieldCheck, Timer, TriangleAlert } from "lucide-react";
-import { BOOK, DEMO_BOOK, REACTIVE, SOURCES, addressUrl } from "@/lib/annal";
+import { ArrowUpRightIcon, PrinterIcon, SealCheckIcon, ShieldCheckIcon, TimerIcon, WarningIcon } from "@phosphor-icons/react";
+import { useState } from "react";
+import { BOOK, DEMO_BOOK, REACTIVE, SAME_ADDRESS_NOTE, SOURCES, addressUrl } from "@/lib/annal";
 import type { BookLine, BookState } from "@/lib/book";
-import { formatDate, formatTime, formatUsdc, shortHex } from "@/lib/format";
+import { formatDate, formatTime, shortHex } from "@/lib/format";
 import { ChainSplit } from "./chain-split";
 import { CopyButton } from "./copy-button";
 import { Identicon } from "./identicon";
-import { LatestTrail } from "./latest-trail";
+import { DotNumber, usdcNumber } from "./dot-number";
+import { Inspector } from "./inspector";
 import { OpenBook } from "./open-book";
 import { PrinterHead } from "./printer";
 import { Roll } from "./roll";
@@ -45,6 +47,9 @@ export function BookView({ initial, demo, fast }: { initial: BookState; demo: bo
   const verified = Object.values(checks).filter((c) => c.state === "checked").length;
   const mismatches = Object.values(checks).filter((c) => c.state === "mismatch").length;
   const med = medianDelay(book.lines);
+  const [picked, setPicked] = useState<number | undefined>(undefined);
+  const selected = picked !== undefined && book.lines.some((l) => l.index === picked) ? picked : newest?.index;
+  const selectedLine = book.lines.find((l) => l.index === selected);
 
   return (
     <>
@@ -59,7 +64,7 @@ export function BookView({ initial, demo, fast }: { initial: BookState; demo: bo
                 <p className="band-kind">Income book{isDemo && " · live demo"}</p>
                 <h1 className="band-title">
                   {shortHex(book.owner, 6, 4)}
-                  <CopyButton value={book.owner} label="Copy this wallet's address" />
+                  <CopyButton value={book.owner} label="Copy this wallet's address" what="Wallet address copied" />
                 </h1>
                 <p className="band-status" aria-live="polite">
                   <span className="live-dot" data-state={watch.dot} aria-hidden />
@@ -77,34 +82,34 @@ export function BookView({ initial, demo, fast }: { initial: BookState; demo: bo
               <div className="bstat bstat-total">
                 <dt>Total received</dt>
                 <dd>
-                  <span className="dotnum">{formatUsdc(book.total)}</span>
+                  <DotNumber className="dotnum" value={usdcNumber(book.total)} decimals={2} />
                   <small>USDC</small>
                 </dd>
               </div>
               <div className="bstat">
                 <dt>
-                  <Printer aria-hidden strokeWidth={2.3} /> Lines
+                  <PrinterIcon aria-hidden weight="bold" /> Lines
                 </dt>
                 <dd>
-                  <span className="dotnum">{book.lines.length}</span>
+                  <DotNumber className="dotnum" value={book.lines.length} />
                 </dd>
               </div>
               <div className="bstat">
                 <dt>
-                  {mismatches > 0 ? <TriangleAlert aria-hidden strokeWidth={2.3} /> : <BadgeCheck aria-hidden strokeWidth={2.3} />}{" "}
+                  {mismatches > 0 ? <WarningIcon aria-hidden weight="bold" /> : <SealCheckIcon aria-hidden weight="bold" />}{" "}
                   Verified here
                 </dt>
                 <dd>
-                  <span className="dotnum">{verified}</span>
+                  <DotNumber className="dotnum" value={verified} />
                   <small>/ {book.lines.length}</small>
                 </dd>
               </div>
               <div className="bstat">
                 <dt>
-                  <Timer aria-hidden strokeWidth={2.3} /> Median print
+                  <TimerIcon aria-hidden weight="bold" /> Median print
                 </dt>
                 <dd>
-                  <span className="dotnum">{med ?? "–"}</span>
+                  {med === null ? <span className="dotnum">–</span> : <DotNumber className="dotnum" value={med} />}
                   {med !== null && <small>s</small>}
                 </dd>
               </div>
@@ -140,14 +145,14 @@ export function BookView({ initial, demo, fast }: { initial: BookState; demo: bo
 
           <div className="press">
             <PrinterHead watch={watch} block={book.block} />
-            <Roll book={book} fresh={fresh} readError={readError} checks={checks} />
+            <Roll book={book} fresh={fresh} readError={readError} checks={checks} selected={selected} onSelect={setPicked} />
           </div>
 
           <aside className="rail rail-right notes" aria-label="How to trust it">
-            <LatestTrail owner={book.owner} line={newest} />
+            <Inspector owner={book.owner} line={selectedLine} newest={selectedLine?.index === newest?.index} />
             <section>
               <h2>
-                <ShieldCheck aria-hidden strokeWidth={2.3} /> Why you can trust it
+                <ShieldCheckIcon aria-hidden weight="bold" /> Why you can trust it
               </h2>
               <p>
                 Nobody types in this book, including its owner. Lines arrive only from one Reactive Network contract, and only
@@ -161,9 +166,9 @@ export function BookView({ initial, demo, fast }: { initial: BookState; demo: bo
                 <div>
                   <dt>AnnalReactive · {REACTIVE.name}</dt>
                   <dd>
-                    <a href={addressUrl(REACTIVE.explorer, REACTIVE.address)} target="_blank" rel="noreferrer">
+                    <a href={addressUrl(REACTIVE.explorer, REACTIVE.address)} target="_blank" rel="noreferrer" title={SAME_ADDRESS_NOTE}>
                       {shortHex(REACTIVE.address, 6, 4)}
-                      <ArrowUpRight aria-hidden strokeWidth={2} />
+                      <ArrowUpRightIcon aria-hidden weight="bold" />
                     </a>
                     <br />
                     {debt === null
@@ -176,15 +181,16 @@ export function BookView({ initial, demo, fast }: { initial: BookState; demo: bo
                 <div>
                   <dt>AnnalBook · {BOOK.name}</dt>
                   <dd>
-                    <a href={addressUrl(BOOK.explorer, BOOK.address)} target="_blank" rel="noreferrer">
+                    <a href={addressUrl(BOOK.explorer, BOOK.address)} target="_blank" rel="noreferrer" title={SAME_ADDRESS_NOTE}>
                       {shortHex(BOOK.address, 6, 4)}
-                      <ArrowUpRight aria-hidden strokeWidth={2} />
+                      <ArrowUpRightIcon aria-hidden weight="bold" />
                     </a>
                     <br />
                     No owner, no admin. Writes only through Reactive&rsquo;s callback proxy.
                   </dd>
                 </div>
               </dl>
+              <p className="same-address">{SAME_ADDRESS_NOTE}</p>
             </section>
             <section>
               <h2>Limits</h2>

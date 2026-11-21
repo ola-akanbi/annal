@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Wallet } from "lucide-react";
+import { WalletIcon } from "@phosphor-icons/react";
 import { useState } from "react";
 import {
   BaseError,
@@ -128,7 +128,7 @@ export function OpenBook({
   return (
     <div className="open-flow">
       <button type="button" className="key" onClick={run} disabled={busy} aria-busy={busy}>
-        {!busy && <Wallet aria-hidden strokeWidth={2.3} />}
+        {!busy && <WalletIcon aria-hidden weight="bold" />}
         {busy ? step.label : label}
       </button>
       {step.s === "idle" && hint && <p>One transaction on Base Sepolia. After that, nothing to run: payments print by themselves.</p>}
