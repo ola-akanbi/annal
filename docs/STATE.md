@@ -1,59 +1,44 @@
 # State
-_Last verified: 2026-11-21 15:20 UTC at c27678c_
+_Last verified: 2026-11-21 15:35 UTC at efdbae7_
 
-**Thesis:** One income book for every chain you're paid on. Every line is copied from the payment's own log, and links back to it. (Claims table: qualified. Copy must name Ethereum, Base and Unichain Sepolia.)
-**Milestone:** M1 · Walking skeleton (checkpoint 2026-11-26 05:49 UTC). M0 closed. · **Deadline:** 2026-12-05 20:00 UTC (time left: the clock line)
-**Next action:** submit on DoraHacks from `internal/SUBMISSION.md` (links pinned to 22d7a22 still resolve), then `git tag submission && git push origin submission`. Preflight passed 2026-11-21 except the items only the project lead can do (phone on cellular, captions attached, old video deleted).
-**Blocked on:** nothing.
+**Thesis:** One income book for every chain you're paid on. Every line is copied from the payment's own log, and links back to it. (Copy near it names Ethereum, Base and Unichain Sepolia.)
+**Milestone:** M4 · Proof surface: README, film, benchmark and preflight done. M0–M3 closed. · **Deadline:** 2026-12-05 20:00 UTC (time left: the clock line)
+**Next action:** the project lead submits on DoraHacks from `internal/SUBMISSION.md` (code links pinned to 22d7a22 still resolve), attaches `docs/media/annal-captions.srt` to https://youtu.be/Hb0ndXJAirs, deletes the old upload EggEfW50Ets, and optionally runs `git tag submission && git push origin submission`. PLAN M4, last item.
+**Blocked on:** nothing on our side.
 
-## Works (verified this session)
+## Works (verified 2026-11-21)
 | Capability | Verified by | Evidence |
 |---|---|---|
-| Open a book → Lasna subscribes on 3 chains → confirmation lands on Base Sepolia, no admin step | `open()` by the freelancer; `watchingSince` set 1 s later; `watching(freelancer)` true on Lasna | E-005 loop 1 |
-| Real USDC payment on Base, Unichain and Ethereum Sepolia → one line each in one book, fields copied exactly | 3 × 1 USDC transfers; `lineAt(freelancer, 0..2)` read back; totalReceived 3,000,000 | E-002, E-005 |
-| Origin → book in 1 s (Base, Unichain) and 3 s (Ethereum Sepolia), n = 1 each | block timestamp vs `writtenAt` | E-002 |
-| Look-alike "USDC" (500) never written | book still 3 lines after 30 s | E-004 |
-| Owner's forged `record` refused on-chain | tx `0x7e5721dc…` status 0, `NotAuthorized` | E-004 |
-| Costs: ~0.015 lREACT per payment, ~0.0000013 ETH per callback, no debt | balances read on Lasna and Base | E-003 |
-| Open flow on production with a fresh browser wallet: "Open my book" → `open()` → Reactive confirmed 2 s later → 1 USDC on Base Sepolia printed live as No. 001 (2 s), receipt check 1/1, full trail in the inspector | browser on https://annal-sooty.vercel.app, wallet key generated in the tab | E-008 |
-| Trail lookup works for freshly printed lines (was 502: Lasna range past its head); landing requests the trail once, not per poll | production `/api/trail` 200 in 1.6 s; 1 request in 20 s, console clean | commit 22551fe |
-| Latency over 24 real payments (8 per chain): 24/24 printed, 0 missed, all fields equal the origin receipt; median 1 s, p90 2 s, max 3 s from origin block to line | `npm run harness:latency` | E-009 |
-| Landing numbered section labels (01–05) | browser at 1440 and 390 wide, no horizontal scroll | commit 2931aca |
-| Contracts source-verified, exact match: Sourcify (both), Blockscout (AnnalBook); "Verified source" links on landing and book pages | Sourcify v2 API + Blockscout API; browser at 1440/390 | E-010 |
-| Link previews from real book data: landing card (demo book receipt + thesis) and a per-book card (`/book/[address]/opengraph-image` + twitter-image); thesis-only fallback when the chain is unreachable or the book is empty | production: both 200 image/png, og:image and twitter:image absolute production URLs, rendered in the browser | commit 599a61d |
-| UI pass (D-012): reader-first band summary, dated lines + statement period, honest same-second clock skew, print stylesheet, unopened state, phone layout (44px targets, stacked flow, no text < 12px), branded 404 | production at 1440 and 390: summary, dated lines and \"same s\" live; no overflow; console clean | commit bee55ab |
-| Landing type reset: section headings 68px / -0.03em / leading 1 in a wider column (two lines per couplet), closing headline two lines, solid h3 leading, audience icons inline, hero thesis in one voice | production at 1440 and 390, no horizontal scroll | commit 757d580 |
-| README as a proof surface: thesis + chains, live links, three-transaction table per demo line, refusals with tx links, latency table, read-only `cast` checks, clean-clone tests, line-level permalinks, limits | verify block run verbatim (C-8); clean clone → 21 passed; permalinks 200 | README.md, claims C-5–C-8 |
-| Submission film v2 rendered (own world: amber counter, dot-matrix wipes, receipt hook and end card, 3D phone + real QR + real printed statement, composed score, sampled printer/stamp effects): 2:29.8, 10 chapters, live open + two live payments printing on camera, refusals, phone reader, numbers, end card; 0 silences, claim on screen at 0:10 | contact sheet + frame checks; on-chain read of the filmed book (2 lines, confirmed 1 s after open) | E-012 |
-| Cold-judge benchmark (sponsor, design, generalist, ai-screen): 15/20 combined, AI screen PASS; fixes shipped: multi-RPC receipt check (demo book 3/3), hero leads with the thesis, phone overflow gone at 360–1440, open button in the hero with errors on their own line, calendar-day dates, "Set once, keeps running" + second book + drain limit in README, judge/prize talk removed from public docs, exact captions | `internal/benchmarks/2026-11-21-7ca9898.md`; local render at 320–1440; gate green | this commit |
-| Preflight 2026-11-21: README verify block verbatim OK; watcher 10.89 lREACT, debt 0 on both sides; gitleaks clean; repo public; 34 README links 200 + app/Etherscan/Uniscan in a browser (Basescan 403 to bots → Base links moved to Blockscout); thesis + og:image in raw HTML; signature visible at 0.7 s; no sideways scroll at 375 on all three pages; demo book 3/3; video plays logged out | terminal + headless browser, production | commit c27678c |
-| Contracts gate: 21 tests, lint with warnings denied, fmt check | `npm run gate:contracts` | E-006 |
-| Landing page in production (live-ticker hero from the newest real payment, ticker, live stats, animated three-chain flow with real tx links, look-alike comparison, audiences, contracts and verify command, final call to action) + glass nav with icons, full-colour brand (D-008) | browser on https://annal-sooty.vercel.app at 1440 and 390 wide, every section rendered, no horizontal scroll, console clean | commit 074b520 |
-| UI refinement in production (D-010): ledger-band rows with chain accent bars, row ↔ inspector sync ("Inspecting"), Motion drawers with inset proof panel and emerald verdict, chain filters + filtered subtotal + expand/collapse all, Phosphor icons, copy toasts, NumberFlow figures, three-colour core, solid nav, shared-address caption | browser on https://annal-sooty.vercel.app at 1440 and 390 wide: filter, expand-all and selection exercised, console clean | commit b08f0d0 |
-| Book page redesign in production (D-009): identity band, live stats incl. 3/3 verified, dot QR share card, printer head (state: watching), verified stamp, chain split, newest line's trail timed +0/+1/+3 s; Doto dot-matrix figures; no GitHub links | browser on https://annal-sooty.vercel.app/book/0xa7D5…7444 at 1440 and 390 wide, console clean | commit 674970b |
-| Statement page in production: server-rendered roll, live re-reads, per-line trail, in-browser receipt check (3/3 ticked), explorers' view showing the look-alike struck | browser on https://annal-sooty.vercel.app at 1440, 900 and 390 wide; console clean | E-007 |
+| Full loop on three chains: USDC paid on Ethereum, Base, Unichain Sepolia → Lasna reactive tx → Base Sepolia callback writes one line | receipts read on-chain; README verify block run verbatim | E-002, E-005, E-014 |
+| Open a book with no admin step; Reactive confirms in 1–2 s | fresh wallets on production (open flow and film take) | E-005, E-008, E-012 |
+| Latency: 24/24 printed, fields equal the origin receipt, median 1 s, max 3 s | `npm run harness:latency` | E-009 |
+| Refusals: look-alike "USDC" never printed; owner's forged `record` reverts `NotAuthorized` | `isSource(lookalike)=false`; live `cast call` revert; mined tx status 0 | E-004, E-014 |
+| Contracts source-verified, exact match (Sourcify both; Blockscout AnnalBook) | Sourcify v2 API | E-010 |
+| Watcher funded: AnnalReactive 10.89 lREACT, debt 0; AnnalBook debt 0 on the proxy (≈ 740 payments of runway) | cast reads | E-011, E-014 |
+| App in production: job-first hero, statement pages, in-browser receipt check across fallback RPCs (demo book 3/3), link previews, app icon, no sideways scroll at 360–1440 | headless browser on production, console clean | E-013, E-014 |
+| README is the proof surface; every factual sentence has a verified claims row (C-1…C-10) | links 200; verify block verbatim; clean-clone `forge test` 21 passed | E-014 |
+| Submission film 2:29.8, real transactions on camera, own score and effects, exact captions | contact sheet, 0 silences, plays logged out | E-012, E-014 |
+| Gate: lint (0 warnings), typecheck, build, forge fmt/lint/build, 21 tests | `npm run gate` | every commit today |
 
 ## Deployed
-| What | Network | Address | Last checked |
+| What | Network | Address / URL | Last checked |
 |---|---|---|---|
-| AnnalReactive | Reactive Lasna | `0x653B62A39Aea06998c152b48F150175B2645c8Bd` (10.99 lREACT ≈ 750 payments at ~0.0145 each, debt 0) | 2026-11-21 08:23 UTC |
-| AnnalBook | Base Sepolia | `0x653B62A39Aea06998c152b48F150175B2645c8Bd` (0.00399 ETH, debt 0) | 2026-11-19 22:20 UTC |
-| LookalikeUSDC (demo only) | Base Sepolia | `0x4D2579b6E0f6273618Cd95Ff57Ae07653E9106Ca` | 2026-11-19 22:15 UTC |
-| Web app (landing `/` + book `/book/[address]`) | Vercel production, `lekan6/annal` | https://annal-sooty.vercel.app (commit 757d580) | 2026-11-21 09:40 UTC |
-| Open-flow test book | — | `0x219B05463962bCc922f1ce3d7fB0374BD501bDD5`, 31 lines (open-flow test + harness) | 2026-11-21 07:50 UTC |
-| Demo book owner (freelancer) | — | `0xa7D557BF0C7312EAF186a6A81159a3650aA77444`, 3 lines | 2026-11-19 22:20 UTC |
+| AnnalReactive | Reactive Lasna (5318007) | `0x653B62A39Aea06998c152b48F150175B2645c8Bd` | 2026-11-21 15:12 UTC |
+| AnnalBook | Base Sepolia (84532) | `0x653B62A39Aea06998c152b48F150175B2645c8Bd` (0.00394 ETH, debt 0) | 2026-11-21 15:12 UTC |
+| LookalikeUSDC (demo only) | Base Sepolia | `0x4D2579b6E0f6273618Cd95Ff57Ae07653E9106Ca` | 2026-11-19 |
+| Web app | Vercel production (`lekan6/annal`) | https://annal-sooty.vercel.app (c27678c) | 2026-11-21 15:20 UTC |
+| Demo book (3 lines) | — | `0xa7D557BF0C7312EAF186a6A81159a3650aA77444` | 2026-11-21 |
+| Lived-in book (31 lines) | — | `0x219B05463962bCc922f1ce3d7fB0374BD501bDD5` | 2026-11-21 |
+| Film | YouTube, unlisted | https://youtu.be/Hb0ndXJAirs | 2026-11-21 |
 
-## Broken or unverified
-- **CI is manual-only (D-011):** the `ola-akanbi` account is billing-locked, so both workflows trigger only on `workflow_dispatch`. Gate of record: `npm run gate` locally + `gitleaks git`.
-- Basescan (Etherscan) shows AnnalBook unverified: it needs an Etherscan API key. Sourcify and Blockscout are verified (E-010).
-- Cross-chain latency carries ±1 s clock skew between chains; only Base → Base is exact (counted in 200 ms blocks).
-- The open flow was run with an injected EIP-1193 provider (E-008), not a wallet extension: MetaMask's own add/switch-chain prompts are unexercised.
-- `ui-audit.mjs` hasn't run against production (this machine's terminal can't reach Vercel; the browser can).
-- The book page at 320 px wide overflows by 13 px (the dot-matrix total); 360 px and up are clean.
-- This machine's terminal can't reach Vercel's IPs (216.198.79.3, 64.29.17.3; connect timeout even outside the sandbox), but a browser can. Run production audits through the browser.
+## Broken, limited or unverified
+- CI is manual-only (D-011, billing lock); the gate of record is `npm run gate` locally.
+- Basescan (Etherscan) shows AnnalBook unverified (needs an API key); links use Blockscout instead.
+- The book page scrolls 13 px sideways at 320 px wide (the dot-matrix total); clean from 360.
+- Anyone can open a book, and zero-value USDC transfers to a watched wallet cost the shared watcher (C-10, from source; not exercised on-chain).
+- Captions attached to the new video: unverified (the project lead's step).
+- This machine's terminal can't reach Vercel's IPs; production checks run through the browser.
 
-## Claims not yet verified
-- C-1 qualified (chains must be named; "links back" not yet in the UI). C-4 verified with wording (E-009: median 1 s, max 3 s, n = 24). C-2, C-3 verified. See docs/EVIDENCE.md.
-
-## Open questions
-- Can related builders submit separate BUIDLs, and when are results announced? (organizers, via DoraHacks Q&A)
+## Where things are
+- Submission draft: `internal/SUBMISSION.md` · benchmark: `internal/benchmarks/2026-11-21-7ca9898.md` · film source: `internal/film/` (shoot, compose, sfx, score, render; `FILM_CHROME` = Playwright's headless shell).
+- Latest decisions: D-011 (CI manual, source verified), D-012 (UI pass), D-013 (benchmark fixes, hero leads with the job, not-doing list).

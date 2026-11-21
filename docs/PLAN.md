@@ -37,14 +37,16 @@ All checkpoints count from `Started:`.
 
 ### M3 · UI pass
 - [x] `impeccable critique` (dual-agent, 23/40) and polish of every priority issue, verified in production. → D-012, commit bee55ab
-- [ ] Re-run critique after the README and video to confirm the score moved; decide on folding the stats band into the roll head.
+- [x] Re-checked by the cold-judge benchmark instead (E-013); the stats band stays (D-013).
 
 ### M4 · Proof surface
 - [x] README proof section: every factual sentence backed by a claims row re-checked live today (C-1–C-8). → README.md
 - [x] Run of show and film script, every line tied to a verified claim. → docs/RUNOFSHOW.md, docs/VIDEO.md
 - [x] Demo video rendered: 2:29.8 on the finished UI, real transactions (E-012).
-- [ ] Upload (unlisted), play in a private window, embed in the README.
-- [ ] Benchmark run.
+- [x] Uploaded unlisted, plays logged out, embedded in the README: https://youtu.be/Hb0ndXJAirs (E-014).
+- [x] Benchmark run: cold judges 15/20, AI screen pass, fixes shipped (E-013, D-013).
+- [x] Preflight passed (E-014).
+- [ ] Submit on DoraHacks from `internal/SUBMISSION.md`; attach captions; delete the old video upload; optional `git tag submission` (project lead).
 
 ## Cut list
 Things deliberately not being built. Each entry links the DECISIONS entry that cut it.

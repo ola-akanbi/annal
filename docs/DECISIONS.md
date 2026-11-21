@@ -99,3 +99,10 @@ Append-only. To change a decision, add a new entry that supersedes it.
 - Kept on purpose: the LED glow on ink figures (D-009's register display), the stamp's overshoot easing, the pulsing printer LED (live state), and the numbered landing section labels (the project lead asked for them).
 **Consequences:** The four-up stats band still repeats the roll's total; folding it into the roll head is the next design question if the band reads as a dashboard.
 
+## D-013 · Cold-judge benchmark: fixes taken, fixes refused, hero leads with the job · 2026-11-21 · accepted · project lead · supersedes D-008's hero ordering
+**Context:** Four cold judges (sponsor, design, generalist, AI screen; public material only) scored 15/20 combined with an AI-screen pass (`internal/benchmarks/2026-11-21-7ca9898.md`). Shared findings: the demo book read "Verified 2/3" (publicnode returned a null receipt), Usefulness 3 against the track's "keep running / personal purpose", 4 px phone overflow, an unstated drain path.
+**Decision:**
+- Taken: multi-RPC receipt check with retries; hero headline is the thesis's first sentence, with the newest live line beneath it as proof (the project lead chose this over the live-ticker-first hero of D-008); hero open button opens a book directly; phone grids use `minmax(0, 1fr)`; "Set once, keeps running" and a second, 31-line book in the README; the drain limit stated; judge and prize wording removed from public docs; exact captions for the film; Base Sepolia links moved from Basescan to Blockscout (preflight).
+- Not doing: stateful reactive decisions (Cron statement close, sweeps) or a minimum-amount filter, because either needs a redeploy that invalidates every hash, the film and E-002…E-012; an owner-binding signature (new feature on the demo path; the limit is stated); WalletConnect or a look-up-any-address box (any book URL already works); moving CLAUDE.md/.claude/.impeccable out of the root; rewriting commit messages that mention judges in passing.
+**Consequences:** The film's first chapter was re-shot on the new hero (https://youtu.be/Hb0ndXJAirs). The book page still scrolls 13 px sideways at 320 px; clean from 360.
+

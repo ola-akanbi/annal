@@ -87,3 +87,12 @@ Both Annal contracts sit at the same address because each was the deployer's fir
 |---|---|---|
 | Deployer, and the client who pays in the demo | `0x4713b56012F67a84114D6a65Cd8924E7850b691E` | `annal-deployer` |
 | Freelancer who owns the demo book | `0xa7D557BF0C7312EAF186a6A81159a3650aA77444` | `annal-freelancer` |
+
+### Traps found 2026-11-21 (film, benchmark, preflight)
+- **Lasna refuses an `eth_getLogs` range past its head** ("requested toBlock … is not yet available on the node"). Clamp `toBlock` to the head; a fresh line's trail lookup 502'd until it did (commit 22551fe).
+- **Base Sepolia's public RPC can lag the block holding a just-mined tx by a few seconds.** Right after `open()`, reads still show `openedAt = 0`; the book page treats `?opened=1` as "opening" (commit d75e9c9).
+- **`ethereum-sepolia-rpc.publicnode.com` can answer `null` for a receipt other nodes have** (0x887310…3522). Receipt checks try `1rpc.io/sepolia` and Blockscout's `eth-sepolia.blockscout.com/api/eth-rpc` first (both CORS `*`); Base falls back to `base-sepolia-rpc.publicnode.com`, Unichain to Blockscout's eth-rpc. viem throws on a null receipt, so "throw" ≠ "unreachable".
+- **Basescan answers 403 to automated clients, even headless Chrome** (Cloudflare). Base Sepolia links use `base-sepolia.blockscout.com`, which serves tx and verified source to anyone.
+- **Blockscout tx pages carry Google ad iframes**; filming them needs the ad networks blocked.
+- **ElevenLabs:** text-to-speech, forced alignment and sound effects work on the account the film uses; the Music API returns 402 `paid_plan_required` on it. The film's score is synthesised in code instead (`internal/film/scripts/compose.ts`).
+
